@@ -1,0 +1,19 @@
+database:
+  url: "postgresql://postgres:postgres@localhost:5555/postgres?sslmode=disable"
+
+server:
+  port: ":50051"
+
+jwt:
+  secret_key: "supersecretkey"  # Используется для подписи JWT-токенов.
+  token_lifetime: 3600          # Время жизни токена в секундах (например, 1 час).
+
+logging:
+  level: "debug"                 # Уровни: "debug", "info", "warn", "error".
+  format: "text"                # Форматы: "json" или "text".
+
+email:
+  password: "example"
+  address: "example@gmail.com"
+  smtp_host: "smtp.gmail.com"
+  smtp_port: "587"
