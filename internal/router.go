@@ -11,7 +11,7 @@ import (
 func Run(ctx context.Context, cfg config.Config) {
 	r := chi.NewRouter()
 
-	r.Route("/cifra-places", func(r chi.Router) {
+	r.Route("/cifra-sso", func(r chi.Router) {
 
 	})
 }

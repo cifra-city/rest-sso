@@ -1,18 +1,12 @@
-DOCS_DIR=api/docs
-DOCS_FILE=sso.json
-
 DB_URL=postgresql://postgres:postgres@localhost:5555/postgres?sslmode=disable
+SWAGGER_CODEGEN := java -jar /home/trpdjke/go/src/github.com/cifra-city/rest-sso/swagger-codegen-cli.jar
 
+SWAGGER_CODEGEN := java -jar /home/trpdjke/go/src/github.com/cifra-city/rest-sso/swagger-codegen-cli.jar
 
-
-generate-docs:
-	mkdir -p $(DOCS_DIR) && \
-	protoc -I $(PROTO_DIR) \
-		-I internal/pkg/googleapis \
-		--openapiv2_out=$(DOCS_DIR) \
-		--openapiv2_opt=logtostderr=true,allow_merge=true \
-		$(PROTO_DIR)/*.proto
-
+generate-models:
+	$(SWAGGER_CODEGEN) generate -i docs/api.yaml -l go -o ./docs/web
+	mkdir -p models
+	find docs/web -name '*.go' -exec mv {} models/ \;
 
 create-db-image:
 	docker run --name cifra-sso -p 5555:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -d postgres:12-alpine
@@ -26,11 +20,3 @@ migrate-down:
 generate-sqlc:
 	sqlc generate
 
-build-server:
-	go build -o main cmd/sso/main.go
-
-run-server: build-server
-	go run cmd/sso/main.go
-
-run-server-dev:
-	go build -o main cmd/sso/main.go && go run cmd/sso/main.go

@@ -1,0 +1,25 @@
+description: "Registration request"
+type: object
+required:
+  - attributes
+properties:
+  attributes:
+    type: object
+    required:
+      - username
+      - email
+      - password
+    properties:
+      email:
+        type: string
+        format: email
+        description: User email
+        example:
+      username:
+        type: string
+        description: Unique username
+        example:
+      password:
+        type: string
+        description: User password
+        example:
