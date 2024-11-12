@@ -11,7 +11,8 @@ type DatabaseConfig struct {
 }
 
 type ServerConfig struct {
-	Port string `mapstructure:"port"`
+	Port     string `mapstructure:"port"`
+	BasePath string `mapstructure:"base_path"`
 }
 
 type JWTConfig struct {
@@ -31,12 +32,26 @@ type EmailConfig struct {
 	SmtpPort string `mapstructure:"smtp_port"`
 }
 
+type SwaggerConfig struct {
+	Enabled bool   `mapstructure:"enabled"`
+	URL     string `mapstructure:"url"`
+	Port    string `mapstructure:"port"`
+}
+
+type CORSConfig struct {
+	AllowedOrigins []string `mapstructure:"allowed_origins"`
+	AllowedMethods []string `mapstructure:"allowed_methods"`
+	AllowedHeaders []string `mapstructure:"allowed_headers"`
+}
+
 type Config struct {
 	Database DatabaseConfig `mapstructure:"database"`
 	Server   ServerConfig   `mapstructure:"server"`
 	JWT      JWTConfig      `mapstructure:"jwt"`
 	Logging  LoggingConfig  `mapstructure:"logging"`
 	Email    EmailConfig    `mapstructure:"email"`
+	Swagger  SwaggerConfig  `mapstructure:"swagger"`
+	CORS     CORSConfig     `mapstructure:"cors"`
 }
 
 // LoadConfig - функция для загрузки конфигурации из файла.

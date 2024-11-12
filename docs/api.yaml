@@ -1,6 +1,7 @@
 openapi: 3.0.0
 info:
   title: Example API
+  description: This is a sample API.
   version: 1.0.0
 
 paths:
@@ -8,18 +9,6 @@ paths:
     $ref: './paths/Registration.yaml'
 
 components:
-  responses:
-    internalError:
-      $ref: './spec/components/responses/internalError.yaml'
-    invalidAuth:
-      $ref: './spec/components/responses/invalidAuth.yaml'
-    invalidParameter:
-      $ref: './spec/components/responses/invalidParameter.yaml'
-    notFound:
-      $ref: './spec/components/responses/notFound.yaml'
-
   schemas:
-    Errors:
-      $ref: './spec/components/schemas/Errors.yaml'
     Registration:
       $ref: './spec/components/schemas/Registration.yaml'

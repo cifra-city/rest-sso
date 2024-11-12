@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/cifra-city/rest-sso/models"
 	val "github.com/go-ozzo/ozzo-validation/v4"
 )
 

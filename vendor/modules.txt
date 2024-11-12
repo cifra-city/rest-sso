@@ -9,6 +9,9 @@ github.com/go-chi/chi
 github.com/go-ozzo/ozzo-validation/v4
 # github.com/google/go-cmp v0.6.0
 ## explicit; go 1.13
+# github.com/google/jsonapi v1.0.0
+## explicit
+github.com/google/jsonapi
 # github.com/google/uuid v1.6.0
 ## explicit
 github.com/google/uuid
@@ -37,6 +40,9 @@ github.com/pelletier/go-toml/v2/internal/characters
 github.com/pelletier/go-toml/v2/internal/danger
 github.com/pelletier/go-toml/v2/internal/tracker
 github.com/pelletier/go-toml/v2/unstable
+# github.com/pkg/errors v0.9.1
+## explicit
+github.com/pkg/errors
 # github.com/sagikazarmark/locafero v0.4.0
 ## explicit; go 1.20
 github.com/sagikazarmark/locafero
@@ -81,6 +87,10 @@ github.com/subosito/gotenv
 # go.uber.org/multierr v1.11.0
 ## explicit; go 1.19
 go.uber.org/multierr
+# golang.org/x/crypto v0.21.0
+## explicit; go 1.18
+golang.org/x/crypto/bcrypt
+golang.org/x/crypto/blowfish
 # golang.org/x/exp v0.0.0-20240404231335-c0f41cb1a7a0
 ## explicit; go 1.20
 golang.org/x/exp/constraints

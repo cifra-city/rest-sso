@@ -2,7 +2,8 @@ database:
   url: "postgresql://postgres:postgres@localhost:5555/postgres?sslmode=disable"
 
 server:
-  port: ":50051"
+  port: ":8888"
+  base_path: "/api/v1"
 
 jwt:
   secret_key: "supersecretkey"  # Используется для подписи JWT-токенов.
@@ -17,3 +18,13 @@ email:
   address: "example@gmail.com"
   smtp_host: "smtp.gmail.com"
   smtp_port: "587"
+
+swagger:
+  enabled: true
+  url: "/swagger"
+  port: "8080"
+
+cors:
+  allowed_origins: ["*"]
+  allowed_methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+  allowed_headers: ["Authorization", "Content-Type"]

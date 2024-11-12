@@ -1,0 +1,47 @@
+openapi: 3.0.0
+info:
+  description: This is a sample API.
+  title: Example API
+  version: 1.0.0
+servers:
+- url: /
+paths:
+  /register: {}
+components:
+  schemas:
+    Registration:
+      properties:
+        data:
+          $ref: '#/components/schemas/Registration_data'
+      required:
+      - data
+      type: object
+    Registration_data_attributes:
+      properties:
+        email:
+          description: User email
+          format: email
+          type: string
+        password:
+          description: User password
+          type: string
+      required:
+      - email
+      - password
+      type: object
+    Registration_data:
+      properties:
+        id:
+          description: Unique identifier username
+          type: string
+        type:
+          enum:
+          - registration
+          type: string
+        attributes:
+          $ref: '#/components/schemas/Registration_data_attributes'
+      required:
+      - attributes
+      - id
+      - type
+      type: object

@@ -4,6 +4,7 @@ import (
 	"context"
 	"sync"
 
+	service "github.com/cifra-city/rest-sso/internal"
 	"github.com/cifra-city/rest-sso/internal/config"
 )
 

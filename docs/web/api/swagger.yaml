@@ -20,13 +20,14 @@ components:
             $ref: '#/components/schemas/Errors_errors'
       description: Standard JSON:API error
     Registration:
-      required:
-      - attributes
-      type: object
-      properties:
-        attributes:
-          $ref: '#/components/schemas/Registration_attributes'
-      description: Registration request
+      allOf:
+      - $ref: ./spec/components/schemas/RegistrationKey.yaml
+      - required:
+        - attributes
+        type: object
+        properties:
+          attributes:
+            $ref: '#/components/schemas/Registration_attributes'
     Errors_errors:
       required:
       - status

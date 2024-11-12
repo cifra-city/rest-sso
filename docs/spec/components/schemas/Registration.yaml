@@ -1,25 +1,29 @@
-description: "Registration request"
 type: object
 required:
-  - attributes
+  - data
 properties:
-  attributes:
-    type: object
+  data:
     required:
-      - username
-      - email
-      - password
+      - id
+      - type
+      - attributes
     properties:
-      email:
+      id:
         type: string
-        format: email
-        description: User email
-        example:
-      username:
+        description: "Unique identifier username"
+      type:
         type: string
-        description: Unique username
-        example:
-      password:
-        type: string
-        description: User password
-        example:
+        enum: [ registration ]
+      attributes:
+        type: object
+        required:
+          - email
+          - password
+        properties:
+          email:
+            type: string
+            format: email
+            description: "User email"
+          password:
+            type: string
+            description: "User password"

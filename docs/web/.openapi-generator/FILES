@@ -1,0 +1,17 @@
+.gitignore
+.travis.yml
+README.md
+api/openapi.yaml
+client.go
+configuration.go
+docs/Registration.md
+docs/RegistrationData.md
+docs/RegistrationDataAttributes.md
+git_push.sh
+go.mod
+go.sum
+model_registration.go
+model_registration_data.go
+model_registration_data_attributes.go
+response.go
+utils.go
