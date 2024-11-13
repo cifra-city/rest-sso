@@ -40,19 +40,17 @@ func Run(args []string) bool {
 	}()
 
 	// Создаем объект server
-	server := &config.Server{
-		Queries: data.New(dbCon),
-		Config:  cfg,
-		Logger:  logger,
+	service, err := config.NewServer(cfg)
+	if err != nil {
+		logger.Fatalf("failed to create server: %v", err)
+		return false
 	}
 
-	// Добавляем сервер в контекст
-	ctx = cifractx.WithValue(ctx, cifractx.ContextKey("server"), server)
+	ctx = cifractx.WithValue(ctx, config.SERVICE, service)
 
 	var wg sync.WaitGroup
-	runServices(ctx, *cfg, &wg)
+	runServices(ctx, &wg)
 
-	// Обрабатываем сигнал остановки и ожидаем завершения всех горутин
 	wgch := make(chan struct{})
 	go func() {
 		wg.Wait()

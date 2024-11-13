@@ -7,21 +7,19 @@ import (
 	"github.com/cifra-city/rest-sso/internal/service/handlers"
 	"github.com/cifra-city/rest-sso/pkg/cifractx"
 	"github.com/cifra-city/rest-sso/pkg/httpresp"
-	"github.com/sirupsen/logrus"
-
 	"github.com/go-chi/chi"
+	"github.com/sirupsen/logrus"
 )
 
-func Run(ctx context.Context, cfg config.Config) {
+func Run(ctx context.Context) {
 	r := chi.NewRouter()
 
-	// Получаем значение из контекста и приводим его к типу *config.Server
-	server, err := cifractx.GetValue[*config.Server](ctx, config.SERVER)
+	service, err := cifractx.GetValue[*config.Service](ctx, config.SERVICE)
 	if err != nil {
 		logrus.Fatalf("failed to get server from context: %v", err)
 	}
 
-	r.Use(cifractx.MiddlewareWithContext(config.SERVER, server))
+	r.Use(cifractx.MiddlewareWithContext(config.SERVICE, service))
 
 	r.Route("/cifra-sso", func(r chi.Router) {
 		r.Route("/v1", func(r chi.Router) {
@@ -35,8 +33,8 @@ func Run(ctx context.Context, cfg config.Config) {
 		})
 	})
 
-	microServ := httpresp.StartServer(ctx, cfg.Server.Port, r)
+	server := httpresp.StartServer(ctx, service.Config.Server.Port, r)
 
 	<-ctx.Done()
-	httpresp.StopServer(context.Background(), microServ)
+	httpresp.StopServer(context.Background(), server)
 }

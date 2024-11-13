@@ -4,11 +4,10 @@ import (
 	"context"
 	"sync"
 
-	service "github.com/cifra-city/rest-sso/internal"
-	"github.com/cifra-city/rest-sso/internal/config"
+	"github.com/cifra-city/rest-sso/internal/service"
 )
 
-func runServices(ctx context.Context, cfg config.Config, wg *sync.WaitGroup) {
+func runServices(ctx context.Context, wg *sync.WaitGroup) {
 	var (
 	// signals indicate the finished initialization of each worker
 	)
@@ -21,5 +20,5 @@ func runServices(ctx context.Context, cfg config.Config, wg *sync.WaitGroup) {
 		}()
 	}
 
-	run(func() { service.Run(ctx, cfg) })
+	run(func() { service.Run(ctx) })
 }

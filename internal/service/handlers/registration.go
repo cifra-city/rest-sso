@@ -33,7 +33,7 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 	em := req.Data.Attributes.Email
 	username := req.Data.Id
 
-	Server, err := cifractx.GetValue[*config.Server](r.Context(), config.SERVER)
+	Server, err := cifractx.GetValue[*config.Service](r.Context(), config.SERVICE)
 	if err != nil {
 		logrus.Errorf("error getting db queries: %v", err)
 		http.Error(w, "Database queries not found", http.StatusInternalServerError)

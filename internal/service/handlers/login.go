@@ -32,10 +32,10 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	logrus.Debugf("email: %v, password: %s, username: %v", em, pas, usr)
 
 	// Извлечение server из контекста
-	Server, err := cifractx.GetValue[*config.Server](r.Context(), config.SERVER)
+	Server, err := cifractx.GetValue[*config.Service](r.Context(), config.SERVICE)
 	if err != nil {
 		logrus.Errorf("error getting server from context: %v", err)
-		http.Error(w, "Server configuration not found", http.StatusInternalServerError)
+		http.Error(w, "Service configuration not found", http.StatusInternalServerError)
 		return
 	}
 

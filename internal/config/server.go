@@ -6,16 +6,16 @@ import (
 )
 
 const (
-	SERVER = "server"
+	SERVICE = "service"
 )
 
-type Server struct {
+type Service struct {
 	Config  *Config
 	Queries *data.Queries
 	Logger  *logrus.Logger
 }
 
-func NewServer(cfg *Config) (*Server, error) {
+func NewServer(cfg *Config) (*Service, error) {
 	// Настройка логгера
 	logger := SetupLogger(cfg.Logging.Level, cfg.Logging.Format)
 
@@ -29,7 +29,7 @@ func NewServer(cfg *Config) (*Server, error) {
 	// Создание queries
 	queries := data.New(dbCon)
 
-	return &Server{
+	return &Service{
 		Config:  cfg,
 		Queries: queries,
 		Logger:  logger,
