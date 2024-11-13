@@ -3,6 +3,7 @@ package config
 import (
 	"time"
 
+	_ "github.com/lib/pq" // driver for postgres PostgreSQL.
 	"github.com/spf13/viper"
 )
 

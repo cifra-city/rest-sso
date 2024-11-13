@@ -7,8 +7,9 @@ import (
 
 	"github.com/cifra-city/rest-sso/internal/db/data"
 	"github.com/cifra-city/rest-sso/internal/service/requests"
-	"github.com/cifra-city/rest-sso/pkg/jsonresp"
-	"github.com/cifra-city/rest-sso/pkg/jsonresp/problems"
+	"github.com/cifra-city/rest-sso/pkg/cifradb"
+	"github.com/cifra-city/rest-sso/pkg/httpresp"
+	"github.com/cifra-city/rest-sso/pkg/httpresp/problems"
 	"github.com/cifra-city/rest-sso/pkg/security"
 	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
@@ -18,45 +19,51 @@ import (
 func Registration(w http.ResponseWriter, r *http.Request) {
 	// Парсинг запроса
 	req, err := requests.NewRegistration(r)
-	logrus.Infof("req: %v", req)
 	if err != nil {
-		jsonresp.RenderErr(w, problems.BadRequest(err)...)
+		httpresp.RenderErr(w, problems.BadRequest(err)...)
 		return
 	}
 
 	// Проверка валидности пароля
 	pas := req.Data.Attributes.Password
 	if len(pas) < 8 || !security.HasRequiredChars(pas) {
-		jsonresp.RenderErr(w, problems.BadRequest(err)...)
+		httpresp.RenderErr(w, problems.BadRequest(errors.New("invalid password requirements"))...)
 		return
 	}
 
 	// Получение данных из запроса
 	em := req.Data.Attributes.Email
 	username := req.Data.Id
-	ctx := r.Context()
+
+	// Получение объекта Queries из контекста
+	Q, err := cifradb.GetDBQueries(r.Context())
+	if err != nil {
+		logrus.Errorf("error getting db queries: %v", err)
+		http.Error(w, "Database queries not found", http.StatusInternalServerError)
+		return
+	}
 
 	// Проверка на существующий email
-	_, err = Users(r).GetUserByEmail(ctx, em)
+	_, err = Q.GetUserByEmail(r.Context(), em)
 	if err != nil && !errors.Is(err, sql.ErrNoRows) {
 		logrus.Errorf("error getting user by email: %v", err)
-		jsonresp.RenderErr(w, problems.InternalError())
+		httpresp.RenderErr(w, problems.InternalError())
 		return
 	}
 	if err == nil {
-		jsonresp.RenderErr(w, problems.Conflict())
+		httpresp.RenderErr(w, problems.Conflict("this email address already exists"))
 		return
 	}
 
 	// Проверка на существующий username
-	_, err = Users(r).GetUserByUsername(ctx, username)
+	_, err = Q.GetUserByUsername(r.Context(), username)
 	if err != nil && !errors.Is(err, sql.ErrNoRows) {
 		logrus.Errorf("error getting user by username: %v", err)
-		jsonresp.RenderErr(w, problems.InternalError())
+		httpresp.RenderErr(w, problems.InternalError())
 		return
 	}
 	if err == nil {
-		jsonresp.RenderErr(w, problems.Conflict())
+		httpresp.RenderErr(w, problems.Conflict("this username already exists"))
 		return
 	}
 
@@ -67,7 +74,7 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Data.Attributes.Password), bcrypt.DefaultCost)
 	if err != nil {
 		logrus.Errorf("error hashing password: %v", err)
-		jsonresp.RenderErr(w, problems.InternalError())
+		httpresp.RenderErr(w, problems.InternalError())
 		return
 	}
 
@@ -81,14 +88,14 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Вставка нового пользователя в базу данных
-	user, err := Users(r).InsertUser(ctx, params)
+	user, err := Q.InsertUser(r.Context(), params)
 	if err != nil {
 		logrus.Errorf("error inserting user: %v", err)
-		jsonresp.RenderErr(w, problems.InternalError())
+		httpresp.RenderErr(w, problems.InternalError())
 		return
 	}
 
 	// Отправка успешного ответа
 	logrus.Infof("user created: %v", user.Username)
-	jsonresp.Render(w, map[string]string{"message": "User created successfully"})
+	httpresp.Render(w, http.StatusCreated)
 }
