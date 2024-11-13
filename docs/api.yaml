@@ -12,3 +12,5 @@ components:
   schemas:
     Registration:
       $ref: './spec/components/schemas/Registration.yaml'
+    Login:
+        $ref: './spec/components/schemas/Login.yaml'

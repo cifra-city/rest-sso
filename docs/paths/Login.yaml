@@ -5,19 +5,19 @@ info:
   version: 1.0.0
 
 paths:
-  /register:
+  /login:
     post:
-      summary: Register a new user
+      summary: Login a new user
       description: Endpoint to register a new user with email, username, and password
       requestBody:
         required: true
         content:
           application/vnd.api+json:
             schema:
-              $ref: '../spec/components/schemas/Registration.yaml'
+              $ref: '../spec/components/schemas/Login.yaml'
       responses:
         '201':
-          description: User successfully registered
+          description: User successfully login
           content:
             application/vnd.api+json:
               schema:

@@ -16,6 +16,13 @@ components:
       required:
       - data
       type: object
+    Login:
+      properties:
+        data:
+          $ref: '#/components/schemas/Login_data'
+      required:
+      - data
+      type: object
     Registration_data_attributes:
       properties:
         email:
@@ -43,5 +50,33 @@ components:
       required:
       - attributes
       - id
+      - type
+      type: object
+    Login_data_attributes:
+      properties:
+        email:
+          description: User email
+          format: email
+          type: string
+        username:
+          description: User username
+          format: username
+          type: string
+        password:
+          description: User password
+          type: string
+      required:
+      - password
+      type: object
+    Login_data:
+      properties:
+        type:
+          enum:
+          - login
+          type: string
+        attributes:
+          $ref: '#/components/schemas/Login_data_attributes'
+      required:
+      - attributes
       - type
       type: object

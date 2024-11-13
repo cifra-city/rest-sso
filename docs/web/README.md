@@ -82,6 +82,9 @@ Class | Method | HTTP request | Description
 
 ## Documentation For Models
 
+ - [Login](docs/Login.md)
+ - [LoginData](docs/LoginData.md)
+ - [LoginDataAttributes](docs/LoginDataAttributes.md)
  - [Registration](docs/Registration.md)
  - [RegistrationData](docs/RegistrationData.md)
  - [RegistrationDataAttributes](docs/RegistrationDataAttributes.md)

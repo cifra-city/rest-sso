@@ -1,4 +1,4 @@
-package security
+package sectools
 
 import "strings"
 

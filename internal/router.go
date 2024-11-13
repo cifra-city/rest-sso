@@ -5,7 +5,7 @@ import (
 
 	"github.com/cifra-city/rest-sso/internal/config"
 	"github.com/cifra-city/rest-sso/internal/service/handlers"
-	"github.com/cifra-city/rest-sso/pkg/cifradb"
+	"github.com/cifra-city/rest-sso/pkg/cifractx"
 	"github.com/cifra-city/rest-sso/pkg/httpresp"
 	"github.com/sirupsen/logrus"
 
@@ -15,29 +15,28 @@ import (
 func Run(ctx context.Context, cfg config.Config) {
 	r := chi.NewRouter()
 
-	queries, err := cifradb.GetDBQueries(ctx)
+	// Получаем значение из контекста и приводим его к типу *config.Server
+	server, err := cifractx.GetValue[*config.Server](ctx, config.SERVER)
 	if err != nil {
-		logrus.Fatalf("Failed to get DB queries from context: %v", err)
+		logrus.Fatalf("failed to get server from context: %v", err)
 	}
 
-	// Middleware для добавления queries в контекст запроса
-	r.Use(cifradb.DBQueriesMiddleware(queries))
+	r.Use(cifractx.MiddlewareWithContext(config.SERVER, server))
 
-	// Определение маршрутов
 	r.Route("/cifra-sso", func(r chi.Router) {
 		r.Route("/v1", func(r chi.Router) {
 			r.Route("/public", func(r chi.Router) {
+				r.Post("/reg", handlers.Registration)
+
 				r.Route("/auth", func(r chi.Router) {
-					r.Post("/register", handlers.Registration)
+					r.Post("/login", handlers.Login)
 				})
 			})
 		})
 	})
 
-	// Запуск сервера
-	server := httpresp.StartServer(ctx, ":8080", r)
+	microServ := httpresp.StartServer(ctx, cfg.Server.Port, r)
 
-	// Ожидание отмены контекста для остановки сервера
 	<-ctx.Done()
-	httpresp.StopServer(context.Background(), server)
+	httpresp.StopServer(context.Background(), microServ)
 }
