@@ -26,7 +26,7 @@ func NewRegistration(r *http.Request) (req resources.Registration, err error) {
 
 	errs := validation.Errors{
 		"data/id":         validation.Validate(req.Data.Id, validation.Required),
-		"data/type":       validation.Validate(req.Data.Type, validation.Required, validation.In("registrations")),
+		"data/type":       validation.Validate(req.Data.Type, validation.Required, validation.In("registration")),
 		"data/attributes": validation.Validate(req.Data.Attributes, validation.Required),
 	}
 	return req, errs.Filter()

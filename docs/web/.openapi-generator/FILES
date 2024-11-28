@@ -4,6 +4,9 @@ README.md
 api/openapi.yaml
 client.go
 configuration.go
+docs/ChangeUsername.md
+docs/ChangeUsernameData.md
+docs/ChangeUsernameDataAttributes.md
 docs/Login.md
 docs/LoginData.md
 docs/LoginDataAttributes.md
@@ -13,6 +16,9 @@ docs/RegistrationDataAttributes.md
 git_push.sh
 go.mod
 go.sum
+model_change_username.go
+model_change_username_data.go
+model_change_username_data_attributes.go
 model_login.go
 model_login_data.go
 model_login_data_attributes.go

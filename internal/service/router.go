@@ -5,6 +5,7 @@ import (
 
 	"github.com/cifra-city/rest-sso/internal/config"
 	"github.com/cifra-city/rest-sso/internal/service/handlers"
+	"github.com/cifra-city/rest-sso/internal/service/middleware"
 	"github.com/cifra-city/rest-sso/pkg/cifractx"
 	"github.com/cifra-city/rest-sso/pkg/httpresp"
 	"github.com/go-chi/chi"
@@ -27,7 +28,14 @@ func Run(ctx context.Context) {
 				r.Post("/reg", handlers.Registration)
 
 				r.Route("/auth", func(r chi.Router) {
-					r.Post("/login", handlers.Login)
+					r.Get("/login", handlers.Login)
+					r.Get("/logout", handlers.Logout)
+
+					r.Route("/change", func(r chi.Router) {
+						//TODO add cfg for sk
+						r.Use(middleware.AuthJWTMiddleware("supersecretkey", logrus.New()))
+						r.Put("/password", handlers.ChangeUsername)
+					})
 				})
 			})
 		})

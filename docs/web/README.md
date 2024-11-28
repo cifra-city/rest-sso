@@ -82,6 +82,9 @@ Class | Method | HTTP request | Description
 
 ## Documentation For Models
 
+ - [ChangeUsername](docs/ChangeUsername.md)
+ - [ChangeUsernameData](docs/ChangeUsernameData.md)
+ - [ChangeUsernameDataAttributes](docs/ChangeUsernameDataAttributes.md)
  - [Login](docs/Login.md)
  - [LoginData](docs/LoginData.md)
  - [LoginDataAttributes](docs/LoginDataAttributes.md)

@@ -1,0 +1,25 @@
+type: object
+required:
+  - data
+properties:
+  data:
+    required:
+      - type
+      - attributes
+    properties:
+      type:
+        type: string
+        enum: [ change_username ]
+      attributes:
+        type: object
+        required:
+          - email
+          - password
+        properties:
+          new_username:
+            type: string
+            format: username
+            description: "New username"
+          password:
+            type: string
+            description: "User password"

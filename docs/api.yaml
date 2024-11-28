@@ -14,3 +14,5 @@ components:
       $ref: './spec/components/schemas/Registration.yaml'
     Login:
         $ref: './spec/components/schemas/Login.yaml'
+    ChangeUsername:
+        $ref: './spec/components/schemas/ChangeUsername.yaml'

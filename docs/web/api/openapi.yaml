@@ -23,6 +23,13 @@ components:
       required:
       - data
       type: object
+    ChangeUsername:
+      properties:
+        data:
+          $ref: '#/components/schemas/ChangeUsername_data'
+      required:
+      - data
+      type: object
     Registration_data_attributes:
       properties:
         email:
@@ -76,6 +83,31 @@ components:
           type: string
         attributes:
           $ref: '#/components/schemas/Login_data_attributes'
+      required:
+      - attributes
+      - type
+      type: object
+    ChangeUsername_data_attributes:
+      properties:
+        new_username:
+          description: New username
+          format: username
+          type: string
+        password:
+          description: User password
+          type: string
+      required:
+      - email
+      - password
+      type: object
+    ChangeUsername_data:
+      properties:
+        type:
+          enum:
+          - change_username
+          type: string
+        attributes:
+          $ref: '#/components/schemas/ChangeUsername_data_attributes'
       required:
       - attributes
       - type
