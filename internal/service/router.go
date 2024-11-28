@@ -21,6 +21,7 @@ func Run(ctx context.Context) {
 	}
 
 	r.Use(cifractx.MiddlewareWithContext(config.SERVICE, service))
+	authMW := middleware.AuthJWTMiddleware(service.Config.JWT.SecretKey, service.Logger)
 
 	r.Route("/cifra-sso", func(r chi.Router) {
 		r.Route("/v1", func(r chi.Router) {
@@ -32,9 +33,9 @@ func Run(ctx context.Context) {
 					r.Get("/logout", handlers.Logout)
 
 					r.Route("/change", func(r chi.Router) {
-						//TODO add cfg for sk
-						r.Use(middleware.AuthJWTMiddleware("supersecretkey", logrus.New()))
-						r.Put("/password", handlers.ChangeUsername)
+
+						r.Use(authMW)
+						r.Put("/username", handlers.ChangeUsername)
 					})
 				})
 			})

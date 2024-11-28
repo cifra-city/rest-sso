@@ -11,11 +11,14 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+type contextKey string
+
+const UserIDKey contextKey = "userID"
+
 // AuthJWTMiddleware validates the JWT token and injects the user ID into the request context.
 func AuthJWTMiddleware(secretKey string, log *logrus.Logger) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			// Extract token from the Authorization header
 			authHeader := r.Header.Get("Authorization")
 			if authHeader == "" {
 				log.Warn("Missing Authorization header")
@@ -31,28 +34,30 @@ func AuthJWTMiddleware(secretKey string, log *logrus.Logger) func(http.Handler) 
 			}
 			tokenString := parts[1]
 
-			// Verify the JWT token
+			log.Infof("Token received: %s", tokenString)
+
 			claims := &cifrajwt.CustomClaims{}
 			token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
 				return []byte(secretKey), nil
 			})
 
 			if err != nil || !token.Valid {
-				log.Warn("Invalid or expired token")
+				log.Warnf("Invalid or expired token: %v", err)
 				http.Error(w, "Unauthorized", http.StatusUnauthorized)
 				return
 			}
 
-			// Parse user ID from claims
 			userID, err := uuid.Parse(claims.Subject)
 			if err != nil {
-				log.Error("Invalid user ID in token claims")
+				log.Errorf("Invalid user ID in token claims: %v", err)
 				http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 				return
 			}
 
-			// Add userID to context and call the next handler
-			ctx := context.WithValue(r.Context(), "userID", userID)
+			log.Infof("Claims Subject (UserID): %s", userID)
+
+			// Добавляем userID в контекст
+			ctx := context.WithValue(r.Context(), UserIDKey, userID)
 			next.ServeHTTP(w, r.WithContext(ctx))
 		})
 	}

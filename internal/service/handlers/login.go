@@ -29,15 +29,17 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	var user data.UsersSecret
 
-	logrus.Debugf("email: %v, password: %s, username: %v", em, pas, usr)
-
-	// Извлечение server из контекста
 	Server, err := cifractx.GetValue[*config.Service](r.Context(), config.SERVICE)
 	if err != nil {
 		logrus.Errorf("error getting server from context: %v", err)
 		http.Error(w, "Service configuration not found", http.StatusInternalServerError)
 		return
 	}
+	log := Server.Logger
+
+	log.Debugf("email: %v, password: %s, username: %v", em, pas, usr)
+
+	// Извлечение server из контекста
 
 	// Работа с queries из server
 	if usr != nil {
@@ -53,7 +55,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	} else {
-		logrus.Infof("Bad request; email: %v, password: %s, username: %v", em, pas, usr)
+		log.Infof("Bad request; email: %v, password: %s, username: %v", em, pas, usr)
 		httpresp.RenderErr(w, problems.BadRequest(errors.New("email or username is required"))...)
 		return
 	}
@@ -61,7 +63,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	// Сравнение пароля
 	err = bcrypt.CompareHashAndPassword([]byte(user.PassHash), []byte(pas))
 	if err != nil {
-		logrus.Debugf("Incorrect password for user: %s, error: %s", user.Username, err)
+		log.Debugf("Incorrect password for user: %s, error: %s", user.Username, err)
 		httpresp.RenderErr(w, problems.NotAllowed(errors.New("invalid password")))
 		return
 	}
@@ -69,10 +71,12 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	// Генерация JWT токена
 	token, err := cifrajwt.GenerateJWT(user.ID, Server.Config.JWT.TokenLifetime, Server.Config.JWT.SecretKey)
 	if err != nil {
-		logrus.Errorf("error generating jwt: %v", err)
+		log.Errorf("error generating jwt: %v", err)
 		httpresp.RenderErr(w, problems.InternalError())
 		return
 	}
 
+	log.Infof("user logged in: %s", user.Username)
+	
 	httpresp.Render(w, map[string]string{"token": token})
 }
