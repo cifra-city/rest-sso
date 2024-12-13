@@ -13,7 +13,6 @@ jwt:
     secret_key: "refreshsuperkey"  # Секретный ключ для подписи Refresh Token (можно использовать другой ключ).
     token_lifetime: 604800         # Время жизни Refresh Token в секундах (например, 7 дней).
 
-
 logging:
   level: "debug"                 # Уровни: "debug", "info", "warn", "error".
   format: "text"                # Форматы: "json" или "text".

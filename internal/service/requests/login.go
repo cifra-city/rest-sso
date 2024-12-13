@@ -8,7 +8,7 @@ import (
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 )
 
-func NewLogin(r *http.Request) (req resources.Login, err error) {
+func NewLogin(r *http.Request) (req resources.LoginReq, err error) {
 	if err = json.NewDecoder(r.Body).Decode(&req); err != nil {
 		err = newDecodeError("body", err)
 		return

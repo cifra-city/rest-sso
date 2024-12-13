@@ -14,6 +14,7 @@ require (
 	github.com/spf13/viper v1.19.0
 	golang.org/x/crypto v0.21.0
 	google.golang.org/grpc v1.62.1
+	gopkg.in/validator.v2 v2.0.1
 )
 
 require (

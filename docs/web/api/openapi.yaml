@@ -113,13 +113,6 @@ components:
       - password
       type: object
     LoginReq_data:
-      oneOf:
-      - required:
-        - attributes.email
-        type: object
-      - required:
-        - attributes.username
-        type: object
       properties:
         type:
           enum:

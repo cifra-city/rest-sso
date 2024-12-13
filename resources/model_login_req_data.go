@@ -12,76 +12,139 @@ package resources
 
 import (
 	"encoding/json"
-	"gopkg.in/validator.v2"
+	"bytes"
 	"fmt"
 )
 
-// LoginReqData - struct for LoginReqData
+// checks if the LoginReqData type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &LoginReqData{}
+
+// LoginReqData struct for LoginReqData
 type LoginReqData struct {
-	MapmapOfStringAny *map[string]interface{}
+	Type string `json:"type"`
+	Attributes LoginReqDataAttributes `json:"attributes"`
 }
 
-// map[string]interface{}AsLoginReqData is a convenience function that returns map[string]interface{} wrapped in LoginReqData
-func MapmapOfStringAnyAsLoginReqData(v *map[string]interface{}) LoginReqData {
-	return LoginReqData{
-		MapmapOfStringAny: v,
+type _LoginReqData LoginReqData
+
+// NewLoginReqData instantiates a new LoginReqData object
+// This constructor will assign default values to properties that have it defined,
+// and makes sure properties required by API are set, but the set of arguments
+// will change when the set of required properties is changed
+func NewLoginReqData(type_ string, attributes LoginReqDataAttributes) *LoginReqData {
+	this := LoginReqData{}
+	this.Type = type_
+	this.Attributes = attributes
+	return &this
+}
+
+// NewLoginReqDataWithDefaults instantiates a new LoginReqData object
+// This constructor will only assign default values to properties that have it defined,
+// but it doesn't guarantee that properties required by API are set
+func NewLoginReqDataWithDefaults() *LoginReqData {
+	this := LoginReqData{}
+	return &this
+}
+
+// GetType returns the Type field value
+func (o *LoginReqData) GetType() string {
+	if o == nil {
+		var ret string
+		return ret
 	}
+
+	return o.Type
 }
 
+// GetTypeOk returns a tuple with the Type field value
+// and a boolean to check if the value has been set.
+func (o *LoginReqData) GetTypeOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.Type, true
+}
 
-// Unmarshal JSON data into one of the pointers in the struct
-func (dst *LoginReqData) UnmarshalJSON(data []byte) error {
-	var err error
-	match := 0
-	// try to unmarshal data into MapmapOfStringAny
-	err = newStrictDecoder(data).Decode(&dst.MapmapOfStringAny)
-	if err == nil {
-		jsonMapmapOfStringAny, _ := json.Marshal(dst.MapmapOfStringAny)
-		if string(jsonMapmapOfStringAny) == "{}" { // empty struct
-			dst.MapmapOfStringAny = nil
-		} else {
-			if err = validator.Validate(dst.MapmapOfStringAny); err != nil {
-				dst.MapmapOfStringAny = nil
-			} else {
-				match++
-			}
+// SetType sets field value
+func (o *LoginReqData) SetType(v string) {
+	o.Type = v
+}
+
+// GetAttributes returns the Attributes field value
+func (o *LoginReqData) GetAttributes() LoginReqDataAttributes {
+	if o == nil {
+		var ret LoginReqDataAttributes
+		return ret
+	}
+
+	return o.Attributes
+}
+
+// GetAttributesOk returns a tuple with the Attributes field value
+// and a boolean to check if the value has been set.
+func (o *LoginReqData) GetAttributesOk() (*LoginReqDataAttributes, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.Attributes, true
+}
+
+// SetAttributes sets field value
+func (o *LoginReqData) SetAttributes(v LoginReqDataAttributes) {
+	o.Attributes = v
+}
+
+func (o LoginReqData) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o LoginReqData) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["type"] = o.Type
+	toSerialize["attributes"] = o.Attributes
+	return toSerialize, nil
+}
+
+func (o *LoginReqData) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"type",
+		"attributes",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
-	} else {
-		dst.MapmapOfStringAny = nil
 	}
 
-	if match > 1 { // more than 1 match
-		// reset to nil
-		dst.MapmapOfStringAny = nil
+	varLoginReqData := _LoginReqData{}
 
-		return fmt.Errorf("data matches more than one schema in oneOf(LoginReqData)")
-	} else if match == 1 {
-		return nil // exactly one match
-	} else { // no match
-		return fmt.Errorf("data failed to match schemas in oneOf(LoginReqData)")
-	}
-}
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varLoginReqData)
 
-// Marshal data from the first non-nil pointers in the struct to JSON
-func (src LoginReqData) MarshalJSON() ([]byte, error) {
-	if src.MapmapOfStringAny != nil {
-		return json.Marshal(&src.MapmapOfStringAny)
+	if err != nil {
+		return err
 	}
 
-	return nil, nil // no data in oneOf schemas
-}
+	*o = LoginReqData(varLoginReqData)
 
-// Get the actual instance
-func (obj *LoginReqData) GetActualInstance() (interface{}) {
-	if obj == nil {
-		return nil
-	}
-	if obj.MapmapOfStringAny != nil {
-		return obj.MapmapOfStringAny
-	}
-
-	// all schemas are nil
-	return nil
+	return err
 }
 
 type NullableLoginReqData struct {

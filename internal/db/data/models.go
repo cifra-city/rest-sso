@@ -5,8 +5,41 @@
 package data
 
 import (
+	"database/sql"
+	"time"
+
 	"github.com/google/uuid"
 )
+
+type Device struct {
+	ID         uuid.UUID
+	UserID     uuid.UUID
+	DeviceID   string
+	DeviceName sql.NullString
+	OsVersion  sql.NullString
+	CreatedAt  time.Time
+	LastUsed   time.Time
+}
+
+type LoginHistory struct {
+	ID            uuid.UUID
+	UserID        uuid.UUID
+	DeviceID      uuid.NullUUID
+	IpAddress     sql.NullString
+	LoginTime     time.Time
+	Success       bool
+	FailureReason sql.NullString
+}
+
+type RefreshToken struct {
+	ID         uuid.UUID
+	UserID     uuid.UUID
+	Token      string
+	CreatedAt  time.Time
+	ExpiresAt  time.Time
+	DeviceInfo sql.NullString
+	IpAddress  sql.NullString
+}
 
 type UsersSecret struct {
 	ID          uuid.UUID

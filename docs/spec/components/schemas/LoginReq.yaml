@@ -26,6 +26,3 @@ properties:
           password:
             type: string
             description: "User password"
-    oneOf:
-      - required: [ attributes.email ]
-      - required: [ attributes.username ]
