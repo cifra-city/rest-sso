@@ -7,12 +7,24 @@ info:
 paths:
   /register:
     $ref: './paths/Registration.yaml'
+  /login:
+    $ref: './paths/Login.yaml'
+  /change-username:
+    $ref: './paths/ChangeUsername.yaml'
+  /refresh:
+    $ref: './paths/Refresh.yaml'
 
 components:
   schemas:
     Registration:
       $ref: './spec/components/schemas/RegistrationReq.yaml'
-    Login:
+    LoginReq:
         $ref: './spec/components/schemas/LoginReq.yaml'
+    LoginResp:
+        $ref: './spec/components/schemas/LoginResp.yaml'
     ChangeUsername:
         $ref: './spec/components/schemas/ChangeUsernameReq.yaml'
+    RefreshReq:
+        $ref: './spec/components/schemas/RefreshReq.yaml'
+    RefreshResp:
+        $ref: './spec/components/schemas/RefreshResp.yaml'

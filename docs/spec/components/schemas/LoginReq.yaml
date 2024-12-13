@@ -3,6 +3,7 @@ required:
   - data
 properties:
   data:
+    type: object
     required:
       - type
       - attributes
@@ -21,8 +22,10 @@ properties:
             description: "User email"
           username:
             type: string
-            format: username
             description: "User username"
           password:
             type: string
             description: "User password"
+    oneOf:
+      - required: [ attributes.email ]
+      - required: [ attributes.username ]

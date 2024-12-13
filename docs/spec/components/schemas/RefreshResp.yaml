@@ -1,0 +1,33 @@
+type: object
+required:
+  - data
+properties:
+  data:
+    type: object
+    required:
+      - type
+      - attributes
+    properties:
+      type:
+        type: string
+        enum: [refresh]
+        example: refresh
+      attributes:
+        type: object
+        required:
+          - access_token
+          - refresh_token
+          - expires_in
+        properties:
+          access_token:
+            type: string
+            description: The new access token.
+            example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+          refresh_token:
+            type: string
+            description: The new refresh token.
+            example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+          expires_in:
+            type: integer
+            description: Time in seconds until the access token expires.
+            example: 3600

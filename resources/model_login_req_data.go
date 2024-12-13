@@ -16,21 +16,21 @@ import (
 	"fmt"
 )
 
-// LoginData - struct for LoginData
-type LoginData struct {
+// LoginReqData - struct for LoginReqData
+type LoginReqData struct {
 	MapmapOfStringAny *map[string]interface{}
 }
 
-// map[string]interface{}AsLoginData is a convenience function that returns map[string]interface{} wrapped in LoginData
-func MapmapOfStringAnyAsLoginData(v *map[string]interface{}) LoginData {
-	return LoginData{
+// map[string]interface{}AsLoginReqData is a convenience function that returns map[string]interface{} wrapped in LoginReqData
+func MapmapOfStringAnyAsLoginReqData(v *map[string]interface{}) LoginReqData {
+	return LoginReqData{
 		MapmapOfStringAny: v,
 	}
 }
 
 
 // Unmarshal JSON data into one of the pointers in the struct
-func (dst *LoginData) UnmarshalJSON(data []byte) error {
+func (dst *LoginReqData) UnmarshalJSON(data []byte) error {
 	var err error
 	match := 0
 	// try to unmarshal data into MapmapOfStringAny
@@ -54,16 +54,16 @@ func (dst *LoginData) UnmarshalJSON(data []byte) error {
 		// reset to nil
 		dst.MapmapOfStringAny = nil
 
-		return fmt.Errorf("data matches more than one schema in oneOf(LoginData)")
+		return fmt.Errorf("data matches more than one schema in oneOf(LoginReqData)")
 	} else if match == 1 {
 		return nil // exactly one match
 	} else { // no match
-		return fmt.Errorf("data failed to match schemas in oneOf(LoginData)")
+		return fmt.Errorf("data failed to match schemas in oneOf(LoginReqData)")
 	}
 }
 
 // Marshal data from the first non-nil pointers in the struct to JSON
-func (src LoginData) MarshalJSON() ([]byte, error) {
+func (src LoginReqData) MarshalJSON() ([]byte, error) {
 	if src.MapmapOfStringAny != nil {
 		return json.Marshal(&src.MapmapOfStringAny)
 	}
@@ -72,7 +72,7 @@ func (src LoginData) MarshalJSON() ([]byte, error) {
 }
 
 // Get the actual instance
-func (obj *LoginData) GetActualInstance() (interface{}) {
+func (obj *LoginReqData) GetActualInstance() (interface{}) {
 	if obj == nil {
 		return nil
 	}
@@ -84,38 +84,38 @@ func (obj *LoginData) GetActualInstance() (interface{}) {
 	return nil
 }
 
-type NullableLoginData struct {
-	value *LoginData
+type NullableLoginReqData struct {
+	value *LoginReqData
 	isSet bool
 }
 
-func (v NullableLoginData) Get() *LoginData {
+func (v NullableLoginReqData) Get() *LoginReqData {
 	return v.value
 }
 
-func (v *NullableLoginData) Set(val *LoginData) {
+func (v *NullableLoginReqData) Set(val *LoginReqData) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableLoginData) IsSet() bool {
+func (v NullableLoginReqData) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableLoginData) Unset() {
+func (v *NullableLoginReqData) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableLoginData(val *LoginData) *NullableLoginData {
-	return &NullableLoginData{value: val, isSet: true}
+func NewNullableLoginReqData(val *LoginReqData) *NullableLoginReqData {
+	return &NullableLoginReqData{value: val, isSet: true}
 }
 
-func (v NullableLoginData) MarshalJSON() ([]byte, error) {
+func (v NullableLoginReqData) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableLoginData) UnmarshalJSON(src []byte) error {
+func (v *NullableLoginReqData) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

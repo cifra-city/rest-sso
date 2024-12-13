@@ -19,51 +19,20 @@ paths:
         '201':
           description: User successfully registered
           content:
-            application/vnd.api+json:
+            application/json:
               schema:
-                $ref: './Registration.yaml'
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 201
         '400':
           $ref: '../spec/components/responses/invalidParameter.yaml'
-        '401':
-          $ref: '../spec/components/responses/invalidAuth.yaml'
-        '404':
-          $ref: '../spec/components/responses/notFound.yaml'
+        '409':
+          $ref: '../spec/components/responses/conflict.yaml'
+        '415':
+          $ref: '../spec/components/responses/unsupportedMediaType.yaml'
+        '429':
+          $ref: '../spec/components/responses/tooManyRequests.yaml'
         '500':
           $ref: '../spec/components/responses/internalError.yaml'
-
-components:
-  schemas:
-    Errors:
-      type: object
-      description: 'Standard JSON:API error'
-      required:
-        - errors
-      properties:
-        errors:
-          type: array
-          description: Non-empty array of errors occurred during request processing
-          items:
-            type: object
-            required:
-              - title
-              - status
-            properties:
-              title:
-                type: string
-                description: 'Title is a short, human-readable summary of the problem'
-                example: Bad Request
-              detail:
-                type: string
-                description: 'Detail is a human-readable explanation specific to this occurrence of the problem'
-                example: "Request body was expected"
-              status:
-                type: integer
-                description: 'Status is the HTTP status code applicable to this problem'
-                example: 400
-                enum:
-                  - 400
-                  - 401
-                  - 403
-                  - 404
-                  - 409
-                  - 500
