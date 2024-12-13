@@ -27,16 +27,26 @@ func Run(ctx context.Context) {
 		r.Route("/v1", func(r chi.Router) {
 			r.Route("/public", func(r chi.Router) {
 				r.Post("/reg", handlers.Registration)
+				r.Post("/login", handlers.Login)
 
-				r.Route("/auth", func(r chi.Router) {
-					r.Get("/login", handlers.Login)
-					r.Get("/logout", handlers.Logout)
-
+				r.Route("/user", func(r chi.Router) {
+					r.Use(authMW)
 					r.Route("/change", func(r chi.Router) {
-
-						r.Use(authMW)
-						r.Put("/username", handlers.ChangeUsername)
+						r.Patch("/username", handlers.ChangeUsername)
+						//r.Patch("/password", handlers.ChangePassword)
+						//r.Patch("/email", handlers.ChangeEmail)
 					})
+					r.Route("/confirm", func(r chi.Router) {
+						//r.Patch("/email", handlers.ConfirmEmail)
+						//r.Patch("/reset-password", handlers.ConfirmReestPassword)
+						//r.Patch("/reset-username", handlers.ConfirmResetUsername)
+						//r.Patch("/reset-email", handlers.ConfirmResetEmail)
+					})
+					r.Get("/logout", handlers.Logout)
+				})
+
+				r.Route("/tokens", func(r chi.Router) {
+					//r.Post("/refresh", handlers.RefershToken)
 				})
 			})
 		})

@@ -6,8 +6,13 @@ server:
   base_path: "/api/v1"
 
 jwt:
-  secret_key: "supersecretkey"  # Используется для подписи JWT-токенов.
-  token_lifetime: 3600          # Время жизни токена в секундах (например, 1 час).
+  access_token:
+    secret_key: "supersecretkey"    # Секретный ключ для подписи Access Token.
+    token_lifetime: 900            # Время жизни Access Token в секундах (например, 15 минут).
+  refresh_token:
+    secret_key: "refreshsuperkey"  # Секретный ключ для подписи Refresh Token (можно использовать другой ключ).
+    token_lifetime: 604800         # Время жизни Refresh Token в секундах (например, 7 дней).
+
 
 logging:
   level: "debug"                 # Уровни: "debug", "info", "warn", "error".

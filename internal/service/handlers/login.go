@@ -16,7 +16,6 @@ import (
 )
 
 func Login(w http.ResponseWriter, r *http.Request) {
-	// Получаем тело запроса
 	req, err := requests.NewLogin(r)
 	if err != nil {
 		httpresp.RenderErr(w, problems.BadRequest(err)...)
@@ -39,9 +38,9 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	log.Debugf("email: %v, password: %s, username: %v", em, pas, usr)
 
-	// Извлечение server из контекста
+	// Get server from context
 
-	// Работа с queries из server
+	// work with queries from server
 	if usr != nil {
 		user, err = Server.Queries.GetUserByUsername(r.Context(), *usr)
 		if err != nil {
@@ -60,7 +59,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Сравнение пароля
 	err = bcrypt.CompareHashAndPassword([]byte(user.PassHash), []byte(pas))
 	if err != nil {
 		log.Debugf("Incorrect password for user: %s, error: %s", user.Username, err)
@@ -68,15 +66,21 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Генерация JWT токена
-	token, err := cifrajwt.GenerateJWT(user.ID, Server.Config.JWT.TokenLifetime, Server.Config.JWT.SecretKey)
+	tokenAccess, err := cifrajwt.GenerateJWT(user.ID, Server.Config.JWT.AccessToken.TokenLifetime, Server.Config.JWT.AccessToken.SecretKey)
 	if err != nil {
-		log.Errorf("error generating jwt: %v", err)
+		log.Errorf("error generating token access jwt: %v", err)
+		httpresp.RenderErr(w, problems.InternalError())
+		return
+	}
+
+	tokenRefresh, err := cifrajwt.GenerateJWT(user.ID, Server.Config.JWT.RefreshToken.TokenLifetime, Server.Config.JWT.RefreshToken.SecretKey)
+	if err != nil {
+		log.Errorf("error generating token access jwt: %v", err)
 		httpresp.RenderErr(w, problems.InternalError())
 		return
 	}
 
 	log.Infof("user logged in: %s", user.Username)
-	
+
 	httpresp.Render(w, map[string]string{"token": token})
 }

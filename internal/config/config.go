@@ -17,8 +17,14 @@ type ServerConfig struct {
 }
 
 type JWTConfig struct {
-	SecretKey     string        `mapstructure:"secret_key"`
-	TokenLifetime time.Duration `mapstructure:"token_lifetime"`
+	AccessToken struct {
+		SecretKey     string        `mapstructure:"secret_key"`
+		TokenLifetime time.Duration `mapstructure:"token_lifetime"`
+	} `mapstructure:"access_token"`
+	RefreshToken struct {
+		SecretKey     string        `mapstructure:"secret_key"`
+		TokenLifetime time.Duration `mapstructure:"token_lifetime"`
+	} `mapstructure:"refresh_token"`
 }
 
 type LoggingConfig struct {

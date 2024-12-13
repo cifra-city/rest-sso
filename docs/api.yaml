@@ -11,8 +11,8 @@ paths:
 components:
   schemas:
     Registration:
-      $ref: './spec/components/schemas/Registration.yaml'
+      $ref: './spec/components/schemas/RegistrationReq.yaml'
     Login:
-        $ref: './spec/components/schemas/Login.yaml'
+        $ref: './spec/components/schemas/LoginReq.yaml'
     ChangeUsername:
-        $ref: './spec/components/schemas/ChangeUsername.yaml'
+        $ref: './spec/components/schemas/ChangeUsernameReq.yaml'

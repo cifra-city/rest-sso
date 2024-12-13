@@ -14,7 +14,7 @@ paths:
         content:
           application/vnd.api+json:
             schema:
-              $ref: '../spec/components/schemas/Registration.yaml'
+              $ref: '../spec/components/schemas/RegistrationReq.yaml'
       responses:
         '201':
           description: User successfully registered

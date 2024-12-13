@@ -14,7 +14,7 @@ paths:
         content:
           application/vnd.api+json:
             schema:
-              $ref: '../spec/components/schemas/Login.yaml'
+              $ref: '../spec/components/schemas/LoginReq.yaml'
       responses:
         '201':
           description: User successfully login
