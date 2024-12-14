@@ -100,16 +100,33 @@ components:
     LoginReq_data_attributes:
       properties:
         email:
-          description: User email
+          description: User email (required if username is not provided).
           format: email
           type: string
         username:
-          description: User username
+          description: User username (required if email is not provided).
           type: string
         password:
-          description: User password
+          description: User password.
+          type: string
+        factory_id:
+          description: Unique identifier for the user's device.
+          type: string
+        device_name:
+          description: "Human-readable name for the user's device (e.g., 'iPhone 14')."
+          type: string
+        os_version:
+          description: Operating system version of the user's device.
+          type: string
+        ip_address:
+          description: IP address of the user's device.
+          format: string
           type: string
       required:
+      - device_name
+      - factory_id
+      - ip_address
+      - os_version
       - password
       type: object
     LoginReq_data:
@@ -127,35 +144,29 @@ components:
     LoginResp_data_attributes:
       properties:
         access_token:
-          description: JWT access token for API access
+          description: Access Token для авторизации запросов.
           type: string
         refresh_token:
-          description: JWT refresh token for generating new access tokens
+          description: Refresh Token для обновления Access Token.
           type: string
-        token_type:
-          description: "Type of the token, typically 'Bearer'"
-          enum:
-          - Bearer
-          type: string
+        expires_in:
+          description: Время жизни Access Token в секундах.
+          type: integer
       required:
       - access_token
+      - expires_in
       - refresh_token
-      - token_type
       type: object
     LoginResp_data:
       properties:
         type:
           enum:
-          - token
-          type: string
-        id:
-          description: User ID (UUID)
+          - tokens
           type: string
         attributes:
           $ref: '#/components/schemas/LoginResp_data_attributes'
       required:
       - attributes
-      - id
       - type
       type: object
     ChangeUsername_data_attributes:

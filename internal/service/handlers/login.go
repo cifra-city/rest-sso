@@ -1,8 +1,10 @@
 package handlers
 
 import (
+	"database/sql"
 	"errors"
 	"net/http"
+	"time"
 
 	"github.com/cifra-city/rest-sso/internal/config"
 	"github.com/cifra-city/rest-sso/internal/db/data"
@@ -11,6 +13,8 @@ import (
 	"github.com/cifra-city/rest-sso/pkg/cifrajwt"
 	"github.com/cifra-city/rest-sso/pkg/httpresp"
 	"github.com/cifra-city/rest-sso/pkg/httpresp/problems"
+	"github.com/cifra-city/rest-sso/resources"
+	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -22,9 +26,18 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	em := req.Data.Attributes.Email
-	pas := req.Data.Attributes.Password
-	usr := req.Data.Attributes.Username
+	email := req.Data.Attributes.Email
+	pass := req.Data.Attributes.Password
+	username := req.Data.Attributes.Username
+	factoryId := req.Data.Attributes.FactoryId
+	deviceName := req.Data.Attributes.DeviceName
+	osVersion := req.Data.Attributes.OsVersion
+	ipAddress := req.Data.Attributes.IpAddress
+
+	if email == nil && username == nil {
+		httpresp.RenderErr(w, problems.BadRequest(errors.New("email or username is required"))...)
+		return
+	}
 
 	var user data.UsersSecret
 
@@ -36,33 +49,35 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 	log := Server.Logger
 
-	log.Debugf("email: %v, password: %s, username: %v", em, pas, usr)
+	log.Debugf("email: %v, password: %s, username: %v", email, pass, username)
 
-	// Get server from context
-
-	// work with queries from server
-	if usr != nil {
-		user, err = Server.Queries.GetUserByUsername(r.Context(), *usr)
-		if err != nil {
-			httpresp.RenderErr(w, problems.InternalError())
-			return
-		}
-	} else if em != nil {
-		user, err = Server.Queries.GetUserByEmail(r.Context(), *em)
-		if err != nil {
-			httpresp.RenderErr(w, problems.InternalError())
-			return
-		}
+	if username != nil {
+		user, err = Server.Queries.GetUserByUsername(r.Context(), *username)
 	} else {
-		log.Infof("Bad request; email: %v, password: %s, username: %v", em, pas, usr)
-		httpresp.RenderErr(w, problems.BadRequest(errors.New("email or username is required"))...)
+		user, err = Server.Queries.GetUserByEmail(r.Context(), *email)
+	}
+	if err != nil {
+		log.Errorf("Failed to get user: %v", err)
+		httpresp.RenderErr(w, problems.InternalError())
 		return
 	}
 
-	err = bcrypt.CompareHashAndPassword([]byte(user.PassHash), []byte(pas))
+	err = bcrypt.CompareHashAndPassword([]byte(user.PassHash), []byte(pass))
 	if err != nil {
+		err = Server.Queries.InsertLoginHistory(r.Context(), data.InsertLoginHistoryParams{
+			ID:        uuid.New(),
+			UserID:    user.ID,
+			DeviceID:  uuid.NullUUID{UUID: uuid.UUID{}, Valid: false},
+			IpAddress: sql.NullString{String: ipAddress, Valid: true},
+			LoginTime: time.Now().UTC(),
+			Success:   false,
+			FailureReason: data.NullFailureReason{
+				FailureReason: data.FailureReasonInvalidPassword,
+			},
+		})
+
 		log.Debugf("Incorrect password for user: %s, error: %s", user.Username, err)
-		httpresp.RenderErr(w, problems.NotAllowed(errors.New("invalid password")))
+		httpresp.RenderErr(w, problems.Unauthorized("invalid password"))
 		return
 	}
 
@@ -80,7 +95,24 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	expiresAt := time.Now().UTC().Add(Server.Config.JWT.RefreshToken.TokenLifetime)
+
+	err = Server.Queries.UpdateRefreshTokenTransaction(r.Context(), &user, factoryId, deviceName, osVersion, tokenRefresh, expiresAt, ipAddress)
+	if err != nil {
+		log.Errorf("error updating last used and refresh token: %v", err)
+		httpresp.RenderErr(w, problems.InternalError())
+		return
+	}
 	log.Infof("user logged in: %s", user.Username)
 
-	httpresp.Render(w, map[string]string{"token": token})
+	httpresp.Render(w, resources.LoginResp{
+		Data: resources.LoginRespData{
+			Type: "login",
+			Attributes: resources.LoginRespDataAttributes{
+				AccessToken:  tokenAccess,
+				RefreshToken: tokenRefresh,
+				ExpiresIn:    int32(Server.Config.JWT.AccessToken.TokenLifetime.Seconds()),
+			},
+		},
+	})
 }

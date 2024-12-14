@@ -56,7 +56,7 @@ func (q *Queries) DeleteOldDevices(ctx context.Context) error {
 }
 
 const getDeviceByID = `-- name: GetDeviceByID :one
-SELECT id, user_id, device_id, device_name, os_version, created_at, last_used FROM devices
+SELECT id, user_id, factory_id, device_name, os_version, created_at, last_used FROM devices
 WHERE id = $1
 `
 
@@ -66,7 +66,32 @@ func (q *Queries) GetDeviceByID(ctx context.Context, id uuid.UUID) (Device, erro
 	err := row.Scan(
 		&i.ID,
 		&i.UserID,
-		&i.DeviceID,
+		&i.FactoryID,
+		&i.DeviceName,
+		&i.OsVersion,
+		&i.CreatedAt,
+		&i.LastUsed,
+	)
+	return i, err
+}
+
+const getDeviceByUserIDAndFactoryId = `-- name: GetDeviceByUserIDAndFactoryId :one
+SELECT id, user_id, factory_id, device_name, os_version, created_at, last_used FROM devices
+WHERE user_id = $1 AND factory_id = $2
+`
+
+type GetDeviceByUserIDAndFactoryIdParams struct {
+	UserID    uuid.UUID
+	FactoryID string
+}
+
+func (q *Queries) GetDeviceByUserIDAndFactoryId(ctx context.Context, arg GetDeviceByUserIDAndFactoryIdParams) (Device, error) {
+	row := q.db.QueryRowContext(ctx, getDeviceByUserIDAndFactoryId, arg.UserID, arg.FactoryID)
+	var i Device
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.FactoryID,
 		&i.DeviceName,
 		&i.OsVersion,
 		&i.CreatedAt,
@@ -76,7 +101,7 @@ func (q *Queries) GetDeviceByID(ctx context.Context, id uuid.UUID) (Device, erro
 }
 
 const getDevicesByUserID = `-- name: GetDevicesByUserID :many
-SELECT id, user_id, device_id, device_name, os_version, created_at, last_used FROM devices
+SELECT id, user_id, factory_id, device_name, os_version, created_at, last_used FROM devices
 WHERE user_id = $1
 ORDER BY last_used DESC
 `
@@ -93,7 +118,7 @@ func (q *Queries) GetDevicesByUserID(ctx context.Context, userID uuid.UUID) ([]D
 		if err := rows.Scan(
 			&i.ID,
 			&i.UserID,
-			&i.DeviceID,
+			&i.FactoryID,
 			&i.DeviceName,
 			&i.OsVersion,
 			&i.CreatedAt,
@@ -113,7 +138,7 @@ func (q *Queries) GetDevicesByUserID(ctx context.Context, userID uuid.UUID) ([]D
 }
 
 const getUnusedDevices = `-- name: GetUnusedDevices :many
-SELECT id, user_id, device_id, device_name, os_version, created_at, last_used FROM devices
+SELECT id, user_id, factory_id, device_name, os_version, created_at, last_used FROM devices
 WHERE last_used < NOW() - INTERVAL '30 days'
 `
 
@@ -129,7 +154,7 @@ func (q *Queries) GetUnusedDevices(ctx context.Context) ([]Device, error) {
 		if err := rows.Scan(
 			&i.ID,
 			&i.UserID,
-			&i.DeviceID,
+			&i.FactoryID,
 			&i.DeviceName,
 			&i.OsVersion,
 			&i.CreatedAt,
@@ -185,14 +210,14 @@ func (q *Queries) GetUsersWithManyDevices(ctx context.Context, dollar_1 interfac
 }
 
 const insertDevice = `-- name: InsertDevice :exec
-INSERT INTO devices (id, user_id, device_id, device_name, os_version, created_at, last_used)
+INSERT INTO devices (id, user_id, factory_id, device_name, os_version, created_at, last_used)
 VALUES ($1, $2, $3, $4, $5, $6, $7)
 `
 
 type InsertDeviceParams struct {
 	ID         uuid.UUID
 	UserID     uuid.UUID
-	DeviceID   string
+	FactoryID  string
 	DeviceName sql.NullString
 	OsVersion  sql.NullString
 	CreatedAt  time.Time
@@ -203,7 +228,7 @@ func (q *Queries) InsertDevice(ctx context.Context, arg InsertDeviceParams) erro
 	_, err := q.db.ExecContext(ctx, insertDevice,
 		arg.ID,
 		arg.UserID,
-		arg.DeviceID,
+		arg.FactoryID,
 		arg.DeviceName,
 		arg.OsVersion,
 		arg.CreatedAt,
@@ -241,5 +266,21 @@ type UpdateLastUsedParams struct {
 
 func (q *Queries) UpdateLastUsed(ctx context.Context, arg UpdateLastUsedParams) error {
 	_, err := q.db.ExecContext(ctx, updateLastUsed, arg.ID, arg.LastUsed)
+	return err
+}
+
+const updateLastUsedByFactoryId = `-- name: UpdateLastUsedByFactoryId :exec
+UPDATE devices
+SET last_used = $2
+WHERE factory_id = $1
+`
+
+type UpdateLastUsedByFactoryIdParams struct {
+	FactoryID string
+	LastUsed  time.Time
+}
+
+func (q *Queries) UpdateLastUsedByFactoryId(ctx context.Context, arg UpdateLastUsedByFactoryIdParams) error {
+	_, err := q.db.ExecContext(ctx, updateLastUsedByFactoryId, arg.FactoryID, arg.LastUsed)
 	return err
 }

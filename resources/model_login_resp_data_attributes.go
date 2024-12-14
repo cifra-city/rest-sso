@@ -21,12 +21,12 @@ var _ MappedNullable = &LoginRespDataAttributes{}
 
 // LoginRespDataAttributes struct for LoginRespDataAttributes
 type LoginRespDataAttributes struct {
-	// JWT access token for API access
+	// Access Token для авторизации запросов.
 	AccessToken string `json:"access_token"`
-	// JWT refresh token for generating new access tokens
+	// Refresh Token для обновления Access Token.
 	RefreshToken string `json:"refresh_token"`
-	// Type of the token, typically 'Bearer'
-	TokenType string `json:"token_type"`
+	// Время жизни Access Token в секундах.
+	ExpiresIn int32 `json:"expires_in"`
 }
 
 type _LoginRespDataAttributes LoginRespDataAttributes
@@ -35,11 +35,11 @@ type _LoginRespDataAttributes LoginRespDataAttributes
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewLoginRespDataAttributes(accessToken string, refreshToken string, tokenType string) *LoginRespDataAttributes {
+func NewLoginRespDataAttributes(accessToken string, refreshToken string, expiresIn int32) *LoginRespDataAttributes {
 	this := LoginRespDataAttributes{}
 	this.AccessToken = accessToken
 	this.RefreshToken = refreshToken
-	this.TokenType = tokenType
+	this.ExpiresIn = expiresIn
 	return &this
 }
 
@@ -99,28 +99,28 @@ func (o *LoginRespDataAttributes) SetRefreshToken(v string) {
 	o.RefreshToken = v
 }
 
-// GetTokenType returns the TokenType field value
-func (o *LoginRespDataAttributes) GetTokenType() string {
+// GetExpiresIn returns the ExpiresIn field value
+func (o *LoginRespDataAttributes) GetExpiresIn() int32 {
 	if o == nil {
-		var ret string
+		var ret int32
 		return ret
 	}
 
-	return o.TokenType
+	return o.ExpiresIn
 }
 
-// GetTokenTypeOk returns a tuple with the TokenType field value
+// GetExpiresInOk returns a tuple with the ExpiresIn field value
 // and a boolean to check if the value has been set.
-func (o *LoginRespDataAttributes) GetTokenTypeOk() (*string, bool) {
+func (o *LoginRespDataAttributes) GetExpiresInOk() (*int32, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.TokenType, true
+	return &o.ExpiresIn, true
 }
 
-// SetTokenType sets field value
-func (o *LoginRespDataAttributes) SetTokenType(v string) {
-	o.TokenType = v
+// SetExpiresIn sets field value
+func (o *LoginRespDataAttributes) SetExpiresIn(v int32) {
+	o.ExpiresIn = v
 }
 
 func (o LoginRespDataAttributes) MarshalJSON() ([]byte, error) {
@@ -135,7 +135,7 @@ func (o LoginRespDataAttributes) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["access_token"] = o.AccessToken
 	toSerialize["refresh_token"] = o.RefreshToken
-	toSerialize["token_type"] = o.TokenType
+	toSerialize["expires_in"] = o.ExpiresIn
 	return toSerialize, nil
 }
 
@@ -146,7 +146,7 @@ func (o *LoginRespDataAttributes) UnmarshalJSON(data []byte) (err error) {
 	requiredProperties := []string{
 		"access_token",
 		"refresh_token",
-		"token_type",
+		"expires_in",
 	}
 
 	allProperties := make(map[string]interface{})

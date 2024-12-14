@@ -34,7 +34,7 @@ func (q *Queries) DeleteRefreshToken(ctx context.Context, token string) error {
 }
 
 const getRefreshToken = `-- name: GetRefreshToken :one
-SELECT id, user_id, token, created_at, expires_at, device_info, ip_address
+SELECT id, user_id, token, created_at, expires_at, device_id, ip_address
 FROM refresh_tokens
 WHERE token = $1
 `
@@ -48,14 +48,40 @@ func (q *Queries) GetRefreshToken(ctx context.Context, token string) (RefreshTok
 		&i.Token,
 		&i.CreatedAt,
 		&i.ExpiresAt,
-		&i.DeviceInfo,
+		&i.DeviceID,
+		&i.IpAddress,
+	)
+	return i, err
+}
+
+const getTokenByUserIdAndDeviceId = `-- name: GetTokenByUserIdAndDeviceId :one
+SELECT id, user_id, token, created_at, expires_at, device_id, ip_address
+FROM refresh_tokens
+WHERE user_id = $1 AND device_id = $2
+`
+
+type GetTokenByUserIdAndDeviceIdParams struct {
+	UserID   uuid.UUID
+	DeviceID uuid.UUID
+}
+
+func (q *Queries) GetTokenByUserIdAndDeviceId(ctx context.Context, arg GetTokenByUserIdAndDeviceIdParams) (RefreshToken, error) {
+	row := q.db.QueryRowContext(ctx, getTokenByUserIdAndDeviceId, arg.UserID, arg.DeviceID)
+	var i RefreshToken
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.Token,
+		&i.CreatedAt,
+		&i.ExpiresAt,
+		&i.DeviceID,
 		&i.IpAddress,
 	)
 	return i, err
 }
 
 const getTokensByUserID = `-- name: GetTokensByUserID :many
-SELECT id, user_id, token, created_at, expires_at, device_info, ip_address
+SELECT id, user_id, token, created_at, expires_at, device_id, ip_address
 FROM refresh_tokens
 WHERE user_id = $1
 `
@@ -75,7 +101,7 @@ func (q *Queries) GetTokensByUserID(ctx context.Context, userID uuid.UUID) ([]Re
 			&i.Token,
 			&i.CreatedAt,
 			&i.ExpiresAt,
-			&i.DeviceInfo,
+			&i.DeviceID,
 			&i.IpAddress,
 		); err != nil {
 			return nil, err
@@ -92,18 +118,18 @@ func (q *Queries) GetTokensByUserID(ctx context.Context, userID uuid.UUID) ([]Re
 }
 
 const insertRefreshToken = `-- name: InsertRefreshToken :exec
-INSERT INTO refresh_tokens (id, user_id, token, created_at, expires_at, device_info, ip_address)
+INSERT INTO refresh_tokens (id, user_id, token, created_at, expires_at, device_id, ip_address)
 VALUES ($1, $2, $3, $4, $5, $6, $7)
 `
 
 type InsertRefreshTokenParams struct {
-	ID         uuid.UUID
-	UserID     uuid.UUID
-	Token      string
-	CreatedAt  time.Time
-	ExpiresAt  time.Time
-	DeviceInfo sql.NullString
-	IpAddress  sql.NullString
+	ID        uuid.UUID
+	UserID    uuid.UUID
+	Token     string
+	CreatedAt time.Time
+	ExpiresAt time.Time
+	DeviceID  uuid.UUID
+	IpAddress sql.NullString
 }
 
 func (q *Queries) InsertRefreshToken(ctx context.Context, arg InsertRefreshTokenParams) error {
@@ -113,7 +139,7 @@ func (q *Queries) InsertRefreshToken(ctx context.Context, arg InsertRefreshToken
 		arg.Token,
 		arg.CreatedAt,
 		arg.ExpiresAt,
-		arg.DeviceInfo,
+		arg.DeviceID,
 		arg.IpAddress,
 	)
 	return err
@@ -134,16 +160,16 @@ func (q *Queries) IsTokenExpired(ctx context.Context, token string) (int64, erro
 
 const updateRefreshToken = `-- name: UpdateRefreshToken :exec
 UPDATE refresh_tokens
-SET token = $2, expires_at = $3, device_info = $4, ip_address = $5
+SET token = $2, expires_at = $3, device_id = $4, ip_address = $5
 WHERE id = $1
 `
 
 type UpdateRefreshTokenParams struct {
-	ID         uuid.UUID
-	Token      string
-	ExpiresAt  time.Time
-	DeviceInfo sql.NullString
-	IpAddress  sql.NullString
+	ID        uuid.UUID
+	Token     string
+	ExpiresAt time.Time
+	DeviceID  uuid.UUID
+	IpAddress sql.NullString
 }
 
 func (q *Queries) UpdateRefreshToken(ctx context.Context, arg UpdateRefreshTokenParams) error {
@@ -151,8 +177,31 @@ func (q *Queries) UpdateRefreshToken(ctx context.Context, arg UpdateRefreshToken
 		arg.ID,
 		arg.Token,
 		arg.ExpiresAt,
-		arg.DeviceInfo,
+		arg.DeviceID,
 		arg.IpAddress,
+	)
+	return err
+}
+
+const updateRefreshTokenByDeviceAndUserID = `-- name: UpdateRefreshTokenByDeviceAndUserID :exec
+UPDATE refresh_tokens
+SET token = $3, expires_at = $4
+WHERE user_id = $1 AND device_id = $2
+`
+
+type UpdateRefreshTokenByDeviceAndUserIDParams struct {
+	UserID    uuid.UUID
+	DeviceID  uuid.UUID
+	Token     string
+	ExpiresAt time.Time
+}
+
+func (q *Queries) UpdateRefreshTokenByDeviceAndUserID(ctx context.Context, arg UpdateRefreshTokenByDeviceAndUserIDParams) error {
+	_, err := q.db.ExecContext(ctx, updateRefreshTokenByDeviceAndUserID,
+		arg.UserID,
+		arg.DeviceID,
+		arg.Token,
+		arg.ExpiresAt,
 	)
 	return err
 }

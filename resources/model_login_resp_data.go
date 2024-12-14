@@ -22,8 +22,6 @@ var _ MappedNullable = &LoginRespData{}
 // LoginRespData struct for LoginRespData
 type LoginRespData struct {
 	Type string `json:"type"`
-	// User ID (UUID)
-	Id string `json:"id"`
 	Attributes LoginRespDataAttributes `json:"attributes"`
 }
 
@@ -33,10 +31,9 @@ type _LoginRespData LoginRespData
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewLoginRespData(type_ string, id string, attributes LoginRespDataAttributes) *LoginRespData {
+func NewLoginRespData(type_ string, attributes LoginRespDataAttributes) *LoginRespData {
 	this := LoginRespData{}
 	this.Type = type_
-	this.Id = id
 	this.Attributes = attributes
 	return &this
 }
@@ -71,30 +68,6 @@ func (o *LoginRespData) GetTypeOk() (*string, bool) {
 // SetType sets field value
 func (o *LoginRespData) SetType(v string) {
 	o.Type = v
-}
-
-// GetId returns the Id field value
-func (o *LoginRespData) GetId() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.Id
-}
-
-// GetIdOk returns a tuple with the Id field value
-// and a boolean to check if the value has been set.
-func (o *LoginRespData) GetIdOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.Id, true
-}
-
-// SetId sets field value
-func (o *LoginRespData) SetId(v string) {
-	o.Id = v
 }
 
 // GetAttributes returns the Attributes field value
@@ -132,7 +105,6 @@ func (o LoginRespData) MarshalJSON() ([]byte, error) {
 func (o LoginRespData) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["type"] = o.Type
-	toSerialize["id"] = o.Id
 	toSerialize["attributes"] = o.Attributes
 	return toSerialize, nil
 }
@@ -143,7 +115,6 @@ func (o *LoginRespData) UnmarshalJSON(data []byte) (err error) {
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
 		"type",
-		"id",
 		"attributes",
 	}
 

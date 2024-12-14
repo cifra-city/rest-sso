@@ -3,31 +3,27 @@ required:
   - data
 properties:
   data:
+    type: object
     required:
       - type
-      - id
       - attributes
     properties:
       type:
         type: string
-        enum: [ token ]
-      id:
-        type: string
-        description: "User ID (UUID)"
+        enum: [tokens]
       attributes:
         type: object
         required:
           - access_token
           - refresh_token
-          - token_type
+          - expires_in
         properties:
           access_token:
             type: string
-            description: "JWT access token for API access"
+            description: "Access Token для авторизации запросов."
           refresh_token:
             type: string
-            description: "JWT refresh token for generating new access tokens"
-          token_type:
-            type: string
-            enum: [ Bearer ]
-            description: "Type of the token, typically 'Bearer'"
+            description: "Refresh Token для обновления Access Token."
+          expires_in:
+            type: integer
+            description: "Время жизни Access Token в секундах."

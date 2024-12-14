@@ -1,11 +1,16 @@
 -- name: InsertDevice :exec
-INSERT INTO devices (id, user_id, device_id, device_name, os_version, created_at, last_used)
+INSERT INTO devices (id, user_id, factory_id, device_name, os_version, created_at, last_used)
 VALUES ($1, $2, $3, $4, $5, $6, $7);
 
 -- name: UpdateLastUsed :exec
 UPDATE devices
 SET last_used = $2
 WHERE id = $1;
+
+-- name: UpdateLastUsedByFactoryId :exec
+UPDATE devices
+SET last_used = $2
+WHERE factory_id = $1;
 
 -- name: UpdateDeviceName :exec
 UPDATE devices
@@ -16,6 +21,10 @@ WHERE id = $1;
 SELECT * FROM devices
 WHERE user_id = $1
 ORDER BY last_used DESC;
+
+-- name: GetDeviceByUserIDAndFactoryId :one
+SELECT * FROM devices
+WHERE user_id = $1 AND factory_id = $2;
 
 -- name: GetDeviceByID :one
 SELECT * FROM devices

@@ -233,7 +233,7 @@ type InsertLoginHistoryParams struct {
 	IpAddress     sql.NullString
 	LoginTime     time.Time
 	Success       bool
-	FailureReason sql.NullString
+	FailureReason NullFailureReason
 }
 
 func (q *Queries) InsertLoginHistory(ctx context.Context, arg InsertLoginHistoryParams) error {

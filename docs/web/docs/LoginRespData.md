@@ -5,14 +5,13 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Type** | **string** |  | 
-**Id** | **string** | User ID (UUID) | 
 **Attributes** | [**LoginRespDataAttributes**](LoginRespDataAttributes.md) |  | 
 
 ## Methods
 
 ### NewLoginRespData
 
-`func NewLoginRespData(type_ string, id string, attributes LoginRespDataAttributes, ) *LoginRespData`
+`func NewLoginRespData(type_ string, attributes LoginRespDataAttributes, ) *LoginRespData`
 
 NewLoginRespData instantiates a new LoginRespData object
 This constructor will assign default values to properties that have it defined,
@@ -45,26 +44,6 @@ and a boolean to check if the value has been set.
 `func (o *LoginRespData) SetType(v string)`
 
 SetType sets Type field to given value.
-
-
-### GetId
-
-`func (o *LoginRespData) GetId() string`
-
-GetId returns the Id field if non-nil, zero value otherwise.
-
-### GetIdOk
-
-`func (o *LoginRespData) GetIdOk() (*string, bool)`
-
-GetIdOk returns a tuple with the Id field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetId
-
-`func (o *LoginRespData) SetId(v string)`
-
-SetId sets Id field to given value.
 
 
 ### GetAttributes

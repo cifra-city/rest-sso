@@ -6,15 +6,63 @@ package data
 
 import (
 	"database/sql"
+	"database/sql/driver"
+	"fmt"
 	"time"
 
 	"github.com/google/uuid"
 )
 
+type FailureReason string
+
+const (
+	FailureReasonInvalidPassword FailureReason = "invalid_password"
+	FailureReasonAccountLocked   FailureReason = "account_locked"
+	FailureReasonExpiredToken    FailureReason = "expired_token"
+	FailureReasonInvalidDeviceID FailureReason = "invalid_device_id"
+	FailureReasonTooManyAttempts FailureReason = "too_many_attempts"
+	FailureReasonSuccess         FailureReason = "success"
+)
+
+func (e *FailureReason) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = FailureReason(s)
+	case string:
+		*e = FailureReason(s)
+	default:
+		return fmt.Errorf("unsupported scan type for FailureReason: %T", src)
+	}
+	return nil
+}
+
+type NullFailureReason struct {
+	FailureReason FailureReason
+	Valid         bool // Valid is true if FailureReason is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullFailureReason) Scan(value interface{}) error {
+	if value == nil {
+		ns.FailureReason, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.FailureReason.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullFailureReason) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.FailureReason), nil
+}
+
 type Device struct {
 	ID         uuid.UUID
 	UserID     uuid.UUID
-	DeviceID   string
+	FactoryID  string
 	DeviceName sql.NullString
 	OsVersion  sql.NullString
 	CreatedAt  time.Time
@@ -28,17 +76,17 @@ type LoginHistory struct {
 	IpAddress     sql.NullString
 	LoginTime     time.Time
 	Success       bool
-	FailureReason sql.NullString
+	FailureReason NullFailureReason
 }
 
 type RefreshToken struct {
-	ID         uuid.UUID
-	UserID     uuid.UUID
-	Token      string
-	CreatedAt  time.Time
-	ExpiresAt  time.Time
-	DeviceInfo sql.NullString
-	IpAddress  sql.NullString
+	ID        uuid.UUID
+	UserID    uuid.UUID
+	Token     string
+	CreatedAt time.Time
+	ExpiresAt time.Time
+	DeviceID  uuid.UUID
+	IpAddress sql.NullString
 }
 
 type UsersSecret struct {

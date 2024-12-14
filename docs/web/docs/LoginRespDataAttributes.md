@@ -4,15 +4,15 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**AccessToken** | **string** | JWT access token for API access | 
-**RefreshToken** | **string** | JWT refresh token for generating new access tokens | 
-**TokenType** | **string** | Type of the token, typically &#39;Bearer&#39; | 
+**AccessToken** | **string** | Access Token для авторизации запросов. | 
+**RefreshToken** | **string** | Refresh Token для обновления Access Token. | 
+**ExpiresIn** | **int32** | Время жизни Access Token в секундах. | 
 
 ## Methods
 
 ### NewLoginRespDataAttributes
 
-`func NewLoginRespDataAttributes(accessToken string, refreshToken string, tokenType string, ) *LoginRespDataAttributes`
+`func NewLoginRespDataAttributes(accessToken string, refreshToken string, expiresIn int32, ) *LoginRespDataAttributes`
 
 NewLoginRespDataAttributes instantiates a new LoginRespDataAttributes object
 This constructor will assign default values to properties that have it defined,
@@ -67,24 +67,24 @@ and a boolean to check if the value has been set.
 SetRefreshToken sets RefreshToken field to given value.
 
 
-### GetTokenType
+### GetExpiresIn
 
-`func (o *LoginRespDataAttributes) GetTokenType() string`
+`func (o *LoginRespDataAttributes) GetExpiresIn() int32`
 
-GetTokenType returns the TokenType field if non-nil, zero value otherwise.
+GetExpiresIn returns the ExpiresIn field if non-nil, zero value otherwise.
 
-### GetTokenTypeOk
+### GetExpiresInOk
 
-`func (o *LoginRespDataAttributes) GetTokenTypeOk() (*string, bool)`
+`func (o *LoginRespDataAttributes) GetExpiresInOk() (*int32, bool)`
 
-GetTokenTypeOk returns a tuple with the TokenType field if it's non-nil, zero value otherwise
+GetExpiresInOk returns a tuple with the ExpiresIn field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetTokenType
+### SetExpiresIn
 
-`func (o *LoginRespDataAttributes) SetTokenType(v string)`
+`func (o *LoginRespDataAttributes) SetExpiresIn(v int32)`
 
-SetTokenType sets TokenType field to given value.
+SetExpiresIn sets ExpiresIn field to given value.
 
 
 
