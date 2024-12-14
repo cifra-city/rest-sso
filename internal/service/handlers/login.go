@@ -58,6 +58,10 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 	if err != nil {
 		log.Errorf("Failed to get user: %v", err)
+		if errors.Is(err, sql.ErrNoRows) {
+			httpresp.RenderErr(w, problems.Unauthorized())
+			return
+		}
 		httpresp.RenderErr(w, problems.InternalError())
 		return
 	}
@@ -77,7 +81,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		})
 
 		log.Debugf("Incorrect password for user: %s, error: %s", user.Username, err)
-		httpresp.RenderErr(w, problems.Unauthorized("invalid password"))
+		httpresp.RenderErr(w, problems.Unauthorized())
 		return
 	}
 
