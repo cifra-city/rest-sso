@@ -2,30 +2,29 @@ package cifrajwt
 
 import (
 	"context"
+	"errors"
+	"net/http"
 	"strings"
-
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/metadata"
-	"google.golang.org/grpc/status"
 )
 
-// ExtractToken extracts the JWT token from the gRPC metadata.
+// ExtractToken extracts the JWT token from the Authorization header of an HTTP request.
 func ExtractToken(ctx context.Context) (string, error) {
-	md, ok := metadata.FromIncomingContext(ctx)
-	if !ok {
-		return "", status.Error(codes.Unauthenticated, "missing metadata")
+	// Извлекаем HTTP-запрос из контекста
+	req, ok := ctx.Value(http.Request{}).(*http.Request)
+	if !ok || req == nil {
+		return "", errors.New("failed to retrieve HTTP request from context")
 	}
 
-	// Get the "Authorization" header value.
-	authHeader, ok := md["authorization"]
-	if !ok || len(authHeader) == 0 {
-		return "", status.Error(codes.Unauthenticated, "missing authorization header")
+	// Извлекаем заголовок Authorization
+	authHeader := req.Header.Get("Authorization")
+	if authHeader == "" {
+		return "", errors.New("missing authorization header")
 	}
 
-	// Expecting "Bearer <token>" format.
-	parts := strings.Split(authHeader[0], " ")
+	// Проверяем формат: "Bearer <token>"
+	parts := strings.Split(authHeader, " ")
 	if len(parts) != 2 || strings.ToLower(parts[0]) != "bearer" {
-		return "", status.Error(codes.Unauthenticated, "invalid authorization header format")
+		return "", errors.New("invalid authorization header format")
 	}
 
 	return parts[1], nil

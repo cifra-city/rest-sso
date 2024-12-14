@@ -2,7 +2,7 @@ database:
   url: "postgresql://postgres:postgres@localhost:5555/postgres?sslmode=disable"
 
 server:
-  port: ":8888"
+  port: ":8080"
   base_path: "/api/v1"
 
 jwt:

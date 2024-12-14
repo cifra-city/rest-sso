@@ -14,7 +14,7 @@ import (
 func VerificationJWT(ctx context.Context, log *logrus.Logger, sk string) (uuid.UUID, error) {
 	tokenString, err := ExtractToken(ctx)
 	if err != nil {
-		log.Info("Failed to extract token from context")
+		log.Info("Failed to extract token from context %s", err)
 		return uuid.Nil, status.Error(codes.Unauthenticated, "missing or malformed token")
 	}
 

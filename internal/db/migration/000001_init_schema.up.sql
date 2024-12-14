@@ -31,7 +31,7 @@ CREATE TABLE refresh_tokens (
     created_at TIMESTAMP NOT NULL DEFAULT now(),
     expires_at TIMESTAMP NOT NULL,
     device_id UUID NOT NULL REFERENCES devices(id) ON DELETE CASCADE,
-    ip_address TEXT
+    ip_address TEXT NOT NULL
 );
 
 CREATE INDEX refresh_token_device_index ON refresh_tokens ("device_id");
@@ -44,6 +44,9 @@ CREATE TYPE failure_reason AS ENUM (
     'account_locked',
     'expired_token',
     'invalid_device_id',
+    'invalid_refresh_token',
+    'invalid_device_factory_id',
+    'invalid_user_id',
     'too_many_attempts',
     'success'
 );
@@ -51,8 +54,8 @@ CREATE TYPE failure_reason AS ENUM (
 CREATE TABLE login_history (
     id UUID PRIMARY KEY NOT NULL,
     user_id UUID NOT NULL REFERENCES users_secret(id) ON DELETE CASCADE,
-    device_id UUID REFERENCES devices(id) ON DELETE CASCADE,
-    ip_address TEXT,
+    device_id UUID NOT NULL REFERENCES devices(id) ON DELETE CASCADE,
+    ip_address TEXT NOT NULL,
     login_time TIMESTAMP NOT NULL DEFAULT now(),
     success BOOLEAN NOT NULL,
     failure_reason failure_reason

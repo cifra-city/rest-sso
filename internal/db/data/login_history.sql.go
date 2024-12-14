@@ -7,7 +7,6 @@ package data
 
 import (
 	"context"
-	"database/sql"
 	"time"
 
 	"github.com/google/uuid"
@@ -42,7 +41,7 @@ DELETE FROM login_history
 WHERE device_id = $1
 `
 
-func (q *Queries) DeleteLoginHistoryByDeviceID(ctx context.Context, deviceID uuid.NullUUID) error {
+func (q *Queries) DeleteLoginHistoryByDeviceID(ctx context.Context, deviceID uuid.UUID) error {
 	_, err := q.db.ExecContext(ctx, deleteLoginHistoryByDeviceID, deviceID)
 	return err
 }
@@ -73,7 +72,7 @@ WHERE device_id = $1
 ORDER BY login_time DESC
 `
 
-func (q *Queries) GetLoginHistoryByDeviceID(ctx context.Context, deviceID uuid.NullUUID) ([]LoginHistory, error) {
+func (q *Queries) GetLoginHistoryByDeviceID(ctx context.Context, deviceID uuid.UUID) ([]LoginHistory, error) {
 	rows, err := q.db.QueryContext(ctx, getLoginHistoryByDeviceID, deviceID)
 	if err != nil {
 		return nil, err
@@ -229,8 +228,8 @@ VALUES ($1, $2, $3, $4, $5, $6, $7)
 type InsertLoginHistoryParams struct {
 	ID            uuid.UUID
 	UserID        uuid.UUID
-	DeviceID      uuid.NullUUID
-	IpAddress     sql.NullString
+	DeviceID      uuid.UUID
+	IpAddress     string
 	LoginTime     time.Time
 	Success       bool
 	FailureReason NullFailureReason

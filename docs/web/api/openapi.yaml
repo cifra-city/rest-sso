@@ -200,7 +200,30 @@ components:
           description: The refresh token to generate a new access token.
           example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
           type: string
+        device_id:
+          description: The device ID of the device that the refresh token was issued
+            to. (Not factory ID)
+          example: 123e4567-e89b-12d3-a456-426614174000
+          format: uuid.UUID
+          type: string
+        factory_id:
+          description: Unique identifier for the user's device.
+          type: string
+        device_name:
+          description: "Human-readable name for the user's device (e.g., 'iPhone 14')."
+          type: string
+        os_version:
+          description: Operating system version of the user's device.
+          type: string
+        ip_address:
+          description: IP address of the user's device.
+          format: string
+          type: string
       required:
+      - device_name
+      - factory_id
+      - ip_address
+      - os_version
       - refresh_token
       type: object
     RefreshReq_data:

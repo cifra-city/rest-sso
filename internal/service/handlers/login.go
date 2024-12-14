@@ -71,8 +71,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		err = Server.Queries.InsertLoginHistory(r.Context(), data.InsertLoginHistoryParams{
 			ID:        uuid.New(),
 			UserID:    user.ID,
-			DeviceID:  uuid.NullUUID{UUID: uuid.UUID{}, Valid: false},
-			IpAddress: sql.NullString{String: ipAddress, Valid: true},
+			DeviceID:  uuid.UUID{},
+			IpAddress: ipAddress,
 			LoginTime: time.Now().UTC(),
 			Success:   false,
 			FailureReason: data.NullFailureReason{

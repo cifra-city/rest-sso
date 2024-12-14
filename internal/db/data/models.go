@@ -16,12 +16,15 @@ import (
 type FailureReason string
 
 const (
-	FailureReasonInvalidPassword FailureReason = "invalid_password"
-	FailureReasonAccountLocked   FailureReason = "account_locked"
-	FailureReasonExpiredToken    FailureReason = "expired_token"
-	FailureReasonInvalidDeviceID FailureReason = "invalid_device_id"
-	FailureReasonTooManyAttempts FailureReason = "too_many_attempts"
-	FailureReasonSuccess         FailureReason = "success"
+	FailureReasonInvalidPassword        FailureReason = "invalid_password"
+	FailureReasonAccountLocked          FailureReason = "account_locked"
+	FailureReasonExpiredToken           FailureReason = "expired_token"
+	FailureReasonInvalidDeviceID        FailureReason = "invalid_device_id"
+	FailureReasonInvalidRefreshToken    FailureReason = "invalid_refresh_token"
+	FailureReasonInvalidDeviceFactoryID FailureReason = "invalid_device_factory_id"
+	FailureReasonInvalidUserID          FailureReason = "invalid_user_id"
+	FailureReasonTooManyAttempts        FailureReason = "too_many_attempts"
+	FailureReasonSuccess                FailureReason = "success"
 )
 
 func (e *FailureReason) Scan(src interface{}) error {
@@ -72,8 +75,8 @@ type Device struct {
 type LoginHistory struct {
 	ID            uuid.UUID
 	UserID        uuid.UUID
-	DeviceID      uuid.NullUUID
-	IpAddress     sql.NullString
+	DeviceID      uuid.UUID
+	IpAddress     string
 	LoginTime     time.Time
 	Success       bool
 	FailureReason NullFailureReason
@@ -86,7 +89,7 @@ type RefreshToken struct {
 	CreatedAt time.Time
 	ExpiresAt time.Time
 	DeviceID  uuid.UUID
-	IpAddress sql.NullString
+	IpAddress string
 }
 
 type UsersSecret struct {

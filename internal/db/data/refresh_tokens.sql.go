@@ -7,7 +7,6 @@ package data
 
 import (
 	"context"
-	"database/sql"
 	"time"
 
 	"github.com/google/uuid"
@@ -129,7 +128,7 @@ type InsertRefreshTokenParams struct {
 	CreatedAt time.Time
 	ExpiresAt time.Time
 	DeviceID  uuid.UUID
-	IpAddress sql.NullString
+	IpAddress string
 }
 
 func (q *Queries) InsertRefreshToken(ctx context.Context, arg InsertRefreshTokenParams) error {
@@ -169,7 +168,7 @@ type UpdateRefreshTokenParams struct {
 	Token     string
 	ExpiresAt time.Time
 	DeviceID  uuid.UUID
-	IpAddress sql.NullString
+	IpAddress string
 }
 
 func (q *Queries) UpdateRefreshToken(ctx context.Context, arg UpdateRefreshTokenParams) error {

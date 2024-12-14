@@ -96,7 +96,7 @@ func (q *Queries) UpdateRefreshTokenTransaction(
 			CreatedAt: time.Now().UTC(),
 			ExpiresAt: expiresAt,
 			DeviceID:  device.ID,
-			IpAddress: sql.NullString{String: ipAddress, Valid: true},
+			IpAddress: ipAddress,
 		})
 		if err != nil {
 			logrus.Errorf("err token 2: %s", err)
@@ -121,8 +121,8 @@ func (q *Queries) UpdateRefreshTokenTransaction(
 	err = queries.InsertLoginHistory(ctx, InsertLoginHistoryParams{
 		ID:        uuid.New(),
 		UserID:    user.ID,
-		DeviceID:  uuid.NullUUID{UUID: device.ID, Valid: true},
-		IpAddress: sql.NullString{String: ipAddress, Valid: true},
+		DeviceID:  device.ID,
+		IpAddress: ipAddress,
 		LoginTime: time.Now().UTC(),
 		Success:   true,
 		FailureReason: NullFailureReason{

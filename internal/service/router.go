@@ -21,7 +21,7 @@ func Run(ctx context.Context) {
 	}
 
 	r.Use(cifractx.MiddlewareWithContext(config.SERVICE, service))
-	authMW := middleware.AuthJWTMiddleware(service.Config.JWT.AccessToken.SecretKey, service.Logger)
+	authMW := middleware.JWTMiddleware(service.Config.JWT.AccessToken.SecretKey, service.Logger)
 
 	r.Route("/cifra-sso", func(r chi.Router) {
 		r.Route("/v1", func(r chi.Router) {
@@ -46,7 +46,13 @@ func Run(ctx context.Context) {
 				})
 
 				r.Route("/tokens", func(r chi.Router) {
-					//r.Post("/refresh", handlers.RefershToken)
+					r.Use(authMW)
+					r.Post("/refresh", handlers.Refresh)
+				})
+
+				r.Route("/test", func(r chi.Router) {
+					r.Use(authMW)
+					r.Post("/test", handlers.Testw)
 				})
 			})
 		})
