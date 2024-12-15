@@ -45,15 +45,7 @@ func Run(ctx context.Context) {
 					r.Get("/logout", handlers.Logout)
 				})
 
-				r.Route("/tokens", func(r chi.Router) {
-					r.Use(authMW)
-					r.Post("/refresh", handlers.Refresh)
-				})
-
-				r.Route("/test", func(r chi.Router) {
-					r.Use(authMW)
-					r.Post("/test", handlers.Testw)
-				})
+				r.Post("/refresh", handlers.Refresh)
 			})
 		})
 	})

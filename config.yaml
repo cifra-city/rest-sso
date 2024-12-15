@@ -11,6 +11,7 @@ jwt:
     token_lifetime: 900            # Время жизни Access Token в секундах (например, 15 минут).
   refresh_token:
     secret_key: "refreshsuperkey"  # Секретный ключ для подписи Refresh Token (можно использовать другой ключ).
+    encryption_key: "f6tD7wVYNvXMm4MwqivfpB9Gf+HYz8a3" # Ключ для шифрования Refresh Token.
     token_lifetime: 604800         # Время жизни Refresh Token в секундах (например, 7 дней).
 
 logging:

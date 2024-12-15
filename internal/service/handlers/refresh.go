@@ -14,6 +14,7 @@ import (
 	"github.com/cifra-city/rest-sso/pkg/cifrajwt"
 	"github.com/cifra-city/rest-sso/pkg/httpresp"
 	"github.com/cifra-city/rest-sso/pkg/httpresp/problems"
+	"github.com/cifra-city/rest-sso/pkg/sectools"
 	"github.com/cifra-city/rest-sso/resources"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
@@ -66,7 +67,7 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 		return []byte(Server.Config.JWT.AccessToken.SecretKey), nil
 	})
 
-	if err != nil {
+	if err != nil && !errors.Is(err, jwt.ErrTokenExpired) {
 		log.Warnf("Invalid token: %v", err)
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
@@ -173,7 +174,14 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if dbToken.Token != refreshToken {
+	decryptedToken, err := sectools.DecryptToken(dbToken.Token, Server.Config.JWT.RefreshToken.EncryptionKey)
+	if err != nil {
+		log.Errorf("Failed to decrypt refresh token: %v", err)
+		httpresp.RenderErr(w, problems.InternalError())
+		return
+	}
+
+	if decryptedToken != refreshToken {
 		Server.Logger.Warn("Provided refresh token does not match the stored token")
 		httpresp.RenderErr(w, problems.Unauthorized("Invalid refresh token"))
 		return
@@ -195,7 +203,14 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 
 	expiresAt := time.Now().UTC().Add(Server.Config.JWT.RefreshToken.TokenLifetime)
 
-	err = Server.Queries.UpdateRefreshTokenTransaction(r.Context(), &user, device.FactoryID, deviceName, osVersion, tokenRefresh, expiresAt, ipAddress)
+	encryptedToken, err := sectools.EncryptToken(tokenRefresh, Server.Config.JWT.RefreshToken.EncryptionKey)
+	if err != nil {
+		log.Errorf("Failed to encrypt refresh token: %v", err)
+		httpresp.RenderErr(w, problems.InternalError())
+		return
+	}
+
+	err = Server.Queries.UpdateRefreshTokenTransaction(r.Context(), &user, device.FactoryID, deviceName, osVersion, encryptedToken, expiresAt, ipAddress)
 	if err != nil {
 		log.Errorf("Error updating last used and refresh token: %v", err)
 		httpresp.RenderErr(w, problems.InternalError())
@@ -203,7 +218,6 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Infof("User logged in: %s", user.Username)
 
-	// Отправляем новые токены клиенту
 	httpresp.Render(w, resources.RefreshResp{
 		Data: resources.RefreshRespData{
 			Type: "refresh",

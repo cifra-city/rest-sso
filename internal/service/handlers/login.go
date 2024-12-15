@@ -13,6 +13,7 @@ import (
 	"github.com/cifra-city/rest-sso/pkg/cifrajwt"
 	"github.com/cifra-city/rest-sso/pkg/httpresp"
 	"github.com/cifra-city/rest-sso/pkg/httpresp/problems"
+	"github.com/cifra-city/rest-sso/pkg/sectools"
 	"github.com/cifra-city/rest-sso/resources"
 	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
@@ -101,7 +102,14 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	expiresAt := time.Now().UTC().Add(Server.Config.JWT.RefreshToken.TokenLifetime)
 
-	err = Server.Queries.UpdateRefreshTokenTransaction(r.Context(), &user, factoryId, deviceName, osVersion, tokenRefresh, expiresAt, ipAddress)
+	encryptedToken, err := sectools.EncryptToken(tokenRefresh, Server.Config.JWT.RefreshToken.EncryptionKey)
+	if err != nil {
+		log.Errorf("Failed to encrypt refresh token: %v", err)
+		httpresp.RenderErr(w, problems.InternalError())
+		return
+	}
+
+	err = Server.Queries.UpdateRefreshTokenTransaction(r.Context(), &user, factoryId, deviceName, osVersion, encryptedToken, expiresAt, ipAddress)
 	if err != nil {
 		log.Errorf("error updating last used and refresh token: %v", err)
 		httpresp.RenderErr(w, problems.InternalError())
