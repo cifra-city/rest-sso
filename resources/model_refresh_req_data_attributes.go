@@ -24,7 +24,7 @@ type RefreshReqDataAttributes struct {
 	// The refresh token to generate a new access token.
 	RefreshToken string `json:"refresh_token"`
 	// The device ID of the device that the refresh token was issued to. (Not factory ID)
-	DeviceId *string `json:"device_id,omitempty"`
+	DeviceId string `json:"device_id"`
 	// Unique identifier for the user's device.
 	FactoryId string `json:"factory_id"`
 	// Human-readable name for the user's device (e.g., 'iPhone 14').
@@ -41,9 +41,10 @@ type _RefreshReqDataAttributes RefreshReqDataAttributes
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewRefreshReqDataAttributes(refreshToken string, factoryId string, deviceName string, osVersion string, ipAddress string) *RefreshReqDataAttributes {
+func NewRefreshReqDataAttributes(refreshToken string, deviceId string, factoryId string, deviceName string, osVersion string, ipAddress string) *RefreshReqDataAttributes {
 	this := RefreshReqDataAttributes{}
 	this.RefreshToken = refreshToken
+	this.DeviceId = deviceId
 	this.FactoryId = factoryId
 	this.DeviceName = deviceName
 	this.OsVersion = osVersion
@@ -83,36 +84,28 @@ func (o *RefreshReqDataAttributes) SetRefreshToken(v string) {
 	o.RefreshToken = v
 }
 
-// GetDeviceId returns the DeviceId field value if set, zero value otherwise.
+// GetDeviceId returns the DeviceId field value
 func (o *RefreshReqDataAttributes) GetDeviceId() string {
-	if o == nil || IsNil(o.DeviceId) {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.DeviceId
+
+	return o.DeviceId
 }
 
-// GetDeviceIdOk returns a tuple with the DeviceId field value if set, nil otherwise
+// GetDeviceIdOk returns a tuple with the DeviceId field value
 // and a boolean to check if the value has been set.
 func (o *RefreshReqDataAttributes) GetDeviceIdOk() (*string, bool) {
-	if o == nil || IsNil(o.DeviceId) {
+	if o == nil {
 		return nil, false
 	}
-	return o.DeviceId, true
+	return &o.DeviceId, true
 }
 
-// HasDeviceId returns a boolean if a field has been set.
-func (o *RefreshReqDataAttributes) HasDeviceId() bool {
-	if o != nil && !IsNil(o.DeviceId) {
-		return true
-	}
-
-	return false
-}
-
-// SetDeviceId gets a reference to the given string and assigns it to the DeviceId field.
+// SetDeviceId sets field value
 func (o *RefreshReqDataAttributes) SetDeviceId(v string) {
-	o.DeviceId = &v
+	o.DeviceId = v
 }
 
 // GetFactoryId returns the FactoryId field value
@@ -222,9 +215,7 @@ func (o RefreshReqDataAttributes) MarshalJSON() ([]byte, error) {
 func (o RefreshReqDataAttributes) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["refresh_token"] = o.RefreshToken
-	if !IsNil(o.DeviceId) {
-		toSerialize["device_id"] = o.DeviceId
-	}
+	toSerialize["device_id"] = o.DeviceId
 	toSerialize["factory_id"] = o.FactoryId
 	toSerialize["device_name"] = o.DeviceName
 	toSerialize["os_version"] = o.OsVersion
@@ -238,6 +229,7 @@ func (o *RefreshReqDataAttributes) UnmarshalJSON(data []byte) (err error) {
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
 		"refresh_token",
+		"device_id",
 		"factory_id",
 		"device_name",
 		"os_version",

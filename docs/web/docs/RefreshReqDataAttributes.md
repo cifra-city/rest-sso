@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **RefreshToken** | **string** | The refresh token to generate a new access token. | 
-**DeviceId** | Pointer to **string** | The device ID of the device that the refresh token was issued to. (Not factory ID) | [optional] 
+**DeviceId** | **string** | The device ID of the device that the refresh token was issued to. (Not factory ID) | 
 **FactoryId** | **string** | Unique identifier for the user&#39;s device. | 
 **DeviceName** | **string** | Human-readable name for the user&#39;s device (e.g., &#39;iPhone 14&#39;). | 
 **OsVersion** | **string** | Operating system version of the user&#39;s device. | 
@@ -15,7 +15,7 @@ Name | Type | Description | Notes
 
 ### NewRefreshReqDataAttributes
 
-`func NewRefreshReqDataAttributes(refreshToken string, factoryId string, deviceName string, osVersion string, ipAddress string, ) *RefreshReqDataAttributes`
+`func NewRefreshReqDataAttributes(refreshToken string, deviceId string, factoryId string, deviceName string, osVersion string, ipAddress string, ) *RefreshReqDataAttributes`
 
 NewRefreshReqDataAttributes instantiates a new RefreshReqDataAttributes object
 This constructor will assign default values to properties that have it defined,
@@ -69,11 +69,6 @@ and a boolean to check if the value has been set.
 
 SetDeviceId sets DeviceId field to given value.
 
-### HasDeviceId
-
-`func (o *RefreshReqDataAttributes) HasDeviceId() bool`
-
-HasDeviceId returns a boolean if a field has been set.
 
 ### GetFactoryId
 

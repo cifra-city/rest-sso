@@ -10,7 +10,7 @@ import (
 // ExtractToken extracts the JWT token from the Authorization header of an HTTP request.
 func ExtractToken(ctx context.Context) (string, error) {
 	// Извлекаем HTTP-запрос из контекста
-	req, ok := ctx.Value(http.Request{}).(*http.Request)
+	req, ok := ctx.Value("userID").(*http.Request)
 	if !ok || req == nil {
 		return "", errors.New("failed to retrieve HTTP request from context")
 	}

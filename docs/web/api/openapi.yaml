@@ -220,6 +220,7 @@ components:
           format: string
           type: string
       required:
+      - device_id
       - device_name
       - factory_id
       - ip_address

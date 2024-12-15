@@ -16,6 +16,7 @@ properties:
         type: object
         required:
           - refresh_token
+          - device_id
           - factory_id
           - device_name
           - os_version

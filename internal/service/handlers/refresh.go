@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"errors"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/cifra-city/rest-sso/internal/config"
@@ -14,6 +15,7 @@ import (
 	"github.com/cifra-city/rest-sso/pkg/httpresp"
 	"github.com/cifra-city/rest-sso/pkg/httpresp/problems"
 	"github.com/cifra-city/rest-sso/resources"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 )
@@ -40,11 +42,46 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 	osVersion := req.Data.Attributes.OsVersion
 	ipAddress := req.Data.Attributes.IpAddress
 
-	userID, err := cifrajwt.VerificationJWT(r.Context(), log, Server.Config.JWT.AccessToken.SecretKey)
-	if err != nil {
-		httpresp.RenderErr(w, problems.Unauthorized("Invalid or expired access token"))
+	//JWT Middleware
+
+	authHeader := r.Header.Get("Authorization")
+	if authHeader == "" {
+		log.Warn("Missing Authorization header")
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
+
+	parts := strings.Split(authHeader, " ")
+	if len(parts) != 2 || strings.ToLower(parts[0]) != "bearer" {
+		log.Warn("Invalid Authorization header format")
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
+	tokenString := parts[1]
+
+	log.Debugf("Token received: %s", tokenString)
+
+	claims := &cifrajwt.CustomClaims{}
+	_, err = jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
+		return []byte(Server.Config.JWT.AccessToken.SecretKey), nil
+	})
+
+	if err != nil {
+		log.Warnf("Invalid token: %v", err)
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
+
+	userID, err := uuid.Parse(claims.Subject)
+	if err != nil {
+		log.Errorf("Invalid user ID in token claims: %v", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	log.Infof("Claims Subject (UserID): %s", userID)
+
+	//END JWT Middleware
 
 	user, err := Server.Queries.GetUserByID(r.Context(), userID)
 	if err != nil {
@@ -57,13 +94,13 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	deviceId, err := uuid.Parse(*deviceIdStr)
+	deviceId, err := uuid.Parse(deviceIdStr)
 	if err != nil {
 		log.Errorf("Invalid device ID format: %v", err)
 		httpresp.RenderErr(w, problems.BadRequest(err)...)
 		return
 	}
-
+	log.Infof("Device ID: %s", deviceId)
 	device, err := Server.Queries.GetDeviceByID(r.Context(), deviceId)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
