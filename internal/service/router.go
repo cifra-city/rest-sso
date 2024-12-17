@@ -26,13 +26,16 @@ func Run(ctx context.Context) {
 	r.Route("/cifra-sso", func(r chi.Router) {
 		r.Route("/v1", func(r chi.Router) {
 			r.Route("/public", func(r chi.Router) {
-				r.Post("/reg", handlers.Registration)
+				r.Post("/registration", handlers.Registration)
+				//r.Post("/registration-confirm", handlers.RegistrationConfirm)
+
 				r.Post("/login", handlers.Login)
+				//r.Post("/login-confirm", handlers.LoginConfirm)
 
 				r.Route("/user", func(r chi.Router) {
 					r.Use(authMW)
 					r.Route("/change", func(r chi.Router) {
-						r.Patch("/username", handlers.ChangeUsername)
+						//r.Patch("/username", handlers.ChangeUsername)
 						//r.Patch("/password", handlers.ChangePassword)
 						//r.Patch("/email", handlers.ChangeEmail)
 					})
