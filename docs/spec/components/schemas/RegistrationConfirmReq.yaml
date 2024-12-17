@@ -13,13 +13,21 @@ properties:
         description: "Unique identifier username"
       type:
         type: string
-        enum: [ registration ]
+        enum: [ registration_confirm ]
       attributes:
         type: object
         required:
+          - first_password
+          - second_password
           - email
-          - usernamev
+          - password
         properties:
+          first_password:
+            type: string
+            description: "First password"
+          second_password:
+            type: string
+            description: "Second password"
           email:
             type: string
             format: email

@@ -7,6 +7,8 @@ servers:
 - url: /
 paths:
   /register: {}
+  /registration-confirm: {}
+  /activate-email: {}
   /login: {}
   /change-username: {}
   /refresh: {}
@@ -16,6 +18,20 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/Registration_data'
+      required:
+      - data
+      type: object
+    ActivateEmail:
+      properties:
+        data:
+          $ref: '#/components/schemas/ActivateEmail_data'
+      required:
+      - data
+      type: object
+    RegistrationConfirm:
+      properties:
+        data:
+          $ref: '#/components/schemas/RegistrationConfirm_data'
       required:
       - data
       type: object
@@ -61,6 +77,20 @@ components:
       required:
       - data
       type: object
+    ActivateEmailReq:
+      properties:
+        data:
+          $ref: '#/components/schemas/ActivateEmail_data'
+      required:
+      - data
+      type: object
+    RegistrationConfirmReq:
+      properties:
+        data:
+          $ref: '#/components/schemas/RegistrationConfirm_data'
+      required:
+      - data
+      type: object
     ChangeUsernameReq:
       properties:
         data:
@@ -74,12 +104,12 @@ components:
           description: User email
           format: email
           type: string
-        password:
-          description: User password
+        username:
+          description: User username
           type: string
       required:
       - email
-      - password
+      - usernamev
       type: object
     Registration_data:
       properties:
@@ -92,6 +122,67 @@ components:
           type: string
         attributes:
           $ref: '#/components/schemas/Registration_data_attributes'
+      required:
+      - attributes
+      - id
+      - type
+      type: object
+    ActivateEmail_data_attributes:
+      properties:
+        email:
+          description: New email
+          type: string
+        code:
+          description: User code
+          type: string
+      required:
+      - code
+      - email
+      type: object
+    ActivateEmail_data:
+      properties:
+        type:
+          enum:
+          - activate_email
+          type: string
+        attributes:
+          $ref: '#/components/schemas/ActivateEmail_data_attributes'
+      required:
+      - attributes
+      - type
+      type: object
+    RegistrationConfirm_data_attributes:
+      properties:
+        first_password:
+          description: First password
+          type: string
+        second_password:
+          description: Second password
+          type: string
+        email:
+          description: User email
+          format: email
+          type: string
+        username:
+          description: User username
+          type: string
+      required:
+      - email
+      - first_password
+      - password
+      - second_password
+      type: object
+    RegistrationConfirm_data:
+      properties:
+        id:
+          description: Unique identifier username
+          type: string
+        type:
+          enum:
+          - registration_confirm
+          type: string
+        attributes:
+          $ref: '#/components/schemas/RegistrationConfirm_data_attributes'
       required:
       - attributes
       - id

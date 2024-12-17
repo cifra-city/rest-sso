@@ -9,13 +9,7 @@ func (m *Mailbox) CheckInBox(username string, ConfidenceCode string, operationTy
 	if operations, exists := m.listCode[username]; exists {
 		if data, opExists := operations[operationType]; opExists {
 			if ConfidenceCode == data.ConfidenceCode {
-				delete(operations, operationType)
 				logrus.Infof("Code for user '%s' and operation '%s' is correct and has been used", username, operationType)
-
-				if len(operations) == 0 {
-					delete(m.listCode, username)
-				}
-
 				return true
 			}
 			logrus.Warnf("Incorrect code for user '%s' and operation '%s'. Expected: '%s', Got: '%s'",

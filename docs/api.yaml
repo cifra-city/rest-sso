@@ -7,6 +7,10 @@ info:
 paths:
   /register:
     $ref: './paths/Registration.yaml'
+  /registration-confirm:
+    $ref: './paths/RegistrationConfirm.yaml'
+  /activate-email:
+    $ref: './paths/ActivateEmail.yaml'
   /login:
     $ref: './paths/Login.yaml'
   /change-username:
@@ -18,6 +22,10 @@ components:
   schemas:
     Registration:
       $ref: './spec/components/schemas/RegistrationReq.yaml'
+    ActivateEmail:
+      $ref: './spec/components/schemas/ActivateEmailReq.yaml'
+    RegistrationConfirm:
+        $ref: './spec/components/schemas/RegistrationConfirmReq.yaml'
     LoginReq:
         $ref: './spec/components/schemas/LoginReq.yaml'
     LoginResp:

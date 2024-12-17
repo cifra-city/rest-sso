@@ -1,0 +1,38 @@
+openapi: 3.0.0
+info:
+  title: Example API
+  description: An example API with error responses and user registration
+  version: 1.0.0
+
+paths:
+  /activate-email:
+    patch:
+      summary: Activate email
+      description: Activate email
+      requestBody:
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '../spec/components/schemas/ActivateEmailReq.yaml'
+      responses:
+        '201':
+          description: Updated username successfully
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../spec/components/schemas/LoginResp.yaml'
+        '400':
+          $ref: '../spec/components/responses/invalidParameter.yaml'
+        '401':
+          $ref: '../spec/components/responses/invalidAuth.yaml'
+        '403':
+          $ref: '../spec/components/responses/forbidden.yaml'
+        '409':
+          $ref: '../spec/components/responses/conflict.yaml'
+        '415':
+          $ref: '../spec/components/responses/unsupportedMediaType.yaml'
+        '429':
+          $ref: '../spec/components/responses/tooManyRequests.yaml'
+        '500':
+          $ref: '../spec/components/responses/internalError.yaml'

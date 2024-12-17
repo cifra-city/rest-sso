@@ -5,13 +5,13 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Email** | **string** | User email | 
-**Password** | **string** | User password | 
+**Username** | Pointer to **string** | User username | [optional] 
 
 ## Methods
 
 ### NewRegistrationDataAttributes
 
-`func NewRegistrationDataAttributes(email string, password string, ) *RegistrationDataAttributes`
+`func NewRegistrationDataAttributes(email string, ) *RegistrationDataAttributes`
 
 NewRegistrationDataAttributes instantiates a new RegistrationDataAttributes object
 This constructor will assign default values to properties that have it defined,
@@ -46,25 +46,30 @@ and a boolean to check if the value has been set.
 SetEmail sets Email field to given value.
 
 
-### GetPassword
+### GetUsername
 
-`func (o *RegistrationDataAttributes) GetPassword() string`
+`func (o *RegistrationDataAttributes) GetUsername() string`
 
-GetPassword returns the Password field if non-nil, zero value otherwise.
+GetUsername returns the Username field if non-nil, zero value otherwise.
 
-### GetPasswordOk
+### GetUsernameOk
 
-`func (o *RegistrationDataAttributes) GetPasswordOk() (*string, bool)`
+`func (o *RegistrationDataAttributes) GetUsernameOk() (*string, bool)`
 
-GetPasswordOk returns a tuple with the Password field if it's non-nil, zero value otherwise
+GetUsernameOk returns a tuple with the Username field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetPassword
+### SetUsername
 
-`func (o *RegistrationDataAttributes) SetPassword(v string)`
+`func (o *RegistrationDataAttributes) SetUsername(v string)`
 
-SetPassword sets Password field to given value.
+SetUsername sets Username field to given value.
 
+### HasUsername
+
+`func (o *RegistrationDataAttributes) HasUsername() bool`
+
+HasUsername returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

@@ -23,8 +23,8 @@ var _ MappedNullable = &RegistrationDataAttributes{}
 type RegistrationDataAttributes struct {
 	// User email
 	Email string `json:"email"`
-	// User password
-	Password string `json:"password"`
+	// User username
+	Username *string `json:"username,omitempty"`
 }
 
 type _RegistrationDataAttributes RegistrationDataAttributes
@@ -33,10 +33,9 @@ type _RegistrationDataAttributes RegistrationDataAttributes
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewRegistrationDataAttributes(email string, password string) *RegistrationDataAttributes {
+func NewRegistrationDataAttributes(email string) *RegistrationDataAttributes {
 	this := RegistrationDataAttributes{}
 	this.Email = email
-	this.Password = password
 	return &this
 }
 
@@ -72,28 +71,36 @@ func (o *RegistrationDataAttributes) SetEmail(v string) {
 	o.Email = v
 }
 
-// GetPassword returns the Password field value
-func (o *RegistrationDataAttributes) GetPassword() string {
-	if o == nil {
+// GetUsername returns the Username field value if set, zero value otherwise.
+func (o *RegistrationDataAttributes) GetUsername() string {
+	if o == nil || IsNil(o.Username) {
 		var ret string
 		return ret
 	}
-
-	return o.Password
+	return *o.Username
 }
 
-// GetPasswordOk returns a tuple with the Password field value
+// GetUsernameOk returns a tuple with the Username field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *RegistrationDataAttributes) GetPasswordOk() (*string, bool) {
-	if o == nil {
+func (o *RegistrationDataAttributes) GetUsernameOk() (*string, bool) {
+	if o == nil || IsNil(o.Username) {
 		return nil, false
 	}
-	return &o.Password, true
+	return o.Username, true
 }
 
-// SetPassword sets field value
-func (o *RegistrationDataAttributes) SetPassword(v string) {
-	o.Password = v
+// HasUsername returns a boolean if a field has been set.
+func (o *RegistrationDataAttributes) HasUsername() bool {
+	if o != nil && !IsNil(o.Username) {
+		return true
+	}
+
+	return false
+}
+
+// SetUsername gets a reference to the given string and assigns it to the Username field.
+func (o *RegistrationDataAttributes) SetUsername(v string) {
+	o.Username = &v
 }
 
 func (o RegistrationDataAttributes) MarshalJSON() ([]byte, error) {
@@ -107,7 +114,9 @@ func (o RegistrationDataAttributes) MarshalJSON() ([]byte, error) {
 func (o RegistrationDataAttributes) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["email"] = o.Email
-	toSerialize["password"] = o.Password
+	if !IsNil(o.Username) {
+		toSerialize["username"] = o.Username
+	}
 	return toSerialize, nil
 }
 
@@ -117,7 +126,6 @@ func (o *RegistrationDataAttributes) UnmarshalJSON(data []byte) (err error) {
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
 		"email",
-		"password",
 	}
 
 	allProperties := make(map[string]interface{})

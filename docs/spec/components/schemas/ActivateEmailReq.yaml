@@ -4,26 +4,21 @@ required:
 properties:
   data:
     required:
-      - id
       - type
       - attributes
     properties:
-      id:
-        type: string
-        description: "Unique identifier username"
       type:
         type: string
-        enum: [ registration ]
+        enum: [ activate_email ]
       attributes:
         type: object
         required:
           - email
-          - usernamev
+          - code
         properties:
           email:
             type: string
-            format: email
-            description: "User email"
-          username:
+            description: "New email"
+          code:
             type: string
-            description: "User username"
+            description: "User code"

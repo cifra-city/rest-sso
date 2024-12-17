@@ -82,6 +82,10 @@ Class | Method | HTTP request | Description
 
 ## Documentation For Models
 
+ - [ActivateEmail](docs/ActivateEmail.md)
+ - [ActivateEmailData](docs/ActivateEmailData.md)
+ - [ActivateEmailDataAttributes](docs/ActivateEmailDataAttributes.md)
+ - [ActivateEmailReq](docs/ActivateEmailReq.md)
  - [ChangeUsername](docs/ChangeUsername.md)
  - [ChangeUsernameData](docs/ChangeUsernameData.md)
  - [ChangeUsernameDataAttributes](docs/ChangeUsernameDataAttributes.md)
@@ -99,6 +103,10 @@ Class | Method | HTTP request | Description
  - [RefreshRespData](docs/RefreshRespData.md)
  - [RefreshRespDataAttributes](docs/RefreshRespDataAttributes.md)
  - [Registration](docs/Registration.md)
+ - [RegistrationConfirm](docs/RegistrationConfirm.md)
+ - [RegistrationConfirmData](docs/RegistrationConfirmData.md)
+ - [RegistrationConfirmDataAttributes](docs/RegistrationConfirmDataAttributes.md)
+ - [RegistrationConfirmReq](docs/RegistrationConfirmReq.md)
  - [RegistrationData](docs/RegistrationData.md)
  - [RegistrationDataAttributes](docs/RegistrationDataAttributes.md)
  - [RegistrationReq](docs/RegistrationReq.md)

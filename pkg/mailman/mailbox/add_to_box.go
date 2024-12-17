@@ -6,29 +6,29 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func (m *Mailbox) AddToBox(username string, ConfidenceCode string, operationType string) {
+func (m *Mailbox) AddToBox(email string, ConfidenceCode string, operationType string) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
-	if _, exists := m.listCode[username]; !exists {
-		m.listCode[username] = make(map[string]Data)
+	if _, exists := m.listCode[email]; !exists {
+		m.listCode[email] = make(map[string]Data)
 	}
 
-	m.listCode[username][operationType] = Data{
+	m.listCode[email][operationType] = Data{
 		ConfidenceCode: ConfidenceCode,
 		OperationType:  operationType,
 	}
 
-	time.AfterFunc(180*time.Second, func() {
+	time.AfterFunc(300*time.Second, func() {
 		m.mu.Lock()
 		defer m.mu.Unlock()
-		if operations, exists := m.listCode[username]; exists {
+		if operations, exists := m.listCode[email]; exists {
 			if _, opExists := operations[operationType]; opExists {
 				delete(operations, operationType)
-				logrus.Infof("Code for user '%s' and operation '%s' has expired", username, operationType)
+				logrus.Infof("Code for user '%s' and operation '%s' has expired", email, operationType)
 
 				if len(operations) == 0 {
-					delete(m.listCode, username)
+					delete(m.listCode, email)
 				}
 			}
 		}

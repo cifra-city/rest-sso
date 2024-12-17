@@ -26,26 +26,24 @@ func Run(ctx context.Context) {
 	r.Route("/cifra-sso", func(r chi.Router) {
 		r.Route("/v1", func(r chi.Router) {
 			r.Route("/public", func(r chi.Router) {
-				r.Post("/registration", handlers.Registration)
-				//r.Post("/registration-confirm", handlers.RegistrationConfirm)
+				r.Post("/registration", handlers.Registration)                // check if email exists, send code to email
+				r.Post("/activate_email", handlers.ActivateEmail)             // approval email address for 15 minutes
+				r.Post("/registration-confirm", handlers.RegistrationConfirm) // check for approved email address for use
 
-				r.Post("/login", handlers.Login)
-				//r.Post("/login-confirm", handlers.LoginConfirm)
+				r.Post("/login", handlers.Login) // user sends data
+				//r.Post("/login-confirm", handlers.LoginConfirm) // user sends code to confirm login
 
 				r.Route("/user", func(r chi.Router) {
 					r.Use(authMW)
+					//r.Post("/send-code/{operationType}", handlers.SendCode) // user sends code to email with operationType
 					r.Route("/change", func(r chi.Router) {
-						//r.Patch("/username", handlers.ChangeUsername)
-						//r.Patch("/password", handlers.ChangePassword)
-						//r.Patch("/email", handlers.ChangeEmail)
+						r.Post("/username", handlers.ChangeUsername) // user sends new username and code
+						//r.Post("/password", handlers.ChangePassword)          // user sends new password and code
+						//r.Post("/email", handlers.ChangeEmail)                // user sends new email and code
+						//r.Post("/email-confirm", handlers.ChangeEmailConfirm) // user sends code to confirm new email
 					})
-					r.Route("/confirm", func(r chi.Router) {
-						//r.Patch("/email", handlers.ConfirmEmail)
-						//r.Patch("/reset-password", handlers.ConfirmReestPassword)
-						//r.Patch("/reset-username", handlers.ConfirmResetUsername)
-						//r.Patch("/reset-email", handlers.ConfirmResetEmail)
-					})
-					r.Get("/logout", handlers.Logout)
+
+					r.Post("/logout", handlers.Logout)
 				})
 
 				r.Post("/refresh", handlers.Refresh)
