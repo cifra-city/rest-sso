@@ -8,7 +8,7 @@ import (
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 )
 
-func NewActivateEmail(r *http.Request) (req resources.ActivateEmail, err error) {
+func NewForgotPassword(r *http.Request) (req resources.ForgotPasswordReq, err error) {
 	if err = json.NewDecoder(r.Body).Decode(&req); err != nil {
 		err = newDecodeError("body", err)
 		return

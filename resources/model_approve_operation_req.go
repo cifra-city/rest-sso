@@ -16,38 +16,38 @@ import (
 	"fmt"
 )
 
-// checks if the ActivateEmailReq type satisfies the MappedNullable interface at compile time
-var _ MappedNullable = &ActivateEmailReq{}
+// checks if the ApproveOperationReq type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ApproveOperationReq{}
 
-// ActivateEmailReq struct for ActivateEmailReq
-type ActivateEmailReq struct {
-	Data ActivateEmailData `json:"data"`
+// ApproveOperationReq struct for ApproveOperationReq
+type ApproveOperationReq struct {
+	Data ApproveOperationReqData `json:"data"`
 }
 
-type _ActivateEmailReq ActivateEmailReq
+type _ApproveOperationReq ApproveOperationReq
 
-// NewActivateEmailReq instantiates a new ActivateEmailReq object
+// NewApproveOperationReq instantiates a new ApproveOperationReq object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewActivateEmailReq(data ActivateEmailData) *ActivateEmailReq {
-	this := ActivateEmailReq{}
+func NewApproveOperationReq(data ApproveOperationReqData) *ApproveOperationReq {
+	this := ApproveOperationReq{}
 	this.Data = data
 	return &this
 }
 
-// NewActivateEmailReqWithDefaults instantiates a new ActivateEmailReq object
+// NewApproveOperationReqWithDefaults instantiates a new ApproveOperationReq object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewActivateEmailReqWithDefaults() *ActivateEmailReq {
-	this := ActivateEmailReq{}
+func NewApproveOperationReqWithDefaults() *ApproveOperationReq {
+	this := ApproveOperationReq{}
 	return &this
 }
 
 // GetData returns the Data field value
-func (o *ActivateEmailReq) GetData() ActivateEmailData {
+func (o *ApproveOperationReq) GetData() ApproveOperationReqData {
 	if o == nil {
-		var ret ActivateEmailData
+		var ret ApproveOperationReqData
 		return ret
 	}
 
@@ -56,7 +56,7 @@ func (o *ActivateEmailReq) GetData() ActivateEmailData {
 
 // GetDataOk returns a tuple with the Data field value
 // and a boolean to check if the value has been set.
-func (o *ActivateEmailReq) GetDataOk() (*ActivateEmailData, bool) {
+func (o *ApproveOperationReq) GetDataOk() (*ApproveOperationReqData, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -64,11 +64,11 @@ func (o *ActivateEmailReq) GetDataOk() (*ActivateEmailData, bool) {
 }
 
 // SetData sets field value
-func (o *ActivateEmailReq) SetData(v ActivateEmailData) {
+func (o *ApproveOperationReq) SetData(v ApproveOperationReqData) {
 	o.Data = v
 }
 
-func (o ActivateEmailReq) MarshalJSON() ([]byte, error) {
+func (o ApproveOperationReq) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
@@ -76,13 +76,13 @@ func (o ActivateEmailReq) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-func (o ActivateEmailReq) ToMap() (map[string]interface{}, error) {
+func (o ApproveOperationReq) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["data"] = o.Data
 	return toSerialize, nil
 }
 
-func (o *ActivateEmailReq) UnmarshalJSON(data []byte) (err error) {
+func (o *ApproveOperationReq) UnmarshalJSON(data []byte) (err error) {
 	// This validates that all required properties are included in the JSON object
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
@@ -104,53 +104,53 @@ func (o *ActivateEmailReq) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varActivateEmailReq := _ActivateEmailReq{}
+	varApproveOperationReq := _ApproveOperationReq{}
 
 	decoder := json.NewDecoder(bytes.NewReader(data))
 	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varActivateEmailReq)
+	err = decoder.Decode(&varApproveOperationReq)
 
 	if err != nil {
 		return err
 	}
 
-	*o = ActivateEmailReq(varActivateEmailReq)
+	*o = ApproveOperationReq(varApproveOperationReq)
 
 	return err
 }
 
-type NullableActivateEmailReq struct {
-	value *ActivateEmailReq
+type NullableApproveOperationReq struct {
+	value *ApproveOperationReq
 	isSet bool
 }
 
-func (v NullableActivateEmailReq) Get() *ActivateEmailReq {
+func (v NullableApproveOperationReq) Get() *ApproveOperationReq {
 	return v.value
 }
 
-func (v *NullableActivateEmailReq) Set(val *ActivateEmailReq) {
+func (v *NullableApproveOperationReq) Set(val *ApproveOperationReq) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableActivateEmailReq) IsSet() bool {
+func (v NullableApproveOperationReq) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableActivateEmailReq) Unset() {
+func (v *NullableApproveOperationReq) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableActivateEmailReq(val *ActivateEmailReq) *NullableActivateEmailReq {
-	return &NullableActivateEmailReq{value: val, isSet: true}
+func NewNullableApproveOperationReq(val *ApproveOperationReq) *NullableApproveOperationReq {
+	return &NullableApproveOperationReq{value: val, isSet: true}
 }
 
-func (v NullableActivateEmailReq) MarshalJSON() ([]byte, error) {
+func (v NullableApproveOperationReq) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableActivateEmailReq) UnmarshalJSON(src []byte) error {
+func (v *NullableApproveOperationReq) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

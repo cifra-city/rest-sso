@@ -4,9 +4,11 @@ SWAGGER_CODEGEN := java -jar /home/trpdjke/go/src/github.com/cifra-city/rest-sso
 OPENAPI_GENERATOR := java -jar ./openapi-generator-cli.jar
 
 generate-models:
+	rm -rf resources/*
 	$(OPENAPI_GENERATOR) generate -i docs/api.yaml -g go -o ./docs/web --additional-properties=packageName=resources
 	mkdir -p resources
 	find docs/web -name '*.go' -exec mv {} resources/ \;
+
 
 
 create-db-image:

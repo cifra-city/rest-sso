@@ -44,7 +44,7 @@ SET email_status = $2
 WHERE id = $1
     RETURNING *;
 
--- name: UpdatePasswordByID :one
+-- name: UpdateUserPasswordByID :one
 UPDATE users_secret
 SET pass_hash = $2
 WHERE id = $1

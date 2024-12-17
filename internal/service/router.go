@@ -26,12 +26,15 @@ func Run(ctx context.Context) {
 	r.Route("/cifra-sso", func(r chi.Router) {
 		r.Route("/v1", func(r chi.Router) {
 			r.Route("/public", func(r chi.Router) {
+				r.Post("/approve-operation", handlers.ApproveOperation) // approval operation with use email for 15 minutes
+
 				r.Post("/registration", handlers.Registration)                // check if email exists, send code to email
-				r.Post("/activate_email", handlers.ActivateEmail)             // approval email address for 15 minutes
 				r.Post("/registration-confirm", handlers.RegistrationConfirm) // check for approved email address for use
 
-				r.Post("/login", handlers.Login) // user sends data
-				//r.Post("/login-confirm", handlers.LoginConfirm) // user sends code to confirm login
+				r.Post("/login", handlers.Login)
+
+				r.Post("/forgot-password", handlers.ForgotPassword)
+				r.Post("/reset-password", handlers.ResetPassword)
 
 				r.Route("/user", func(r chi.Router) {
 					r.Use(authMW)

@@ -54,7 +54,7 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = Server.Mailman.SendList(username, "registration", em)
+	err = Server.Mailman.SendList(username, "registration", em, 300)
 	if err != nil {
 		log.Errorf("error sending email: %v", err)
 		httpresp.RenderErr(w, problems.InternalError())

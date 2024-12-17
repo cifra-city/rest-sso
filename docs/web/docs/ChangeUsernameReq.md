@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Data** | [**ChangeUsernameData**](ChangeUsernameData.md) |  | 
+**Data** | [**ChangeUsernameReqData**](ChangeUsernameReqData.md) |  | 
 
 ## Methods
 
 ### NewChangeUsernameReq
 
-`func NewChangeUsernameReq(data ChangeUsernameData, ) *ChangeUsernameReq`
+`func NewChangeUsernameReq(data ChangeUsernameReqData, ) *ChangeUsernameReq`
 
 NewChangeUsernameReq instantiates a new ChangeUsernameReq object
 This constructor will assign default values to properties that have it defined,
@@ -27,20 +27,20 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetData
 
-`func (o *ChangeUsernameReq) GetData() ChangeUsernameData`
+`func (o *ChangeUsernameReq) GetData() ChangeUsernameReqData`
 
 GetData returns the Data field if non-nil, zero value otherwise.
 
 ### GetDataOk
 
-`func (o *ChangeUsernameReq) GetDataOk() (*ChangeUsernameData, bool)`
+`func (o *ChangeUsernameReq) GetDataOk() (*ChangeUsernameReqData, bool)`
 
 GetDataOk returns a tuple with the Data field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetData
 
-`func (o *ChangeUsernameReq) SetData(v ChangeUsernameData)`
+`func (o *ChangeUsernameReq) SetData(v ChangeUsernameReqData)`
 
 SetData sets Data field to given value.
 

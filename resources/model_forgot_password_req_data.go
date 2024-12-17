@@ -16,38 +16,38 @@ import (
 	"fmt"
 )
 
-// checks if the ActivateEmailData type satisfies the MappedNullable interface at compile time
-var _ MappedNullable = &ActivateEmailData{}
+// checks if the ForgotPasswordReqData type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ForgotPasswordReqData{}
 
-// ActivateEmailData struct for ActivateEmailData
-type ActivateEmailData struct {
+// ForgotPasswordReqData struct for ForgotPasswordReqData
+type ForgotPasswordReqData struct {
 	Type string `json:"type"`
-	Attributes ActivateEmailDataAttributes `json:"attributes"`
+	Attributes ForgotPasswordReqDataAttributes `json:"attributes"`
 }
 
-type _ActivateEmailData ActivateEmailData
+type _ForgotPasswordReqData ForgotPasswordReqData
 
-// NewActivateEmailData instantiates a new ActivateEmailData object
+// NewForgotPasswordReqData instantiates a new ForgotPasswordReqData object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewActivateEmailData(type_ string, attributes ActivateEmailDataAttributes) *ActivateEmailData {
-	this := ActivateEmailData{}
+func NewForgotPasswordReqData(type_ string, attributes ForgotPasswordReqDataAttributes) *ForgotPasswordReqData {
+	this := ForgotPasswordReqData{}
 	this.Type = type_
 	this.Attributes = attributes
 	return &this
 }
 
-// NewActivateEmailDataWithDefaults instantiates a new ActivateEmailData object
+// NewForgotPasswordReqDataWithDefaults instantiates a new ForgotPasswordReqData object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewActivateEmailDataWithDefaults() *ActivateEmailData {
-	this := ActivateEmailData{}
+func NewForgotPasswordReqDataWithDefaults() *ForgotPasswordReqData {
+	this := ForgotPasswordReqData{}
 	return &this
 }
 
 // GetType returns the Type field value
-func (o *ActivateEmailData) GetType() string {
+func (o *ForgotPasswordReqData) GetType() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -58,7 +58,7 @@ func (o *ActivateEmailData) GetType() string {
 
 // GetTypeOk returns a tuple with the Type field value
 // and a boolean to check if the value has been set.
-func (o *ActivateEmailData) GetTypeOk() (*string, bool) {
+func (o *ForgotPasswordReqData) GetTypeOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -66,14 +66,14 @@ func (o *ActivateEmailData) GetTypeOk() (*string, bool) {
 }
 
 // SetType sets field value
-func (o *ActivateEmailData) SetType(v string) {
+func (o *ForgotPasswordReqData) SetType(v string) {
 	o.Type = v
 }
 
 // GetAttributes returns the Attributes field value
-func (o *ActivateEmailData) GetAttributes() ActivateEmailDataAttributes {
+func (o *ForgotPasswordReqData) GetAttributes() ForgotPasswordReqDataAttributes {
 	if o == nil {
-		var ret ActivateEmailDataAttributes
+		var ret ForgotPasswordReqDataAttributes
 		return ret
 	}
 
@@ -82,7 +82,7 @@ func (o *ActivateEmailData) GetAttributes() ActivateEmailDataAttributes {
 
 // GetAttributesOk returns a tuple with the Attributes field value
 // and a boolean to check if the value has been set.
-func (o *ActivateEmailData) GetAttributesOk() (*ActivateEmailDataAttributes, bool) {
+func (o *ForgotPasswordReqData) GetAttributesOk() (*ForgotPasswordReqDataAttributes, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -90,11 +90,11 @@ func (o *ActivateEmailData) GetAttributesOk() (*ActivateEmailDataAttributes, boo
 }
 
 // SetAttributes sets field value
-func (o *ActivateEmailData) SetAttributes(v ActivateEmailDataAttributes) {
+func (o *ForgotPasswordReqData) SetAttributes(v ForgotPasswordReqDataAttributes) {
 	o.Attributes = v
 }
 
-func (o ActivateEmailData) MarshalJSON() ([]byte, error) {
+func (o ForgotPasswordReqData) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
@@ -102,14 +102,14 @@ func (o ActivateEmailData) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-func (o ActivateEmailData) ToMap() (map[string]interface{}, error) {
+func (o ForgotPasswordReqData) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["type"] = o.Type
 	toSerialize["attributes"] = o.Attributes
 	return toSerialize, nil
 }
 
-func (o *ActivateEmailData) UnmarshalJSON(data []byte) (err error) {
+func (o *ForgotPasswordReqData) UnmarshalJSON(data []byte) (err error) {
 	// This validates that all required properties are included in the JSON object
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
@@ -132,53 +132,53 @@ func (o *ActivateEmailData) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varActivateEmailData := _ActivateEmailData{}
+	varForgotPasswordReqData := _ForgotPasswordReqData{}
 
 	decoder := json.NewDecoder(bytes.NewReader(data))
 	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varActivateEmailData)
+	err = decoder.Decode(&varForgotPasswordReqData)
 
 	if err != nil {
 		return err
 	}
 
-	*o = ActivateEmailData(varActivateEmailData)
+	*o = ForgotPasswordReqData(varForgotPasswordReqData)
 
 	return err
 }
 
-type NullableActivateEmailData struct {
-	value *ActivateEmailData
+type NullableForgotPasswordReqData struct {
+	value *ForgotPasswordReqData
 	isSet bool
 }
 
-func (v NullableActivateEmailData) Get() *ActivateEmailData {
+func (v NullableForgotPasswordReqData) Get() *ForgotPasswordReqData {
 	return v.value
 }
 
-func (v *NullableActivateEmailData) Set(val *ActivateEmailData) {
+func (v *NullableForgotPasswordReqData) Set(val *ForgotPasswordReqData) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableActivateEmailData) IsSet() bool {
+func (v NullableForgotPasswordReqData) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableActivateEmailData) Unset() {
+func (v *NullableForgotPasswordReqData) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableActivateEmailData(val *ActivateEmailData) *NullableActivateEmailData {
-	return &NullableActivateEmailData{value: val, isSet: true}
+func NewNullableForgotPasswordReqData(val *ForgotPasswordReqData) *NullableForgotPasswordReqData {
+	return &NullableForgotPasswordReqData{value: val, isSet: true}
 }
 
-func (v NullableActivateEmailData) MarshalJSON() ([]byte, error) {
+func (v NullableForgotPasswordReqData) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableActivateEmailData) UnmarshalJSON(src []byte) error {
+func (v *NullableForgotPasswordReqData) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

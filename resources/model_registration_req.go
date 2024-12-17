@@ -21,7 +21,7 @@ var _ MappedNullable = &RegistrationReq{}
 
 // RegistrationReq struct for RegistrationReq
 type RegistrationReq struct {
-	Data RegistrationData `json:"data"`
+	Data RegistrationReqData `json:"data"`
 }
 
 type _RegistrationReq RegistrationReq
@@ -30,7 +30,7 @@ type _RegistrationReq RegistrationReq
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewRegistrationReq(data RegistrationData) *RegistrationReq {
+func NewRegistrationReq(data RegistrationReqData) *RegistrationReq {
 	this := RegistrationReq{}
 	this.Data = data
 	return &this
@@ -45,9 +45,9 @@ func NewRegistrationReqWithDefaults() *RegistrationReq {
 }
 
 // GetData returns the Data field value
-func (o *RegistrationReq) GetData() RegistrationData {
+func (o *RegistrationReq) GetData() RegistrationReqData {
 	if o == nil {
-		var ret RegistrationData
+		var ret RegistrationReqData
 		return ret
 	}
 
@@ -56,7 +56,7 @@ func (o *RegistrationReq) GetData() RegistrationData {
 
 // GetDataOk returns a tuple with the Data field value
 // and a boolean to check if the value has been set.
-func (o *RegistrationReq) GetDataOk() (*RegistrationData, bool) {
+func (o *RegistrationReq) GetDataOk() (*RegistrationReqData, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -64,7 +64,7 @@ func (o *RegistrationReq) GetDataOk() (*RegistrationData, bool) {
 }
 
 // SetData sets field value
-func (o *RegistrationReq) SetData(v RegistrationData) {
+func (o *RegistrationReq) SetData(v RegistrationReqData) {
 	o.Data = v
 }
 

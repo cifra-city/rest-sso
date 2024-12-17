@@ -6,7 +6,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func (m *Mailbox) AddToBox(email string, ConfidenceCode string, operationType string) {
+func (m *Mailbox) AddToBox(email string, ConfidenceCode string, operationType string, seconds time.Duration) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
@@ -19,7 +19,7 @@ func (m *Mailbox) AddToBox(email string, ConfidenceCode string, operationType st
 		OperationType:  operationType,
 	}
 
-	time.AfterFunc(300*time.Second, func() {
+	time.AfterFunc(seconds*time.Second, func() {
 		m.mu.Lock()
 		defer m.mu.Unlock()
 		if operations, exists := m.listCode[email]; exists {

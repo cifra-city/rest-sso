@@ -133,3 +133,55 @@ func (q *Queries) UpdateRefreshTokenTransaction(
 	logrus.Errorf("err final 1: %s", err)
 	return tx.Commit()
 }
+
+// ResetPassword updates the refresh token for a user and device,
+func (q *Queries) ResetPassword(
+	ctx context.Context,
+	user *UsersSecret,
+	newToken string,
+	expiresAt time.Time,
+	hashedPassword string) error {
+
+	tx, err := q.db.(*sql.DB).BeginTx(ctx, nil)
+	if err != nil {
+		log.Fatalf("failed to begin transaction: %v", err)
+		return err
+	}
+	queries := q.WithTx(tx)
+
+	defer func() {
+		if err != nil {
+			tx.Rollback()
+		}
+	}()
+
+	devices, err := queries.GetDevicesByUserID(ctx, user.ID)
+	if err != nil {
+		logrus.Infof("Failed to get devices: %v", err)
+		return err
+	}
+
+	for _, device := range devices {
+		err = queries.UpdateRefreshTokenByDeviceAndUserID(ctx, UpdateRefreshTokenByDeviceAndUserIDParams{
+			UserID:    user.ID,
+			DeviceID:  device.ID,
+			Token:     newToken,
+			ExpiresAt: expiresAt,
+		})
+		if err != nil {
+			logrus.Errorf("error updated refreshen token: %s", err)
+			return err
+		}
+	}
+
+	_, err = queries.UpdateUserPasswordByID(ctx, UpdateUserPasswordByIDParams{
+		ID:       user.ID,
+		PassHash: hashedPassword,
+	})
+	if err != nil {
+		logrus.Errorf("error updated password: %s", err)
+		return err
+	}
+
+	return tx.Commit()
+}

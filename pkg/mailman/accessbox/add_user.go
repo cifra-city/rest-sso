@@ -2,7 +2,7 @@ package accessbox
 
 import "time"
 
-func (a *AccessBox) AddOperation(email string, operation string) {
+func (a *AccessBox) AddAccess(email string, operation string, minutes time.Duration) {
 	a.mu.Lock()
 	defer a.mu.Unlock()
 
@@ -11,7 +11,7 @@ func (a *AccessBox) AddOperation(email string, operation string) {
 	}
 
 	go func() {
-		<-time.After(15 * time.Minute)
+		<-time.After(minutes * time.Minute)
 		a.DeleteOperationForUser(email, operation)
 	}()
 }

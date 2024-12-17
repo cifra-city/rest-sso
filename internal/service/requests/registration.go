@@ -16,7 +16,7 @@ func newDecodeError(what string, err error) error {
 	}
 }
 
-func NewRegistration(r *http.Request) (req resources.Registration, err error) {
+func NewRegistration(r *http.Request) (req resources.RegistrationReq, err error) {
 	if err = json.NewDecoder(r.Body).Decode(&req); err != nil {
 		err = newDecodeError("body", err)
 		return

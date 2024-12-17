@@ -9,12 +9,13 @@ properties:
     properties:
       type:
         type: string
-        enum: [ activate_email ]
+        enum: [ approve-operation ]
       attributes:
         type: object
         required:
           - email
           - code
+          - operation
         properties:
           email:
             type: string
@@ -22,3 +23,7 @@ properties:
           code:
             type: string
             description: "User code"
+          operation:
+            type: string
+            description: "Type of operation"
+            example: "reset-password"

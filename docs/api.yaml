@@ -10,27 +10,35 @@ paths:
   /registration-confirm:
     $ref: './paths/RegistrationConfirm.yaml'
   /activate-email:
-    $ref: './paths/ActivateEmail.yaml'
+    $ref: './paths/ApproveOperation.yaml'
   /login:
     $ref: './paths/Login.yaml'
   /change-username:
     $ref: './paths/ChangeUsername.yaml'
   /refresh:
     $ref: './paths/Refresh.yaml'
+  /forgot-password:
+    $ref: './paths/ForgotPassword.yaml'
+  /reset-password:
+    $ref: './paths/ResetPassword.yaml'
 
 components:
   schemas:
-    Registration:
+    RegistrationReq:
       $ref: './spec/components/schemas/RegistrationReq.yaml'
-    ActivateEmail:
-      $ref: './spec/components/schemas/ActivateEmailReq.yaml'
-    RegistrationConfirm:
+    ApproveOperationReq:
+      $ref: './spec/components/schemas/ApproveOperationReq.yaml'
+    RegistrationConfirmReq:
         $ref: './spec/components/schemas/RegistrationConfirmReq.yaml'
     LoginReq:
         $ref: './spec/components/schemas/LoginReq.yaml'
     LoginResp:
         $ref: './spec/components/schemas/LoginResp.yaml'
-    ChangeUsername:
+    ForgotPasswordReq:
+        $ref: './spec/components/schemas/ForgotPasswordReq.yaml'
+    ResetPasswordReq:
+        $ref: './spec/components/schemas/ResetPasswordReq.yaml'
+    ChangeUsernameReq:
         $ref: './spec/components/schemas/ChangeUsernameReq.yaml'
     RefreshReq:
         $ref: './spec/components/schemas/RefreshReq.yaml'

@@ -12,26 +12,28 @@ paths:
   /login: {}
   /change-username: {}
   /refresh: {}
+  /forgot-password: {}
+  /reset-password: {}
 components:
   schemas:
-    Registration:
+    RegistrationReq:
       properties:
         data:
-          $ref: '#/components/schemas/Registration_data'
+          $ref: '#/components/schemas/RegistrationReq_data'
       required:
       - data
       type: object
-    ActivateEmail:
+    ApproveOperationReq:
       properties:
         data:
-          $ref: '#/components/schemas/ActivateEmail_data'
+          $ref: '#/components/schemas/ApproveOperationReq_data'
       required:
       - data
       type: object
-    RegistrationConfirm:
+    RegistrationConfirmReq:
       properties:
         data:
-          $ref: '#/components/schemas/RegistrationConfirm_data'
+          $ref: '#/components/schemas/RegistrationConfirmReq_data'
       required:
       - data
       type: object
@@ -49,10 +51,24 @@ components:
       required:
       - data
       type: object
-    ChangeUsername:
+    ForgotPasswordReq:
       properties:
         data:
-          $ref: '#/components/schemas/ChangeUsername_data'
+          $ref: '#/components/schemas/ForgotPasswordReq_data'
+      required:
+      - data
+      type: object
+    ResetPasswordReq:
+      properties:
+        data:
+          $ref: '#/components/schemas/ResetPasswordReq_data'
+      required:
+      - data
+      type: object
+    ChangeUsernameReq:
+      properties:
+        data:
+          $ref: '#/components/schemas/ChangeUsernameReq_data'
       required:
       - data
       type: object
@@ -70,35 +86,7 @@ components:
       required:
       - data
       type: object
-    RegistrationReq:
-      properties:
-        data:
-          $ref: '#/components/schemas/Registration_data'
-      required:
-      - data
-      type: object
-    ActivateEmailReq:
-      properties:
-        data:
-          $ref: '#/components/schemas/ActivateEmail_data'
-      required:
-      - data
-      type: object
-    RegistrationConfirmReq:
-      properties:
-        data:
-          $ref: '#/components/schemas/RegistrationConfirm_data'
-      required:
-      - data
-      type: object
-    ChangeUsernameReq:
-      properties:
-        data:
-          $ref: '#/components/schemas/ChangeUsername_data'
-      required:
-      - data
-      type: object
-    Registration_data_attributes:
+    RegistrationReq_data_attributes:
       properties:
         email:
           description: User email
@@ -111,7 +99,7 @@ components:
       - email
       - usernamev
       type: object
-    Registration_data:
+    RegistrationReq_data:
       properties:
         id:
           description: Unique identifier username
@@ -121,13 +109,13 @@ components:
           - registration
           type: string
         attributes:
-          $ref: '#/components/schemas/Registration_data_attributes'
+          $ref: '#/components/schemas/RegistrationReq_data_attributes'
       required:
       - attributes
       - id
       - type
       type: object
-    ActivateEmail_data_attributes:
+    ApproveOperationReq_data_attributes:
       properties:
         email:
           description: New email
@@ -135,23 +123,28 @@ components:
         code:
           description: User code
           type: string
+        operation:
+          description: Type of operation
+          example: reset-password
+          type: string
       required:
       - code
       - email
+      - operation
       type: object
-    ActivateEmail_data:
+    ApproveOperationReq_data:
       properties:
         type:
           enum:
-          - activate_email
+          - approve-operation
           type: string
         attributes:
-          $ref: '#/components/schemas/ActivateEmail_data_attributes'
+          $ref: '#/components/schemas/ApproveOperationReq_data_attributes'
       required:
       - attributes
       - type
       type: object
-    RegistrationConfirm_data_attributes:
+    RegistrationConfirmReq_data_attributes:
       properties:
         first_password:
           description: First password
@@ -172,7 +165,7 @@ components:
       - password
       - second_password
       type: object
-    RegistrationConfirm_data:
+    RegistrationConfirmReq_data:
       properties:
         id:
           description: Unique identifier username
@@ -182,7 +175,7 @@ components:
           - registration_confirm
           type: string
         attributes:
-          $ref: '#/components/schemas/RegistrationConfirm_data_attributes'
+          $ref: '#/components/schemas/RegistrationConfirmReq_data_attributes'
       required:
       - attributes
       - id
@@ -260,7 +253,77 @@ components:
       - attributes
       - type
       type: object
-    ChangeUsername_data_attributes:
+    ForgotPasswordReq_data_attributes:
+      properties:
+        email:
+          description: User email (required if username is not provided).
+          format: email
+          type: string
+        username:
+          description: User username (required if email is not provided).
+          type: string
+      type: object
+    ForgotPasswordReq_data:
+      properties:
+        type:
+          enum:
+          - login
+          type: string
+        attributes:
+          $ref: '#/components/schemas/ForgotPasswordReq_data_attributes'
+      required:
+      - attributes
+      - type
+      type: object
+    ResetPasswordReq_data_attributes:
+      properties:
+        email:
+          description: User email (required if username is not provided).
+          format: email
+          type: string
+        username:
+          description: User username (required if email is not provided).
+          type: string
+        first_password:
+          description: User password.
+          type: string
+        second_password:
+          description: User password.
+          type: string
+        factory_id:
+          description: Unique identifier for the user's device.
+          type: string
+        device_name:
+          description: "Human-readable name for the user's device (e.g., 'iPhone 14')."
+          type: string
+        os_version:
+          description: Operating system version of the user's device.
+          type: string
+        ip_address:
+          description: IP address of the user's device.
+          format: string
+          type: string
+      required:
+      - device_name
+      - factory_id
+      - first_password
+      - ip_address
+      - os_version
+      - second_password
+      type: object
+    ResetPasswordReq_data:
+      properties:
+        type:
+          enum:
+          - login
+          type: string
+        attributes:
+          $ref: '#/components/schemas/ResetPasswordReq_data_attributes'
+      required:
+      - attributes
+      - type
+      type: object
+    ChangeUsernameReq_data_attributes:
       properties:
         new_username:
           description: New username
@@ -273,14 +336,14 @@ components:
       - email
       - password
       type: object
-    ChangeUsername_data:
+    ChangeUsernameReq_data:
       properties:
         type:
           enum:
           - change_username
           type: string
         attributes:
-          $ref: '#/components/schemas/ChangeUsername_data_attributes'
+          $ref: '#/components/schemas/ChangeUsernameReq_data_attributes'
       required:
       - attributes
       - type

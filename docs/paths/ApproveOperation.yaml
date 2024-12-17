@@ -5,19 +5,19 @@ info:
   version: 1.0.0
 
 paths:
-  /register:
-    post:
-      summary: Send a request to register a new user
-      description: Send code to email for user to confirm registration
+  /approve-operation:
+    patch:
+      summary: Approve operation
+      description: Send a request to approve an operation
       requestBody:
         required: true
         content:
           application/vnd.api+json:
             schema:
-              $ref: '../spec/components/schemas/RegistrationReq.yaml'
+              $ref: '../spec/components/schemas/ApproveOperationReq.yaml'
       responses:
-        '201':
-          description: User successfully registered
+        '200':
+          description: User successfully activated email
           content:
             application/json:
               schema:
@@ -25,9 +25,13 @@ paths:
                 properties:
                   status:
                     type: number
-                    example: 201
+                    example: 200
         '400':
           $ref: '../spec/components/responses/invalidParameter.yaml'
+        '401':
+          $ref: '../spec/components/responses/invalidAuth.yaml'
+        '403':
+          $ref: '../spec/components/responses/forbidden.yaml'
         '409':
           $ref: '../spec/components/responses/conflict.yaml'
         '415':

@@ -249,31 +249,6 @@ func (q *Queries) UpdateEmailStatusByID(ctx context.Context, arg UpdateEmailStat
 	return i, err
 }
 
-const updatePasswordByID = `-- name: UpdatePasswordByID :one
-UPDATE users_secret
-SET pass_hash = $2
-WHERE id = $1
-    RETURNING id, username, email, email_status, pass_hash
-`
-
-type UpdatePasswordByIDParams struct {
-	ID       uuid.UUID
-	PassHash string
-}
-
-func (q *Queries) UpdatePasswordByID(ctx context.Context, arg UpdatePasswordByIDParams) (UsersSecret, error) {
-	row := q.db.QueryRowContext(ctx, updatePasswordByID, arg.ID, arg.PassHash)
-	var i UsersSecret
-	err := row.Scan(
-		&i.ID,
-		&i.Username,
-		&i.Email,
-		&i.EmailStatus,
-		&i.PassHash,
-	)
-	return i, err
-}
-
 const updateUserByID = `-- name: UpdateUserByID :one
 UPDATE users_secret
 SET
@@ -298,6 +273,31 @@ func (q *Queries) UpdateUserByID(ctx context.Context, arg UpdateUserByIDParams) 
 		arg.EmailStatus,
 		arg.Username,
 	)
+	var i UsersSecret
+	err := row.Scan(
+		&i.ID,
+		&i.Username,
+		&i.Email,
+		&i.EmailStatus,
+		&i.PassHash,
+	)
+	return i, err
+}
+
+const updateUserPasswordByID = `-- name: UpdateUserPasswordByID :one
+UPDATE users_secret
+SET pass_hash = $2
+WHERE id = $1
+    RETURNING id, username, email, email_status, pass_hash
+`
+
+type UpdateUserPasswordByIDParams struct {
+	ID       uuid.UUID
+	PassHash string
+}
+
+func (q *Queries) UpdateUserPasswordByID(ctx context.Context, arg UpdateUserPasswordByIDParams) (UsersSecret, error) {
+	row := q.db.QueryRowContext(ctx, updateUserPasswordByID, arg.ID, arg.PassHash)
 	var i UsersSecret
 	err := row.Scan(
 		&i.ID,

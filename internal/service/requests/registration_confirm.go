@@ -9,7 +9,7 @@ import (
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 )
 
-func NewRegistrationConfirm(r *http.Request) (req resources.RegistrationConfirm, err error) {
+func NewRegistrationConfirm(r *http.Request) (req resources.RegistrationConfirmReq, err error) {
 	if err = json.NewDecoder(r.Body).Decode(&req); err != nil {
 		err = newDecodeError("body", err)
 		return

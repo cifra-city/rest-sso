@@ -16,39 +16,39 @@ import (
 	"fmt"
 )
 
-// checks if the RegistrationDataAttributes type satisfies the MappedNullable interface at compile time
-var _ MappedNullable = &RegistrationDataAttributes{}
+// checks if the RegistrationReqDataAttributes type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &RegistrationReqDataAttributes{}
 
-// RegistrationDataAttributes struct for RegistrationDataAttributes
-type RegistrationDataAttributes struct {
+// RegistrationReqDataAttributes struct for RegistrationReqDataAttributes
+type RegistrationReqDataAttributes struct {
 	// User email
 	Email string `json:"email"`
 	// User username
 	Username *string `json:"username,omitempty"`
 }
 
-type _RegistrationDataAttributes RegistrationDataAttributes
+type _RegistrationReqDataAttributes RegistrationReqDataAttributes
 
-// NewRegistrationDataAttributes instantiates a new RegistrationDataAttributes object
+// NewRegistrationReqDataAttributes instantiates a new RegistrationReqDataAttributes object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewRegistrationDataAttributes(email string) *RegistrationDataAttributes {
-	this := RegistrationDataAttributes{}
+func NewRegistrationReqDataAttributes(email string) *RegistrationReqDataAttributes {
+	this := RegistrationReqDataAttributes{}
 	this.Email = email
 	return &this
 }
 
-// NewRegistrationDataAttributesWithDefaults instantiates a new RegistrationDataAttributes object
+// NewRegistrationReqDataAttributesWithDefaults instantiates a new RegistrationReqDataAttributes object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewRegistrationDataAttributesWithDefaults() *RegistrationDataAttributes {
-	this := RegistrationDataAttributes{}
+func NewRegistrationReqDataAttributesWithDefaults() *RegistrationReqDataAttributes {
+	this := RegistrationReqDataAttributes{}
 	return &this
 }
 
 // GetEmail returns the Email field value
-func (o *RegistrationDataAttributes) GetEmail() string {
+func (o *RegistrationReqDataAttributes) GetEmail() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -59,7 +59,7 @@ func (o *RegistrationDataAttributes) GetEmail() string {
 
 // GetEmailOk returns a tuple with the Email field value
 // and a boolean to check if the value has been set.
-func (o *RegistrationDataAttributes) GetEmailOk() (*string, bool) {
+func (o *RegistrationReqDataAttributes) GetEmailOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -67,12 +67,12 @@ func (o *RegistrationDataAttributes) GetEmailOk() (*string, bool) {
 }
 
 // SetEmail sets field value
-func (o *RegistrationDataAttributes) SetEmail(v string) {
+func (o *RegistrationReqDataAttributes) SetEmail(v string) {
 	o.Email = v
 }
 
 // GetUsername returns the Username field value if set, zero value otherwise.
-func (o *RegistrationDataAttributes) GetUsername() string {
+func (o *RegistrationReqDataAttributes) GetUsername() string {
 	if o == nil || IsNil(o.Username) {
 		var ret string
 		return ret
@@ -82,7 +82,7 @@ func (o *RegistrationDataAttributes) GetUsername() string {
 
 // GetUsernameOk returns a tuple with the Username field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *RegistrationDataAttributes) GetUsernameOk() (*string, bool) {
+func (o *RegistrationReqDataAttributes) GetUsernameOk() (*string, bool) {
 	if o == nil || IsNil(o.Username) {
 		return nil, false
 	}
@@ -90,7 +90,7 @@ func (o *RegistrationDataAttributes) GetUsernameOk() (*string, bool) {
 }
 
 // HasUsername returns a boolean if a field has been set.
-func (o *RegistrationDataAttributes) HasUsername() bool {
+func (o *RegistrationReqDataAttributes) HasUsername() bool {
 	if o != nil && !IsNil(o.Username) {
 		return true
 	}
@@ -99,11 +99,11 @@ func (o *RegistrationDataAttributes) HasUsername() bool {
 }
 
 // SetUsername gets a reference to the given string and assigns it to the Username field.
-func (o *RegistrationDataAttributes) SetUsername(v string) {
+func (o *RegistrationReqDataAttributes) SetUsername(v string) {
 	o.Username = &v
 }
 
-func (o RegistrationDataAttributes) MarshalJSON() ([]byte, error) {
+func (o RegistrationReqDataAttributes) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
@@ -111,7 +111,7 @@ func (o RegistrationDataAttributes) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-func (o RegistrationDataAttributes) ToMap() (map[string]interface{}, error) {
+func (o RegistrationReqDataAttributes) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["email"] = o.Email
 	if !IsNil(o.Username) {
@@ -120,7 +120,7 @@ func (o RegistrationDataAttributes) ToMap() (map[string]interface{}, error) {
 	return toSerialize, nil
 }
 
-func (o *RegistrationDataAttributes) UnmarshalJSON(data []byte) (err error) {
+func (o *RegistrationReqDataAttributes) UnmarshalJSON(data []byte) (err error) {
 	// This validates that all required properties are included in the JSON object
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
@@ -142,53 +142,53 @@ func (o *RegistrationDataAttributes) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varRegistrationDataAttributes := _RegistrationDataAttributes{}
+	varRegistrationReqDataAttributes := _RegistrationReqDataAttributes{}
 
 	decoder := json.NewDecoder(bytes.NewReader(data))
 	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varRegistrationDataAttributes)
+	err = decoder.Decode(&varRegistrationReqDataAttributes)
 
 	if err != nil {
 		return err
 	}
 
-	*o = RegistrationDataAttributes(varRegistrationDataAttributes)
+	*o = RegistrationReqDataAttributes(varRegistrationReqDataAttributes)
 
 	return err
 }
 
-type NullableRegistrationDataAttributes struct {
-	value *RegistrationDataAttributes
+type NullableRegistrationReqDataAttributes struct {
+	value *RegistrationReqDataAttributes
 	isSet bool
 }
 
-func (v NullableRegistrationDataAttributes) Get() *RegistrationDataAttributes {
+func (v NullableRegistrationReqDataAttributes) Get() *RegistrationReqDataAttributes {
 	return v.value
 }
 
-func (v *NullableRegistrationDataAttributes) Set(val *RegistrationDataAttributes) {
+func (v *NullableRegistrationReqDataAttributes) Set(val *RegistrationReqDataAttributes) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableRegistrationDataAttributes) IsSet() bool {
+func (v NullableRegistrationReqDataAttributes) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableRegistrationDataAttributes) Unset() {
+func (v *NullableRegistrationReqDataAttributes) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableRegistrationDataAttributes(val *RegistrationDataAttributes) *NullableRegistrationDataAttributes {
-	return &NullableRegistrationDataAttributes{value: val, isSet: true}
+func NewNullableRegistrationReqDataAttributes(val *RegistrationReqDataAttributes) *NullableRegistrationReqDataAttributes {
+	return &NullableRegistrationReqDataAttributes{value: val, isSet: true}
 }
 
-func (v NullableRegistrationDataAttributes) MarshalJSON() ([]byte, error) {
+func (v NullableRegistrationReqDataAttributes) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableRegistrationDataAttributes) UnmarshalJSON(src []byte) error {
+func (v *NullableRegistrationReqDataAttributes) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

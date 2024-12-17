@@ -21,7 +21,7 @@ var _ MappedNullable = &ChangeUsernameReq{}
 
 // ChangeUsernameReq struct for ChangeUsernameReq
 type ChangeUsernameReq struct {
-	Data ChangeUsernameData `json:"data"`
+	Data ChangeUsernameReqData `json:"data"`
 }
 
 type _ChangeUsernameReq ChangeUsernameReq
@@ -30,7 +30,7 @@ type _ChangeUsernameReq ChangeUsernameReq
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewChangeUsernameReq(data ChangeUsernameData) *ChangeUsernameReq {
+func NewChangeUsernameReq(data ChangeUsernameReqData) *ChangeUsernameReq {
 	this := ChangeUsernameReq{}
 	this.Data = data
 	return &this
@@ -45,9 +45,9 @@ func NewChangeUsernameReqWithDefaults() *ChangeUsernameReq {
 }
 
 // GetData returns the Data field value
-func (o *ChangeUsernameReq) GetData() ChangeUsernameData {
+func (o *ChangeUsernameReq) GetData() ChangeUsernameReqData {
 	if o == nil {
-		var ret ChangeUsernameData
+		var ret ChangeUsernameReqData
 		return ret
 	}
 
@@ -56,7 +56,7 @@ func (o *ChangeUsernameReq) GetData() ChangeUsernameData {
 
 // GetDataOk returns a tuple with the Data field value
 // and a boolean to check if the value has been set.
-func (o *ChangeUsernameReq) GetDataOk() (*ChangeUsernameData, bool) {
+func (o *ChangeUsernameReq) GetDataOk() (*ChangeUsernameReqData, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -64,7 +64,7 @@ func (o *ChangeUsernameReq) GetDataOk() (*ChangeUsernameData, bool) {
 }
 
 // SetData sets field value
-func (o *ChangeUsernameReq) SetData(v ChangeUsernameData) {
+func (o *ChangeUsernameReq) SetData(v ChangeUsernameReqData) {
 	o.Data = v
 }
 

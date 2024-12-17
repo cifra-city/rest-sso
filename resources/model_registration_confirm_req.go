@@ -21,7 +21,7 @@ var _ MappedNullable = &RegistrationConfirmReq{}
 
 // RegistrationConfirmReq struct for RegistrationConfirmReq
 type RegistrationConfirmReq struct {
-	Data RegistrationConfirmData `json:"data"`
+	Data RegistrationConfirmReqData `json:"data"`
 }
 
 type _RegistrationConfirmReq RegistrationConfirmReq
@@ -30,7 +30,7 @@ type _RegistrationConfirmReq RegistrationConfirmReq
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewRegistrationConfirmReq(data RegistrationConfirmData) *RegistrationConfirmReq {
+func NewRegistrationConfirmReq(data RegistrationConfirmReqData) *RegistrationConfirmReq {
 	this := RegistrationConfirmReq{}
 	this.Data = data
 	return &this
@@ -45,9 +45,9 @@ func NewRegistrationConfirmReqWithDefaults() *RegistrationConfirmReq {
 }
 
 // GetData returns the Data field value
-func (o *RegistrationConfirmReq) GetData() RegistrationConfirmData {
+func (o *RegistrationConfirmReq) GetData() RegistrationConfirmReqData {
 	if o == nil {
-		var ret RegistrationConfirmData
+		var ret RegistrationConfirmReqData
 		return ret
 	}
 
@@ -56,7 +56,7 @@ func (o *RegistrationConfirmReq) GetData() RegistrationConfirmData {
 
 // GetDataOk returns a tuple with the Data field value
 // and a boolean to check if the value has been set.
-func (o *RegistrationConfirmReq) GetDataOk() (*RegistrationConfirmData, bool) {
+func (o *RegistrationConfirmReq) GetDataOk() (*RegistrationConfirmReqData, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -64,7 +64,7 @@ func (o *RegistrationConfirmReq) GetDataOk() (*RegistrationConfirmData, bool) {
 }
 
 // SetData sets field value
-func (o *RegistrationConfirmReq) SetData(v RegistrationConfirmData) {
+func (o *RegistrationConfirmReq) SetData(v RegistrationConfirmReqData) {
 	o.Data = v
 }
 

@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Data** | [**RegistrationData**](RegistrationData.md) |  | 
+**Data** | [**RegistrationReqData**](RegistrationReqData.md) |  | 
 
 ## Methods
 
 ### NewRegistrationReq
 
-`func NewRegistrationReq(data RegistrationData, ) *RegistrationReq`
+`func NewRegistrationReq(data RegistrationReqData, ) *RegistrationReq`
 
 NewRegistrationReq instantiates a new RegistrationReq object
 This constructor will assign default values to properties that have it defined,
@@ -27,20 +27,20 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetData
 
-`func (o *RegistrationReq) GetData() RegistrationData`
+`func (o *RegistrationReq) GetData() RegistrationReqData`
 
 GetData returns the Data field if non-nil, zero value otherwise.
 
 ### GetDataOk
 
-`func (o *RegistrationReq) GetDataOk() (*RegistrationData, bool)`
+`func (o *RegistrationReq) GetDataOk() (*RegistrationReqData, bool)`
 
 GetDataOk returns a tuple with the Data field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetData
 
-`func (o *RegistrationReq) SetData(v RegistrationData)`
+`func (o *RegistrationReq) SetData(v RegistrationReqData)`
 
 SetData sets Data field to given value.
 
