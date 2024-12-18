@@ -1,3 +1,9 @@
+openapi: 3.0.0
+info:
+  title: Example API
+  description: An example API with error responses and user registration
+  version: 1.0.0
+
 paths:
   /refresh:
     post:

@@ -5,7 +5,7 @@ info:
   version: 1.0.0
 
 paths:
-  /register-confirm:
+  /register-complete:
     post:
       summary: Confirm register a new user
       description: Endpoint to register a new user with email, username, and password

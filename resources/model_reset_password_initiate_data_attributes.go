@@ -14,36 +14,36 @@ import (
 	"encoding/json"
 )
 
-// checks if the ForgotPasswordReqDataAttributes type satisfies the MappedNullable interface at compile time
-var _ MappedNullable = &ForgotPasswordReqDataAttributes{}
+// checks if the ResetPasswordInitiateDataAttributes type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ResetPasswordInitiateDataAttributes{}
 
-// ForgotPasswordReqDataAttributes struct for ForgotPasswordReqDataAttributes
-type ForgotPasswordReqDataAttributes struct {
+// ResetPasswordInitiateDataAttributes struct for ResetPasswordInitiateDataAttributes
+type ResetPasswordInitiateDataAttributes struct {
 	// User email (required if username is not provided).
 	Email *string `json:"email,omitempty"`
 	// User username (required if email is not provided).
 	Username *string `json:"username,omitempty"`
 }
 
-// NewForgotPasswordReqDataAttributes instantiates a new ForgotPasswordReqDataAttributes object
+// NewResetPasswordInitiateDataAttributes instantiates a new ResetPasswordInitiateDataAttributes object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewForgotPasswordReqDataAttributes() *ForgotPasswordReqDataAttributes {
-	this := ForgotPasswordReqDataAttributes{}
+func NewResetPasswordInitiateDataAttributes() *ResetPasswordInitiateDataAttributes {
+	this := ResetPasswordInitiateDataAttributes{}
 	return &this
 }
 
-// NewForgotPasswordReqDataAttributesWithDefaults instantiates a new ForgotPasswordReqDataAttributes object
+// NewResetPasswordInitiateDataAttributesWithDefaults instantiates a new ResetPasswordInitiateDataAttributes object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewForgotPasswordReqDataAttributesWithDefaults() *ForgotPasswordReqDataAttributes {
-	this := ForgotPasswordReqDataAttributes{}
+func NewResetPasswordInitiateDataAttributesWithDefaults() *ResetPasswordInitiateDataAttributes {
+	this := ResetPasswordInitiateDataAttributes{}
 	return &this
 }
 
 // GetEmail returns the Email field value if set, zero value otherwise.
-func (o *ForgotPasswordReqDataAttributes) GetEmail() string {
+func (o *ResetPasswordInitiateDataAttributes) GetEmail() string {
 	if o == nil || IsNil(o.Email) {
 		var ret string
 		return ret
@@ -53,7 +53,7 @@ func (o *ForgotPasswordReqDataAttributes) GetEmail() string {
 
 // GetEmailOk returns a tuple with the Email field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ForgotPasswordReqDataAttributes) GetEmailOk() (*string, bool) {
+func (o *ResetPasswordInitiateDataAttributes) GetEmailOk() (*string, bool) {
 	if o == nil || IsNil(o.Email) {
 		return nil, false
 	}
@@ -61,7 +61,7 @@ func (o *ForgotPasswordReqDataAttributes) GetEmailOk() (*string, bool) {
 }
 
 // HasEmail returns a boolean if a field has been set.
-func (o *ForgotPasswordReqDataAttributes) HasEmail() bool {
+func (o *ResetPasswordInitiateDataAttributes) HasEmail() bool {
 	if o != nil && !IsNil(o.Email) {
 		return true
 	}
@@ -70,12 +70,12 @@ func (o *ForgotPasswordReqDataAttributes) HasEmail() bool {
 }
 
 // SetEmail gets a reference to the given string and assigns it to the Email field.
-func (o *ForgotPasswordReqDataAttributes) SetEmail(v string) {
+func (o *ResetPasswordInitiateDataAttributes) SetEmail(v string) {
 	o.Email = &v
 }
 
 // GetUsername returns the Username field value if set, zero value otherwise.
-func (o *ForgotPasswordReqDataAttributes) GetUsername() string {
+func (o *ResetPasswordInitiateDataAttributes) GetUsername() string {
 	if o == nil || IsNil(o.Username) {
 		var ret string
 		return ret
@@ -85,7 +85,7 @@ func (o *ForgotPasswordReqDataAttributes) GetUsername() string {
 
 // GetUsernameOk returns a tuple with the Username field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ForgotPasswordReqDataAttributes) GetUsernameOk() (*string, bool) {
+func (o *ResetPasswordInitiateDataAttributes) GetUsernameOk() (*string, bool) {
 	if o == nil || IsNil(o.Username) {
 		return nil, false
 	}
@@ -93,7 +93,7 @@ func (o *ForgotPasswordReqDataAttributes) GetUsernameOk() (*string, bool) {
 }
 
 // HasUsername returns a boolean if a field has been set.
-func (o *ForgotPasswordReqDataAttributes) HasUsername() bool {
+func (o *ResetPasswordInitiateDataAttributes) HasUsername() bool {
 	if o != nil && !IsNil(o.Username) {
 		return true
 	}
@@ -102,11 +102,11 @@ func (o *ForgotPasswordReqDataAttributes) HasUsername() bool {
 }
 
 // SetUsername gets a reference to the given string and assigns it to the Username field.
-func (o *ForgotPasswordReqDataAttributes) SetUsername(v string) {
+func (o *ResetPasswordInitiateDataAttributes) SetUsername(v string) {
 	o.Username = &v
 }
 
-func (o ForgotPasswordReqDataAttributes) MarshalJSON() ([]byte, error) {
+func (o ResetPasswordInitiateDataAttributes) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
@@ -114,7 +114,7 @@ func (o ForgotPasswordReqDataAttributes) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-func (o ForgotPasswordReqDataAttributes) ToMap() (map[string]interface{}, error) {
+func (o ResetPasswordInitiateDataAttributes) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	if !IsNil(o.Email) {
 		toSerialize["email"] = o.Email
@@ -125,38 +125,38 @@ func (o ForgotPasswordReqDataAttributes) ToMap() (map[string]interface{}, error)
 	return toSerialize, nil
 }
 
-type NullableForgotPasswordReqDataAttributes struct {
-	value *ForgotPasswordReqDataAttributes
+type NullableResetPasswordInitiateDataAttributes struct {
+	value *ResetPasswordInitiateDataAttributes
 	isSet bool
 }
 
-func (v NullableForgotPasswordReqDataAttributes) Get() *ForgotPasswordReqDataAttributes {
+func (v NullableResetPasswordInitiateDataAttributes) Get() *ResetPasswordInitiateDataAttributes {
 	return v.value
 }
 
-func (v *NullableForgotPasswordReqDataAttributes) Set(val *ForgotPasswordReqDataAttributes) {
+func (v *NullableResetPasswordInitiateDataAttributes) Set(val *ResetPasswordInitiateDataAttributes) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableForgotPasswordReqDataAttributes) IsSet() bool {
+func (v NullableResetPasswordInitiateDataAttributes) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableForgotPasswordReqDataAttributes) Unset() {
+func (v *NullableResetPasswordInitiateDataAttributes) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableForgotPasswordReqDataAttributes(val *ForgotPasswordReqDataAttributes) *NullableForgotPasswordReqDataAttributes {
-	return &NullableForgotPasswordReqDataAttributes{value: val, isSet: true}
+func NewNullableResetPasswordInitiateDataAttributes(val *ResetPasswordInitiateDataAttributes) *NullableResetPasswordInitiateDataAttributes {
+	return &NullableResetPasswordInitiateDataAttributes{value: val, isSet: true}
 }
 
-func (v NullableForgotPasswordReqDataAttributes) MarshalJSON() ([]byte, error) {
+func (v NullableResetPasswordInitiateDataAttributes) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableForgotPasswordReqDataAttributes) UnmarshalJSON(src []byte) error {
+func (v *NullableResetPasswordInitiateDataAttributes) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

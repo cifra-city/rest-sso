@@ -88,9 +88,6 @@ Class | Method | HTTP request | Description
  - [ChangeUsernameReq](docs/ChangeUsernameReq.md)
  - [ChangeUsernameReqData](docs/ChangeUsernameReqData.md)
  - [ChangeUsernameReqDataAttributes](docs/ChangeUsernameReqDataAttributes.md)
- - [ForgotPasswordReq](docs/ForgotPasswordReq.md)
- - [ForgotPasswordReqData](docs/ForgotPasswordReqData.md)
- - [ForgotPasswordReqDataAttributes](docs/ForgotPasswordReqDataAttributes.md)
  - [LoginReq](docs/LoginReq.md)
  - [LoginReqData](docs/LoginReqData.md)
  - [LoginReqDataAttributes](docs/LoginReqDataAttributes.md)
@@ -109,9 +106,12 @@ Class | Method | HTTP request | Description
  - [RegistrationInitiate](docs/RegistrationInitiate.md)
  - [RegistrationInitiateData](docs/RegistrationInitiateData.md)
  - [RegistrationInitiateDataAttributes](docs/RegistrationInitiateDataAttributes.md)
- - [ResetPasswordReq](docs/ResetPasswordReq.md)
- - [ResetPasswordReqData](docs/ResetPasswordReqData.md)
- - [ResetPasswordReqDataAttributes](docs/ResetPasswordReqDataAttributes.md)
+ - [ResetPasswordComplete](docs/ResetPasswordComplete.md)
+ - [ResetPasswordCompleteData](docs/ResetPasswordCompleteData.md)
+ - [ResetPasswordCompleteDataAttributes](docs/ResetPasswordCompleteDataAttributes.md)
+ - [ResetPasswordInitiate](docs/ResetPasswordInitiate.md)
+ - [ResetPasswordInitiateData](docs/ResetPasswordInitiateData.md)
+ - [ResetPasswordInitiateDataAttributes](docs/ResetPasswordInitiateDataAttributes.md)
 
 
 ## Documentation For Authorization

@@ -14,8 +14,8 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func ForgotPassword(w http.ResponseWriter, r *http.Request) {
-	req, err := requests.NewForgotPassword(r)
+func ResetPasswordInitiate(w http.ResponseWriter, r *http.Request) {
+	req, err := requests.NewResetPasswordInitiate(r)
 	if err != nil {
 		httpresp.RenderErr(w, problems.BadRequest(err)...)
 		return
@@ -23,11 +23,6 @@ func ForgotPassword(w http.ResponseWriter, r *http.Request) {
 
 	email := req.Data.Attributes.Email
 	username := req.Data.Attributes.Username
-
-	if email == nil && username == nil {
-		httpresp.RenderErr(w, problems.BadRequest(errors.New("email or username is required"))...)
-		return
-	}
 
 	var user data.UsersSecret
 
@@ -47,18 +42,20 @@ func ForgotPassword(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Errorf("Failed to get user: %v", err)
 		if errors.Is(err, sql.ErrNoRows) {
-			httpresp.RenderErr(w, problems.Unauthorized())
+			httpresp.RenderErr(w, problems.NotFound())
 			return
 		}
 		httpresp.RenderErr(w, problems.InternalError())
 		return
 	}
-
-	if Server.Mailman.SendList(user.Email, string(FORGOT_PASSWORD), "forgot_password.html", 15) != nil {
-		log.Errorf("Failed to send email: %v", err)
-		httpresp.RenderErr(w, problems.InternalError())
-		return
-	}
+	go func() {
+		err = Server.Mailman.SendList(user.Email, string(RESET_PASSWORD), "email_list.html", 300)
+		if err != nil {
+			log.Errorf("error sending email: %v", err)
+		} else {
+			log.Infof("Email sent successfully to: %s", user.Email)
+		}
+	}()
 
 	httpresp.Render(w, http.StatusOK)
 }

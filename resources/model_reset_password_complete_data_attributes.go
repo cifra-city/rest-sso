@@ -16,11 +16,11 @@ import (
 	"fmt"
 )
 
-// checks if the ResetPasswordReqDataAttributes type satisfies the MappedNullable interface at compile time
-var _ MappedNullable = &ResetPasswordReqDataAttributes{}
+// checks if the ResetPasswordCompleteDataAttributes type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ResetPasswordCompleteDataAttributes{}
 
-// ResetPasswordReqDataAttributes struct for ResetPasswordReqDataAttributes
-type ResetPasswordReqDataAttributes struct {
+// ResetPasswordCompleteDataAttributes struct for ResetPasswordCompleteDataAttributes
+type ResetPasswordCompleteDataAttributes struct {
 	// User email (required if username is not provided).
 	Email *string `json:"email,omitempty"`
 	// User username (required if email is not provided).
@@ -39,14 +39,14 @@ type ResetPasswordReqDataAttributes struct {
 	IpAddress string `json:"ip_address"`
 }
 
-type _ResetPasswordReqDataAttributes ResetPasswordReqDataAttributes
+type _ResetPasswordCompleteDataAttributes ResetPasswordCompleteDataAttributes
 
-// NewResetPasswordReqDataAttributes instantiates a new ResetPasswordReqDataAttributes object
+// NewResetPasswordCompleteDataAttributes instantiates a new ResetPasswordCompleteDataAttributes object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewResetPasswordReqDataAttributes(firstPassword string, secondPassword string, factoryId string, deviceName string, osVersion string, ipAddress string) *ResetPasswordReqDataAttributes {
-	this := ResetPasswordReqDataAttributes{}
+func NewResetPasswordCompleteDataAttributes(firstPassword string, secondPassword string, factoryId string, deviceName string, osVersion string, ipAddress string) *ResetPasswordCompleteDataAttributes {
+	this := ResetPasswordCompleteDataAttributes{}
 	this.FirstPassword = firstPassword
 	this.SecondPassword = secondPassword
 	this.FactoryId = factoryId
@@ -56,16 +56,16 @@ func NewResetPasswordReqDataAttributes(firstPassword string, secondPassword stri
 	return &this
 }
 
-// NewResetPasswordReqDataAttributesWithDefaults instantiates a new ResetPasswordReqDataAttributes object
+// NewResetPasswordCompleteDataAttributesWithDefaults instantiates a new ResetPasswordCompleteDataAttributes object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewResetPasswordReqDataAttributesWithDefaults() *ResetPasswordReqDataAttributes {
-	this := ResetPasswordReqDataAttributes{}
+func NewResetPasswordCompleteDataAttributesWithDefaults() *ResetPasswordCompleteDataAttributes {
+	this := ResetPasswordCompleteDataAttributes{}
 	return &this
 }
 
 // GetEmail returns the Email field value if set, zero value otherwise.
-func (o *ResetPasswordReqDataAttributes) GetEmail() string {
+func (o *ResetPasswordCompleteDataAttributes) GetEmail() string {
 	if o == nil || IsNil(o.Email) {
 		var ret string
 		return ret
@@ -75,7 +75,7 @@ func (o *ResetPasswordReqDataAttributes) GetEmail() string {
 
 // GetEmailOk returns a tuple with the Email field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ResetPasswordReqDataAttributes) GetEmailOk() (*string, bool) {
+func (o *ResetPasswordCompleteDataAttributes) GetEmailOk() (*string, bool) {
 	if o == nil || IsNil(o.Email) {
 		return nil, false
 	}
@@ -83,7 +83,7 @@ func (o *ResetPasswordReqDataAttributes) GetEmailOk() (*string, bool) {
 }
 
 // HasEmail returns a boolean if a field has been set.
-func (o *ResetPasswordReqDataAttributes) HasEmail() bool {
+func (o *ResetPasswordCompleteDataAttributes) HasEmail() bool {
 	if o != nil && !IsNil(o.Email) {
 		return true
 	}
@@ -92,12 +92,12 @@ func (o *ResetPasswordReqDataAttributes) HasEmail() bool {
 }
 
 // SetEmail gets a reference to the given string and assigns it to the Email field.
-func (o *ResetPasswordReqDataAttributes) SetEmail(v string) {
+func (o *ResetPasswordCompleteDataAttributes) SetEmail(v string) {
 	o.Email = &v
 }
 
 // GetUsername returns the Username field value if set, zero value otherwise.
-func (o *ResetPasswordReqDataAttributes) GetUsername() string {
+func (o *ResetPasswordCompleteDataAttributes) GetUsername() string {
 	if o == nil || IsNil(o.Username) {
 		var ret string
 		return ret
@@ -107,7 +107,7 @@ func (o *ResetPasswordReqDataAttributes) GetUsername() string {
 
 // GetUsernameOk returns a tuple with the Username field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ResetPasswordReqDataAttributes) GetUsernameOk() (*string, bool) {
+func (o *ResetPasswordCompleteDataAttributes) GetUsernameOk() (*string, bool) {
 	if o == nil || IsNil(o.Username) {
 		return nil, false
 	}
@@ -115,7 +115,7 @@ func (o *ResetPasswordReqDataAttributes) GetUsernameOk() (*string, bool) {
 }
 
 // HasUsername returns a boolean if a field has been set.
-func (o *ResetPasswordReqDataAttributes) HasUsername() bool {
+func (o *ResetPasswordCompleteDataAttributes) HasUsername() bool {
 	if o != nil && !IsNil(o.Username) {
 		return true
 	}
@@ -124,12 +124,12 @@ func (o *ResetPasswordReqDataAttributes) HasUsername() bool {
 }
 
 // SetUsername gets a reference to the given string and assigns it to the Username field.
-func (o *ResetPasswordReqDataAttributes) SetUsername(v string) {
+func (o *ResetPasswordCompleteDataAttributes) SetUsername(v string) {
 	o.Username = &v
 }
 
 // GetFirstPassword returns the FirstPassword field value
-func (o *ResetPasswordReqDataAttributes) GetFirstPassword() string {
+func (o *ResetPasswordCompleteDataAttributes) GetFirstPassword() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -140,7 +140,7 @@ func (o *ResetPasswordReqDataAttributes) GetFirstPassword() string {
 
 // GetFirstPasswordOk returns a tuple with the FirstPassword field value
 // and a boolean to check if the value has been set.
-func (o *ResetPasswordReqDataAttributes) GetFirstPasswordOk() (*string, bool) {
+func (o *ResetPasswordCompleteDataAttributes) GetFirstPasswordOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -148,12 +148,12 @@ func (o *ResetPasswordReqDataAttributes) GetFirstPasswordOk() (*string, bool) {
 }
 
 // SetFirstPassword sets field value
-func (o *ResetPasswordReqDataAttributes) SetFirstPassword(v string) {
+func (o *ResetPasswordCompleteDataAttributes) SetFirstPassword(v string) {
 	o.FirstPassword = v
 }
 
 // GetSecondPassword returns the SecondPassword field value
-func (o *ResetPasswordReqDataAttributes) GetSecondPassword() string {
+func (o *ResetPasswordCompleteDataAttributes) GetSecondPassword() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -164,7 +164,7 @@ func (o *ResetPasswordReqDataAttributes) GetSecondPassword() string {
 
 // GetSecondPasswordOk returns a tuple with the SecondPassword field value
 // and a boolean to check if the value has been set.
-func (o *ResetPasswordReqDataAttributes) GetSecondPasswordOk() (*string, bool) {
+func (o *ResetPasswordCompleteDataAttributes) GetSecondPasswordOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -172,12 +172,12 @@ func (o *ResetPasswordReqDataAttributes) GetSecondPasswordOk() (*string, bool) {
 }
 
 // SetSecondPassword sets field value
-func (o *ResetPasswordReqDataAttributes) SetSecondPassword(v string) {
+func (o *ResetPasswordCompleteDataAttributes) SetSecondPassword(v string) {
 	o.SecondPassword = v
 }
 
 // GetFactoryId returns the FactoryId field value
-func (o *ResetPasswordReqDataAttributes) GetFactoryId() string {
+func (o *ResetPasswordCompleteDataAttributes) GetFactoryId() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -188,7 +188,7 @@ func (o *ResetPasswordReqDataAttributes) GetFactoryId() string {
 
 // GetFactoryIdOk returns a tuple with the FactoryId field value
 // and a boolean to check if the value has been set.
-func (o *ResetPasswordReqDataAttributes) GetFactoryIdOk() (*string, bool) {
+func (o *ResetPasswordCompleteDataAttributes) GetFactoryIdOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -196,12 +196,12 @@ func (o *ResetPasswordReqDataAttributes) GetFactoryIdOk() (*string, bool) {
 }
 
 // SetFactoryId sets field value
-func (o *ResetPasswordReqDataAttributes) SetFactoryId(v string) {
+func (o *ResetPasswordCompleteDataAttributes) SetFactoryId(v string) {
 	o.FactoryId = v
 }
 
 // GetDeviceName returns the DeviceName field value
-func (o *ResetPasswordReqDataAttributes) GetDeviceName() string {
+func (o *ResetPasswordCompleteDataAttributes) GetDeviceName() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -212,7 +212,7 @@ func (o *ResetPasswordReqDataAttributes) GetDeviceName() string {
 
 // GetDeviceNameOk returns a tuple with the DeviceName field value
 // and a boolean to check if the value has been set.
-func (o *ResetPasswordReqDataAttributes) GetDeviceNameOk() (*string, bool) {
+func (o *ResetPasswordCompleteDataAttributes) GetDeviceNameOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -220,12 +220,12 @@ func (o *ResetPasswordReqDataAttributes) GetDeviceNameOk() (*string, bool) {
 }
 
 // SetDeviceName sets field value
-func (o *ResetPasswordReqDataAttributes) SetDeviceName(v string) {
+func (o *ResetPasswordCompleteDataAttributes) SetDeviceName(v string) {
 	o.DeviceName = v
 }
 
 // GetOsVersion returns the OsVersion field value
-func (o *ResetPasswordReqDataAttributes) GetOsVersion() string {
+func (o *ResetPasswordCompleteDataAttributes) GetOsVersion() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -236,7 +236,7 @@ func (o *ResetPasswordReqDataAttributes) GetOsVersion() string {
 
 // GetOsVersionOk returns a tuple with the OsVersion field value
 // and a boolean to check if the value has been set.
-func (o *ResetPasswordReqDataAttributes) GetOsVersionOk() (*string, bool) {
+func (o *ResetPasswordCompleteDataAttributes) GetOsVersionOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -244,12 +244,12 @@ func (o *ResetPasswordReqDataAttributes) GetOsVersionOk() (*string, bool) {
 }
 
 // SetOsVersion sets field value
-func (o *ResetPasswordReqDataAttributes) SetOsVersion(v string) {
+func (o *ResetPasswordCompleteDataAttributes) SetOsVersion(v string) {
 	o.OsVersion = v
 }
 
 // GetIpAddress returns the IpAddress field value
-func (o *ResetPasswordReqDataAttributes) GetIpAddress() string {
+func (o *ResetPasswordCompleteDataAttributes) GetIpAddress() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -260,7 +260,7 @@ func (o *ResetPasswordReqDataAttributes) GetIpAddress() string {
 
 // GetIpAddressOk returns a tuple with the IpAddress field value
 // and a boolean to check if the value has been set.
-func (o *ResetPasswordReqDataAttributes) GetIpAddressOk() (*string, bool) {
+func (o *ResetPasswordCompleteDataAttributes) GetIpAddressOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -268,11 +268,11 @@ func (o *ResetPasswordReqDataAttributes) GetIpAddressOk() (*string, bool) {
 }
 
 // SetIpAddress sets field value
-func (o *ResetPasswordReqDataAttributes) SetIpAddress(v string) {
+func (o *ResetPasswordCompleteDataAttributes) SetIpAddress(v string) {
 	o.IpAddress = v
 }
 
-func (o ResetPasswordReqDataAttributes) MarshalJSON() ([]byte, error) {
+func (o ResetPasswordCompleteDataAttributes) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
@@ -280,7 +280,7 @@ func (o ResetPasswordReqDataAttributes) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-func (o ResetPasswordReqDataAttributes) ToMap() (map[string]interface{}, error) {
+func (o ResetPasswordCompleteDataAttributes) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	if !IsNil(o.Email) {
 		toSerialize["email"] = o.Email
@@ -297,7 +297,7 @@ func (o ResetPasswordReqDataAttributes) ToMap() (map[string]interface{}, error) 
 	return toSerialize, nil
 }
 
-func (o *ResetPasswordReqDataAttributes) UnmarshalJSON(data []byte) (err error) {
+func (o *ResetPasswordCompleteDataAttributes) UnmarshalJSON(data []byte) (err error) {
 	// This validates that all required properties are included in the JSON object
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
@@ -324,53 +324,53 @@ func (o *ResetPasswordReqDataAttributes) UnmarshalJSON(data []byte) (err error) 
 		}
 	}
 
-	varResetPasswordReqDataAttributes := _ResetPasswordReqDataAttributes{}
+	varResetPasswordCompleteDataAttributes := _ResetPasswordCompleteDataAttributes{}
 
 	decoder := json.NewDecoder(bytes.NewReader(data))
 	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varResetPasswordReqDataAttributes)
+	err = decoder.Decode(&varResetPasswordCompleteDataAttributes)
 
 	if err != nil {
 		return err
 	}
 
-	*o = ResetPasswordReqDataAttributes(varResetPasswordReqDataAttributes)
+	*o = ResetPasswordCompleteDataAttributes(varResetPasswordCompleteDataAttributes)
 
 	return err
 }
 
-type NullableResetPasswordReqDataAttributes struct {
-	value *ResetPasswordReqDataAttributes
+type NullableResetPasswordCompleteDataAttributes struct {
+	value *ResetPasswordCompleteDataAttributes
 	isSet bool
 }
 
-func (v NullableResetPasswordReqDataAttributes) Get() *ResetPasswordReqDataAttributes {
+func (v NullableResetPasswordCompleteDataAttributes) Get() *ResetPasswordCompleteDataAttributes {
 	return v.value
 }
 
-func (v *NullableResetPasswordReqDataAttributes) Set(val *ResetPasswordReqDataAttributes) {
+func (v *NullableResetPasswordCompleteDataAttributes) Set(val *ResetPasswordCompleteDataAttributes) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableResetPasswordReqDataAttributes) IsSet() bool {
+func (v NullableResetPasswordCompleteDataAttributes) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableResetPasswordReqDataAttributes) Unset() {
+func (v *NullableResetPasswordCompleteDataAttributes) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableResetPasswordReqDataAttributes(val *ResetPasswordReqDataAttributes) *NullableResetPasswordReqDataAttributes {
-	return &NullableResetPasswordReqDataAttributes{value: val, isSet: true}
+func NewNullableResetPasswordCompleteDataAttributes(val *ResetPasswordCompleteDataAttributes) *NullableResetPasswordCompleteDataAttributes {
+	return &NullableResetPasswordCompleteDataAttributes{value: val, isSet: true}
 }
 
-func (v NullableResetPasswordReqDataAttributes) MarshalJSON() ([]byte, error) {
+func (v NullableResetPasswordCompleteDataAttributes) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableResetPasswordReqDataAttributes) UnmarshalJSON(src []byte) error {
+func (v *NullableResetPasswordCompleteDataAttributes) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

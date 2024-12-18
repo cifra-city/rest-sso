@@ -1,21 +1,22 @@
-package middleware
+package cifrajwt
 
 import (
 	"context"
 	"net/http"
 	"strings"
 
-	"github.com/cifra-city/rest-sso/pkg/cifrajwt"
-	"github.com/golang-jwt/jwt/v5"
-	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 )
 
 type contextKey string
 
-const UserIDKey contextKey = "userID"
+const (
+	UserIDKey       contextKey = "userID"
+	TokenVersionKey contextKey = "tokenVersion"
+	RoleKey         contextKey = "role"
+)
 
-// JWTMiddleware validates the JWT token and injects the user ID into the request context.
+// JWTMiddleware validates the JWT token and injects user data into the request context.
 func JWTMiddleware(secretKey string, log *logrus.Logger) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -32,32 +33,25 @@ func JWTMiddleware(secretKey string, log *logrus.Logger) func(http.Handler) http
 				http.Error(w, "Unauthorized", http.StatusUnauthorized)
 				return
 			}
+
 			tokenString := parts[1]
 
 			log.Debugf("Token received: %s", tokenString)
 
-			claims := &cifrajwt.CustomClaims{}
-			token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
-				return []byte(secretKey), nil
-			})
-
-			if err != nil || !token.Valid {
-				log.Warnf("Invalid or expired token: %v", err)
+			userID, tokenVersion, role, err := VerifyJWTAndExtractClaims(r.Context(), tokenString, secretKey, log)
+			if err != nil {
+				log.Warnf("Token validation failed: %v", err)
 				http.Error(w, "Unauthorized", http.StatusUnauthorized)
 				return
 			}
 
-			userID, err := uuid.Parse(claims.Subject)
-			if err != nil {
-				log.Errorf("Invalid user ID in token claims: %v", err)
-				http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-				return
-			}
+			log.Infof("Authenticated user: %s, Token Version: %d, Role: %s", userID, tokenVersion, role)
 
-			log.Infof("Claims Subject (UserID): %s", userID)
-
-			// Добавляем userID в контекст
+			// Add user ID, token version, and role to the context
 			ctx := context.WithValue(r.Context(), UserIDKey, userID)
+			ctx = context.WithValue(ctx, TokenVersionKey, tokenVersion)
+			ctx = context.WithValue(ctx, RoleKey, role)
+
 			next.ServeHTTP(w, r.WithContext(ctx))
 		})
 	}

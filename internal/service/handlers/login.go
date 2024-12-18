@@ -84,14 +84,14 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tokenAccess, err := cifrajwt.GenerateJWT(user.ID, Server.Config.JWT.AccessToken.TokenLifetime, Server.Config.JWT.AccessToken.SecretKey)
+	tokenAccess, err := cifrajwt.GenerateJWT(user.ID, string(user.Role), int(user.TokenVersion), Server.Config.JWT.AccessToken.TokenLifetime, Server.Config.JWT.AccessToken.SecretKey)
 	if err != nil {
 		log.Errorf("error generating token access jwt: %v", err)
 		httpresp.RenderErr(w, problems.InternalError())
 		return
 	}
 
-	tokenRefresh, err := cifrajwt.GenerateJWT(user.ID, Server.Config.JWT.RefreshToken.TokenLifetime, Server.Config.JWT.RefreshToken.SecretKey)
+	tokenRefresh, err := cifrajwt.GenerateJWT(user.ID, string(user.Role), int(user.TokenVersion), Server.Config.JWT.RefreshToken.TokenLifetime, Server.Config.JWT.RefreshToken.SecretKey)
 	if err != nil {
 		log.Errorf("error generating token access jwt: %v", err)
 		httpresp.RenderErr(w, problems.InternalError())

@@ -62,6 +62,49 @@ func (ns NullFailureReason) Value() (driver.Value, error) {
 	return string(ns.FailureReason), nil
 }
 
+type RoleType string
+
+const (
+	RoleTypeAdmin      RoleType = "admin"
+	RoleTypeUser       RoleType = "user"
+	RoleTypeVerifyUser RoleType = "verify_user"
+)
+
+func (e *RoleType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = RoleType(s)
+	case string:
+		*e = RoleType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for RoleType: %T", src)
+	}
+	return nil
+}
+
+type NullRoleType struct {
+	RoleType RoleType
+	Valid    bool // Valid is true if RoleType is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullRoleType) Scan(value interface{}) error {
+	if value == nil {
+		ns.RoleType, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.RoleType.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullRoleType) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.RoleType), nil
+}
+
 type Device struct {
 	ID         uuid.UUID
 	UserID     uuid.UUID
@@ -93,9 +136,10 @@ type RefreshToken struct {
 }
 
 type UsersSecret struct {
-	ID          uuid.UUID
-	Username    string
-	Email       string
-	EmailStatus bool
-	PassHash    string
+	ID           uuid.UUID
+	Username     string
+	Email        string
+	Role         RoleType
+	PassHash     string
+	TokenVersion int32
 }

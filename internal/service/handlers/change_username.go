@@ -5,9 +5,9 @@ import (
 
 	"github.com/cifra-city/rest-sso/internal/config"
 	"github.com/cifra-city/rest-sso/internal/db/data"
-	"github.com/cifra-city/rest-sso/internal/service/middleware"
 	"github.com/cifra-city/rest-sso/internal/service/requests"
 	"github.com/cifra-city/rest-sso/pkg/cifractx"
+	"github.com/cifra-city/rest-sso/pkg/cifrajwt"
 	"github.com/cifra-city/rest-sso/pkg/httpresp"
 	"github.com/cifra-city/rest-sso/pkg/httpresp/problems"
 	"github.com/google/uuid"
@@ -31,7 +31,7 @@ func ChangeUsername(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userID, ok := r.Context().Value(middleware.UserIDKey).(uuid.UUID)
+	userID, ok := r.Context().Value(cifrajwt.UserIDKey).(uuid.UUID)
 	if !ok {
 		logrus.Warn("UserID not found in context")
 		httpresp.RenderErr(w, problems.Unauthorized("User not authenticated"))

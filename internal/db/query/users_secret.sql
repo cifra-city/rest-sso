@@ -22,27 +22,12 @@ ORDER BY username
     LIMIT $1
 OFFSET $2;
 
-
--- name: UpdateUserByID :one
-UPDATE users_secret
-SET
-    email = $2,
-    email_status = $3,
-    username = $4
-WHERE id = $1
-    RETURNING *;
-
 -- name: UpdateUsernameByID :one
 UPDATE users_secret
 SET username = $2
 WHERE id = $1
     RETURNING *;
 
--- name: UpdateEmailStatusByID :one
-UPDATE users_secret
-SET email_status = $2
-WHERE id = $1
-    RETURNING *;
 
 -- name: UpdateUserPasswordByID :one
 UPDATE users_secret
@@ -53,8 +38,7 @@ WHERE id = $1
 -- name: UpdateEmailByID :one
 UPDATE users_secret
 SET
-    email = $2,
-    email_status = $3
+    email = $2
 WHERE id = $1
     RETURNING *;
 
@@ -63,13 +47,23 @@ INSERT INTO users_secret (
     id,
     username,
     email,
-    email_status,
     pass_hash
 ) VALUES (
-    $1, $2, $3, $4, $5
+    $1, $2, $3, $4
 ) RETURNING *;
-
 
 -- name: DeleteUserByID :exec
 DELETE FROM users_secret
 WHERE id = $1;
+
+-- name: SetUserTokenVersionByID :one
+UPDATE users_secret
+SET token_version = $2
+WHERE id = $1
+    RETURNING *;
+
+-- name: UpdateUserTokenVersionByID :one
+UPDATE users_secret
+SET token_version = token_version + 1
+WHERE id = $1
+    RETURNING *;

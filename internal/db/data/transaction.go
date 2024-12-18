@@ -167,5 +167,10 @@ func (q *Queries) ResetPassword(
 		return err
 	}
 
+	_, err = queries.UpdateUserTokenVersionByID(ctx, user.ID)
+	if err != nil {
+		return err
+	}
+
 	return tx.Commit()
 }

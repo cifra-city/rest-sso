@@ -6,14 +6,14 @@ info:
 servers:
 - url: /
 paths:
-  /register: {}
-  /registration-confirm: {}
-  /activate-email: {}
+  /registertion-initiate: {}
+  /registration-complete: {}
+  /aprove-operation: {}
   /login: {}
   /change-username: {}
   /refresh: {}
-  /forgot-password: {}
-  /reset-password: {}
+  /reset-password-initiate: {}
+  /reset-password-complete: {}
 components:
   schemas:
     RegistrationInitiate:
@@ -23,17 +23,17 @@ components:
       required:
       - data
       type: object
-    ApproveOperationReq:
-      properties:
-        data:
-          $ref: '#/components/schemas/ApproveOperationReq_data'
-      required:
-      - data
-      type: object
     RegistrationComplete:
       properties:
         data:
           $ref: '#/components/schemas/RegistrationComplete_data'
+      required:
+      - data
+      type: object
+    ApproveOperationReq:
+      properties:
+        data:
+          $ref: '#/components/schemas/ApproveOperationReq_data'
       required:
       - data
       type: object
@@ -51,17 +51,17 @@ components:
       required:
       - data
       type: object
-    ForgotPasswordReq:
+    ResetPasswordInitiate:
       properties:
         data:
-          $ref: '#/components/schemas/ForgotPasswordReq_data'
+          $ref: '#/components/schemas/ResetPasswordInitiate_data'
       required:
       - data
       type: object
-    ResetPasswordReq:
+    ResetPasswordComplete:
       properties:
         data:
-          $ref: '#/components/schemas/ResetPasswordReq_data'
+          $ref: '#/components/schemas/ResetPasswordComplete_data'
       required:
       - data
       type: object
@@ -111,35 +111,6 @@ components:
       - attributes
       - type
       type: object
-    ApproveOperationReq_data_attributes:
-      properties:
-        email:
-          description: New email
-          type: string
-        code:
-          description: User code
-          type: string
-        operation:
-          description: Type of operation
-          example: reset-password
-          type: string
-      required:
-      - code
-      - email
-      - operation
-      type: object
-    ApproveOperationReq_data:
-      properties:
-        type:
-          enum:
-          - approve_operation
-          type: string
-        attributes:
-          $ref: '#/components/schemas/ApproveOperationReq_data_attributes'
-      required:
-      - attributes
-      - type
-      type: object
     RegistrationComplete_data_attributes:
       properties:
         first_password:
@@ -169,6 +140,35 @@ components:
           type: string
         attributes:
           $ref: '#/components/schemas/RegistrationComplete_data_attributes'
+      required:
+      - attributes
+      - type
+      type: object
+    ApproveOperationReq_data_attributes:
+      properties:
+        email:
+          description: New email
+          type: string
+        code:
+          description: User code
+          type: string
+        operation:
+          description: Type of operation
+          example: reset-password
+          type: string
+      required:
+      - code
+      - email
+      - operation
+      type: object
+    ApproveOperationReq_data:
+      properties:
+        type:
+          enum:
+          - approve_operation
+          type: string
+        attributes:
+          $ref: '#/components/schemas/ApproveOperationReq_data_attributes'
       required:
       - attributes
       - type
@@ -245,7 +245,7 @@ components:
       - attributes
       - type
       type: object
-    ForgotPasswordReq_data_attributes:
+    ResetPasswordInitiate_data_attributes:
       properties:
         email:
           description: User email (required if username is not provided).
@@ -255,19 +255,19 @@ components:
           description: User username (required if email is not provided).
           type: string
       type: object
-    ForgotPasswordReq_data:
+    ResetPasswordInitiate_data:
       properties:
         type:
           enum:
-          - login
+          - reset_password
           type: string
         attributes:
-          $ref: '#/components/schemas/ForgotPasswordReq_data_attributes'
+          $ref: '#/components/schemas/ResetPasswordInitiate_data_attributes'
       required:
       - attributes
       - type
       type: object
-    ResetPasswordReq_data_attributes:
+    ResetPasswordComplete_data_attributes:
       properties:
         email:
           description: User email (required if username is not provided).
@@ -303,14 +303,14 @@ components:
       - os_version
       - second_password
       type: object
-    ResetPasswordReq_data:
+    ResetPasswordComplete_data:
       properties:
         type:
           enum:
-          - login
+          - reset_password
           type: string
         attributes:
-          $ref: '#/components/schemas/ResetPasswordReq_data_attributes'
+          $ref: '#/components/schemas/ResetPasswordComplete_data_attributes'
       required:
       - attributes
       - type

@@ -8,7 +8,7 @@ import (
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 )
 
-func NewResetPassword(r *http.Request) (req *resources.ResetPasswordReq, err error) {
+func NewResetPasswordComplete(r *http.Request) (req *resources.ResetPasswordComplete, err error) {
 	if err = json.NewDecoder(r.Body).Decode(&req); err != nil {
 		err = newDecodeError("body", err)
 		return

@@ -5,8 +5,8 @@ import (
 
 	"github.com/cifra-city/rest-sso/internal/config"
 	"github.com/cifra-city/rest-sso/internal/service/handlers"
-	"github.com/cifra-city/rest-sso/internal/service/middleware"
 	"github.com/cifra-city/rest-sso/pkg/cifractx"
+	"github.com/cifra-city/rest-sso/pkg/cifrajwt"
 	"github.com/cifra-city/rest-sso/pkg/httpresp"
 	"github.com/go-chi/chi"
 	"github.com/sirupsen/logrus"
@@ -21,7 +21,7 @@ func Run(ctx context.Context) {
 	}
 
 	r.Use(cifractx.MiddlewareWithContext(config.SERVICE, service))
-	authMW := middleware.JWTMiddleware(service.Config.JWT.AccessToken.SecretKey, service.Logger)
+	authMW := cifrajwt.JWTMiddleware(service.Config.JWT.AccessToken.SecretKey, service.Logger)
 
 	r.Route("/cifra-sso", func(r chi.Router) {
 		r.Route("/v1", func(r chi.Router) {
@@ -33,8 +33,8 @@ func Run(ctx context.Context) {
 
 				r.Post("/login", handlers.Login)
 
-				r.Post("/forgot-password", handlers.ForgotPassword)
-				r.Post("/reset-password", handlers.ResetPassword)
+				r.Post("/reset-password-initiate", handlers.ResetPasswordInitiate)
+				r.Post("/reset-password-complete", handlers.ResetPasswordComplete)
 
 				r.Route("/user", func(r chi.Router) {
 					r.Use(authMW)

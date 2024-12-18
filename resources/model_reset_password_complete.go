@@ -16,38 +16,38 @@ import (
 	"fmt"
 )
 
-// checks if the ResetPasswordReq type satisfies the MappedNullable interface at compile time
-var _ MappedNullable = &ResetPasswordReq{}
+// checks if the ResetPasswordComplete type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ResetPasswordComplete{}
 
-// ResetPasswordReq struct for ResetPasswordReq
-type ResetPasswordReq struct {
-	Data ResetPasswordReqData `json:"data"`
+// ResetPasswordComplete struct for ResetPasswordComplete
+type ResetPasswordComplete struct {
+	Data ResetPasswordCompleteData `json:"data"`
 }
 
-type _ResetPasswordReq ResetPasswordReq
+type _ResetPasswordComplete ResetPasswordComplete
 
-// NewResetPasswordReq instantiates a new ResetPasswordReq object
+// NewResetPasswordComplete instantiates a new ResetPasswordComplete object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewResetPasswordReq(data ResetPasswordReqData) *ResetPasswordReq {
-	this := ResetPasswordReq{}
+func NewResetPasswordComplete(data ResetPasswordCompleteData) *ResetPasswordComplete {
+	this := ResetPasswordComplete{}
 	this.Data = data
 	return &this
 }
 
-// NewResetPasswordReqWithDefaults instantiates a new ResetPasswordReq object
+// NewResetPasswordCompleteWithDefaults instantiates a new ResetPasswordComplete object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewResetPasswordReqWithDefaults() *ResetPasswordReq {
-	this := ResetPasswordReq{}
+func NewResetPasswordCompleteWithDefaults() *ResetPasswordComplete {
+	this := ResetPasswordComplete{}
 	return &this
 }
 
 // GetData returns the Data field value
-func (o *ResetPasswordReq) GetData() ResetPasswordReqData {
+func (o *ResetPasswordComplete) GetData() ResetPasswordCompleteData {
 	if o == nil {
-		var ret ResetPasswordReqData
+		var ret ResetPasswordCompleteData
 		return ret
 	}
 
@@ -56,7 +56,7 @@ func (o *ResetPasswordReq) GetData() ResetPasswordReqData {
 
 // GetDataOk returns a tuple with the Data field value
 // and a boolean to check if the value has been set.
-func (o *ResetPasswordReq) GetDataOk() (*ResetPasswordReqData, bool) {
+func (o *ResetPasswordComplete) GetDataOk() (*ResetPasswordCompleteData, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -64,11 +64,11 @@ func (o *ResetPasswordReq) GetDataOk() (*ResetPasswordReqData, bool) {
 }
 
 // SetData sets field value
-func (o *ResetPasswordReq) SetData(v ResetPasswordReqData) {
+func (o *ResetPasswordComplete) SetData(v ResetPasswordCompleteData) {
 	o.Data = v
 }
 
-func (o ResetPasswordReq) MarshalJSON() ([]byte, error) {
+func (o ResetPasswordComplete) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
@@ -76,13 +76,13 @@ func (o ResetPasswordReq) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-func (o ResetPasswordReq) ToMap() (map[string]interface{}, error) {
+func (o ResetPasswordComplete) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["data"] = o.Data
 	return toSerialize, nil
 }
 
-func (o *ResetPasswordReq) UnmarshalJSON(data []byte) (err error) {
+func (o *ResetPasswordComplete) UnmarshalJSON(data []byte) (err error) {
 	// This validates that all required properties are included in the JSON object
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
@@ -104,53 +104,53 @@ func (o *ResetPasswordReq) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varResetPasswordReq := _ResetPasswordReq{}
+	varResetPasswordComplete := _ResetPasswordComplete{}
 
 	decoder := json.NewDecoder(bytes.NewReader(data))
 	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varResetPasswordReq)
+	err = decoder.Decode(&varResetPasswordComplete)
 
 	if err != nil {
 		return err
 	}
 
-	*o = ResetPasswordReq(varResetPasswordReq)
+	*o = ResetPasswordComplete(varResetPasswordComplete)
 
 	return err
 }
 
-type NullableResetPasswordReq struct {
-	value *ResetPasswordReq
+type NullableResetPasswordComplete struct {
+	value *ResetPasswordComplete
 	isSet bool
 }
 
-func (v NullableResetPasswordReq) Get() *ResetPasswordReq {
+func (v NullableResetPasswordComplete) Get() *ResetPasswordComplete {
 	return v.value
 }
 
-func (v *NullableResetPasswordReq) Set(val *ResetPasswordReq) {
+func (v *NullableResetPasswordComplete) Set(val *ResetPasswordComplete) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableResetPasswordReq) IsSet() bool {
+func (v NullableResetPasswordComplete) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableResetPasswordReq) Unset() {
+func (v *NullableResetPasswordComplete) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableResetPasswordReq(val *ResetPasswordReq) *NullableResetPasswordReq {
-	return &NullableResetPasswordReq{value: val, isSet: true}
+func NewNullableResetPasswordComplete(val *ResetPasswordComplete) *NullableResetPasswordComplete {
+	return &NullableResetPasswordComplete{value: val, isSet: true}
 }
 
-func (v NullableResetPasswordReq) MarshalJSON() ([]byte, error) {
+func (v NullableResetPasswordComplete) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableResetPasswordReq) UnmarshalJSON(src []byte) error {
+func (v *NullableResetPasswordComplete) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

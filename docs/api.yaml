@@ -5,11 +5,11 @@ info:
   version: 1.0.0
 
 paths:
-  /register:
+  /registertion-initiate:
     $ref: './paths/RegistrationInitiate.yaml'
-  /registration-confirm:
+  /registration-complete:
     $ref: './paths/RegistrationComplete.yaml'
-  /activate-email:
+  /aprove-operation:
     $ref: './paths/ApproveOperation.yaml'
   /login:
     $ref: './paths/Login.yaml'
@@ -17,27 +17,27 @@ paths:
     $ref: './paths/ChangeUsername.yaml'
   /refresh:
     $ref: './paths/Refresh.yaml'
-  /forgot-password:
-    $ref: './paths/ForgotPassword.yaml'
-  /reset-password:
-    $ref: './paths/ResetPassword.yaml'
+  /reset-password-initiate:
+    $ref: './paths/ResetPasswordInitiate.yaml'
+  /reset-password-complete:
+    $ref: './paths/ResetPasswordComplete.yaml'
 
 components:
   schemas:
     RegistrationInitiate:
       $ref: './spec/components/schemas/RegistrationInitiate.yaml'
-    ApproveOperationReq:
-      $ref: './spec/components/schemas/ApproveOperationReq.yaml'
     RegistrationComplete:
         $ref: './spec/components/schemas/RegistrationComplete.yaml'
+    ApproveOperationReq:
+      $ref: './spec/components/schemas/ApproveOperationReq.yaml'
     LoginReq:
         $ref: './spec/components/schemas/LoginReq.yaml'
     LoginResp:
         $ref: './spec/components/schemas/LoginResp.yaml'
-    ForgotPasswordReq:
-        $ref: './spec/components/schemas/ForgotPasswordReq.yaml'
-    ResetPasswordReq:
-        $ref: './spec/components/schemas/ResetPasswordReq.yaml'
+    ResetPasswordInitiate:
+        $ref: './spec/components/schemas/ResetPasswordInitiate.yaml'
+    ResetPasswordComplete:
+        $ref: './spec/components/schemas/ResetPasswordComplete.yaml'
     ChangeUsernameReq:
         $ref: './spec/components/schemas/ChangeUsernameReq.yaml'
     RefreshReq:

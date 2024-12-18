@@ -187,14 +187,14 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tokenAccess, err := cifrajwt.GenerateJWT(userID, Server.Config.JWT.AccessToken.TokenLifetime, Server.Config.JWT.AccessToken.SecretKey)
+	tokenAccess, err := cifrajwt.GenerateJWT(user.ID, string(user.Role), int(user.TokenVersion), Server.Config.JWT.AccessToken.TokenLifetime, Server.Config.JWT.AccessToken.SecretKey)
 	if err != nil {
 		Server.Logger.Errorf("Error generating access token: %v", err)
 		httpresp.RenderErr(w, problems.InternalError())
 		return
 	}
 
-	tokenRefresh, err := cifrajwt.GenerateJWT(userID, Server.Config.JWT.RefreshToken.TokenLifetime, Server.Config.JWT.RefreshToken.SecretKey)
+	tokenRefresh, err := cifrajwt.GenerateJWT(user.ID, string(user.Role), int(user.TokenVersion), Server.Config.JWT.RefreshToken.TokenLifetime, Server.Config.JWT.RefreshToken.SecretKey)
 	if err != nil {
 		Server.Logger.Errorf("Error generating refresh token: %v", err)
 		httpresp.RenderErr(w, problems.InternalError())

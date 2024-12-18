@@ -15,13 +15,13 @@ import (
 type OperationType string
 
 const (
-	FORGOT_PASSWORD OperationType = "reset_password"
-	REGISTRATION    OperationType = "registration"
+	RESET_PASSWORD OperationType = "reset_password"
+	REGISTRATION   OperationType = "registration"
 )
 
 func (op OperationType) IsValid() bool {
 	switch op {
-	case FORGOT_PASSWORD, REGISTRATION:
+	case RESET_PASSWORD, REGISTRATION:
 		return true
 	default:
 		return false

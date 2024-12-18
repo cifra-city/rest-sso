@@ -18,8 +18,8 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func ResetPassword(w http.ResponseWriter, r *http.Request) {
-	req, err := requests.NewResetPassword(r)
+func ResetPasswordComplete(w http.ResponseWriter, r *http.Request) {
+	req, err := requests.NewResetPasswordComplete(r)
 	if err != nil {
 		httpresp.RenderErr(w, problems.BadRequest(err)...)
 		return
@@ -35,7 +35,7 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if firstPassword == secondPassword {
+	if firstPassword != secondPassword {
 		httpresp.RenderErr(w, problems.BadRequest(errors.New("passwords do not match"))...)
 		return
 	}
@@ -65,6 +65,12 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if !Server.Mailman.CheckAndDeleteAccessForUser(user.Email, string(RESET_PASSWORD)) {
+		log.Debugf("User %s has no access to reset password", user.Email)
+		httpresp.RenderErr(w, problems.Forbidden())
+		return
+	}
+
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(firstPassword), bcrypt.DefaultCost)
 	if err != nil {
 		logrus.Errorf("error hashing password: %v", err)
@@ -72,7 +78,7 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tokenRefresh, err := cifrajwt.GenerateJWT(user.ID, Server.Config.JWT.RefreshToken.TokenLifetime, Server.Config.JWT.RefreshToken.SecretKey)
+	tokenRefresh, err := cifrajwt.GenerateJWT(user.ID, string(user.Role), int(user.TokenVersion+1), Server.Config.JWT.RefreshToken.TokenLifetime, Server.Config.JWT.RefreshToken.SecretKey)
 	if err != nil {
 		log.Errorf("error generating token access jwt: %v", err)
 		httpresp.RenderErr(w, problems.InternalError())
@@ -96,5 +102,5 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Infof("user logged in: %s", user.Username)
 
-	httpresp.Render(w, http.StatusCreated)
+	httpresp.Render(w, http.StatusAccepted)
 }

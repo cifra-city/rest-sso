@@ -87,11 +87,10 @@ func RegistrationComplete(w http.ResponseWriter, r *http.Request) {
 	}
 
 	params := data.InsertUserParams{
-		ID:          newUuid,
-		Username:    *username,
-		Email:       em,
-		EmailStatus: false,
-		PassHash:    string(hashedPassword),
+		ID:       newUuid,
+		Username: *username,
+		Email:    em,
+		PassHash: string(hashedPassword),
 	}
 
 	user, err := Server.Queries.InsertUser(r.Context(), params)

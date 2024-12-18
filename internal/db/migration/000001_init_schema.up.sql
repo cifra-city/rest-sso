@@ -1,9 +1,16 @@
+CREATE TYPE role_type AS ENUM (
+    'admin',
+    'user',
+    'verify_user'
+);
+
 CREATE TABLE "users_secret" (
     "id" UUID NOT NULL PRIMARY KEY,
     "username" VARCHAR(255) NOT NULL UNIQUE,
     "email" VARCHAR(255) NOT NULL UNIQUE,
-    "email_status" BOOLEAN NOT NULL,
-    "pass_hash" VARCHAR(255) NOT NULL
+    "role" role_type DEFAULT 'user' NOT NULL,
+    "pass_hash" VARCHAR(255) NOT NULL,
+    "token_version" INTEGER DEFAULT 0 NOT NULL
 );
 
 CREATE INDEX "user_public_username_index" ON "users_secret" ("username");
