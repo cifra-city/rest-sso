@@ -4,11 +4,9 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"log"
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/sirupsen/logrus"
 )
 
 // UpdateRefreshTokenTransaction updates the refresh token for a user and device,
@@ -26,7 +24,6 @@ func (q *Queries) UpdateRefreshTokenTransaction(
 
 	tx, err := q.db.(*sql.DB).BeginTx(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to begin transaction: %v", err)
 		return err
 	}
 	queries := q.WithTx(tx)
@@ -41,8 +38,7 @@ func (q *Queries) UpdateRefreshTokenTransaction(
 		UserID:    user.ID,
 		FactoryID: factoryID,
 	})
-	if err != nil && !errors.Is(err, sql.ErrNoRows) { // Internal Error
-		logrus.Errorf("err device 1: %s", err)
+	if err != nil && !errors.Is(err, sql.ErrNoRows) {
 		return err
 	}
 
@@ -57,7 +53,6 @@ func (q *Queries) UpdateRefreshTokenTransaction(
 			LastUsed:   time.Now().UTC(),
 		})
 		if err != nil {
-			logrus.Errorf("err device 2: %s", err)
 			return err
 		}
 
@@ -66,7 +61,6 @@ func (q *Queries) UpdateRefreshTokenTransaction(
 			FactoryID: factoryID,
 		})
 		if err != nil {
-			logrus.Errorf("err device 3: %s", err)
 			return err
 		}
 	} else { // if device exists
@@ -75,7 +69,6 @@ func (q *Queries) UpdateRefreshTokenTransaction(
 			LastUsed: time.Now().UTC(),
 		})
 		if err != nil {
-			logrus.Errorf("err device 4: %s", err)
 			return err
 		}
 	}
@@ -85,7 +78,6 @@ func (q *Queries) UpdateRefreshTokenTransaction(
 		DeviceID: device.ID,
 	})
 	if err != nil && !errors.Is(err, sql.ErrNoRows) {
-		logrus.Errorf("err token 1: %s", err)
 		return err
 	}
 	if errors.Is(err, sql.ErrNoRows) { // Token for this user isn`t exists
@@ -99,7 +91,6 @@ func (q *Queries) UpdateRefreshTokenTransaction(
 			IpAddress: ipAddress,
 		})
 		if err != nil {
-			logrus.Errorf("err token 2: %s", err)
 			return err
 		}
 	} else if err == nil { // Token is exists
@@ -110,11 +101,9 @@ func (q *Queries) UpdateRefreshTokenTransaction(
 			ExpiresAt: expiresAt,
 		})
 		if err != nil {
-			logrus.Errorf("err token 3: %s", err)
 			return err
 		}
 	} else {
-		logrus.Errorf("err token 4: %s", err)
 		return err
 	}
 
@@ -130,7 +119,6 @@ func (q *Queries) UpdateRefreshTokenTransaction(
 			Valid:         true,
 		},
 	})
-	logrus.Errorf("err final 1: %s", err)
 	return tx.Commit()
 }
 
@@ -144,7 +132,6 @@ func (q *Queries) ResetPassword(
 
 	tx, err := q.db.(*sql.DB).BeginTx(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to begin transaction: %v", err)
 		return err
 	}
 	queries := q.WithTx(tx)
@@ -157,7 +144,6 @@ func (q *Queries) ResetPassword(
 
 	devices, err := queries.GetDevicesByUserID(ctx, user.ID)
 	if err != nil {
-		logrus.Infof("Failed to get devices: %v", err)
 		return err
 	}
 
@@ -169,7 +155,6 @@ func (q *Queries) ResetPassword(
 			ExpiresAt: expiresAt,
 		})
 		if err != nil {
-			logrus.Errorf("error updated refreshen token: %s", err)
 			return err
 		}
 	}
@@ -179,7 +164,6 @@ func (q *Queries) ResetPassword(
 		PassHash: hashedPassword,
 	})
 	if err != nil {
-		logrus.Errorf("error updated password: %s", err)
 		return err
 	}
 

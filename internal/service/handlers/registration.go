@@ -21,7 +21,7 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 	}
 
 	em := req.Data.Attributes.Email
-	username := *req.Data.Attributes.Username
+	username := req.Data.Id
 
 	Server, err := cifractx.GetValue[*config.Service](r.Context(), config.SERVICE)
 	if err != nil {

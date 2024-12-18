@@ -50,8 +50,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 	log := Server.Logger
 
-	log.Debugf("email: %v, password: %s, username: %v", email, pass, username)
-
 	if username != nil {
 		user, err = Server.Queries.GetUserByUsername(r.Context(), *username)
 	} else {
