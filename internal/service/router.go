@@ -38,7 +38,6 @@ func Run(ctx context.Context) {
 
 				r.Route("/user", func(r chi.Router) {
 					r.Use(authMW)
-					//r.Post("/send-code/{operationType}", handlers.SendCode) // user sends code to email with operationType
 					r.Route("/change", func(r chi.Router) {
 						r.Post("/username", handlers.ChangeUsername) // user sends new username and code
 						//r.Post("/password", handlers.ChangePassword)          // user sends new password and code

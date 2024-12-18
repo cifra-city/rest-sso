@@ -22,7 +22,7 @@ func (q *Queries) DeleteUserByID(ctx context.Context, id uuid.UUID) error {
 }
 
 const getUserByEmail = `-- name: GetUserByEmail :one
-SELECT id, username, email, role, pass_hash, token_version FROM users_secret
+SELECT id, username, email, role, pass_hash, token_version, created_at, updated_at FROM users_secret
 WHERE email = $1 LIMIT 1
 `
 
@@ -36,12 +36,14 @@ func (q *Queries) GetUserByEmail(ctx context.Context, email string) (UsersSecret
 		&i.Role,
 		&i.PassHash,
 		&i.TokenVersion,
+		&i.CreatedAt,
+		&i.UpdatedAt,
 	)
 	return i, err
 }
 
 const getUserByID = `-- name: GetUserByID :one
-SELECT id, username, email, role, pass_hash, token_version FROM users_secret
+SELECT id, username, email, role, pass_hash, token_version, created_at, updated_at FROM users_secret
 WHERE id = $1 LIMIT 1
 `
 
@@ -55,12 +57,14 @@ func (q *Queries) GetUserByID(ctx context.Context, id uuid.UUID) (UsersSecret, e
 		&i.Role,
 		&i.PassHash,
 		&i.TokenVersion,
+		&i.CreatedAt,
+		&i.UpdatedAt,
 	)
 	return i, err
 }
 
 const getUserByUsername = `-- name: GetUserByUsername :one
-SELECT id, username, email, role, pass_hash, token_version FROM users_secret
+SELECT id, username, email, role, pass_hash, token_version, created_at, updated_at FROM users_secret
 WHERE username = $1 LIMIT 1
 `
 
@@ -74,6 +78,8 @@ func (q *Queries) GetUserByUsername(ctx context.Context, username string) (Users
 		&i.Role,
 		&i.PassHash,
 		&i.TokenVersion,
+		&i.CreatedAt,
+		&i.UpdatedAt,
 	)
 	return i, err
 }
@@ -85,8 +91,8 @@ INSERT INTO users_secret (
     email,
     pass_hash
 ) VALUES (
-    $1, $2, $3, $4
-) RETURNING id, username, email, role, pass_hash, token_version
+             $1, $2, $3, $4
+         ) RETURNING id, username, email, role, pass_hash, token_version, created_at, updated_at
 `
 
 type InsertUserParams struct {
@@ -111,99 +117,19 @@ func (q *Queries) InsertUser(ctx context.Context, arg InsertUserParams) (UsersSe
 		&i.Role,
 		&i.PassHash,
 		&i.TokenVersion,
+		&i.CreatedAt,
+		&i.UpdatedAt,
 	)
 	return i, err
 }
 
-const listUsersByID = `-- name: ListUsersByID :many
-SELECT id, username, email, role, pass_hash, token_version FROM users_secret
-ORDER BY id
-    LIMIT $1
-OFFSET $2
-`
-
-type ListUsersByIDParams struct {
-	Limit  int32
-	Offset int32
-}
-
-func (q *Queries) ListUsersByID(ctx context.Context, arg ListUsersByIDParams) ([]UsersSecret, error) {
-	rows, err := q.db.QueryContext(ctx, listUsersByID, arg.Limit, arg.Offset)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []UsersSecret
-	for rows.Next() {
-		var i UsersSecret
-		if err := rows.Scan(
-			&i.ID,
-			&i.Username,
-			&i.Email,
-			&i.Role,
-			&i.PassHash,
-			&i.TokenVersion,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const listUsersByUsername = `-- name: ListUsersByUsername :many
-SELECT id, username, email, role, pass_hash, token_version FROM users_secret
-ORDER BY username
-    LIMIT $1
-OFFSET $2
-`
-
-type ListUsersByUsernameParams struct {
-	Limit  int32
-	Offset int32
-}
-
-func (q *Queries) ListUsersByUsername(ctx context.Context, arg ListUsersByUsernameParams) ([]UsersSecret, error) {
-	rows, err := q.db.QueryContext(ctx, listUsersByUsername, arg.Limit, arg.Offset)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []UsersSecret
-	for rows.Next() {
-		var i UsersSecret
-		if err := rows.Scan(
-			&i.ID,
-			&i.Username,
-			&i.Email,
-			&i.Role,
-			&i.PassHash,
-			&i.TokenVersion,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
 const setUserTokenVersionByID = `-- name: SetUserTokenVersionByID :one
 UPDATE users_secret
-SET token_version = $2
+SET
+    token_version = $2,
+    updated_at = now()
 WHERE id = $1
-    RETURNING id, username, email, role, pass_hash, token_version
+    RETURNING id, username, email, role, pass_hash, token_version, created_at, updated_at
 `
 
 type SetUserTokenVersionByIDParams struct {
@@ -221,6 +147,8 @@ func (q *Queries) SetUserTokenVersionByID(ctx context.Context, arg SetUserTokenV
 		&i.Role,
 		&i.PassHash,
 		&i.TokenVersion,
+		&i.CreatedAt,
+		&i.UpdatedAt,
 	)
 	return i, err
 }
@@ -228,9 +156,10 @@ func (q *Queries) SetUserTokenVersionByID(ctx context.Context, arg SetUserTokenV
 const updateEmailByID = `-- name: UpdateEmailByID :one
 UPDATE users_secret
 SET
-    email = $2
+    email = $2,
+    updated_at = now()
 WHERE id = $1
-    RETURNING id, username, email, role, pass_hash, token_version
+    RETURNING id, username, email, role, pass_hash, token_version, created_at, updated_at
 `
 
 type UpdateEmailByIDParams struct {
@@ -248,15 +177,19 @@ func (q *Queries) UpdateEmailByID(ctx context.Context, arg UpdateEmailByIDParams
 		&i.Role,
 		&i.PassHash,
 		&i.TokenVersion,
+		&i.CreatedAt,
+		&i.UpdatedAt,
 	)
 	return i, err
 }
 
 const updateUserPasswordByID = `-- name: UpdateUserPasswordByID :one
 UPDATE users_secret
-SET pass_hash = $2
+SET
+    pass_hash = $2,
+    updated_at = now()
 WHERE id = $1
-    RETURNING id, username, email, role, pass_hash, token_version
+    RETURNING id, username, email, role, pass_hash, token_version, created_at, updated_at
 `
 
 type UpdateUserPasswordByIDParams struct {
@@ -274,15 +207,19 @@ func (q *Queries) UpdateUserPasswordByID(ctx context.Context, arg UpdateUserPass
 		&i.Role,
 		&i.PassHash,
 		&i.TokenVersion,
+		&i.CreatedAt,
+		&i.UpdatedAt,
 	)
 	return i, err
 }
 
 const updateUserTokenVersionByID = `-- name: UpdateUserTokenVersionByID :one
 UPDATE users_secret
-SET token_version = token_version + 1
+SET
+    token_version = token_version + 1,
+    updated_at = now()
 WHERE id = $1
-    RETURNING id, username, email, role, pass_hash, token_version
+    RETURNING id, username, email, role, pass_hash, token_version, created_at, updated_at
 `
 
 func (q *Queries) UpdateUserTokenVersionByID(ctx context.Context, id uuid.UUID) (UsersSecret, error) {
@@ -295,15 +232,19 @@ func (q *Queries) UpdateUserTokenVersionByID(ctx context.Context, id uuid.UUID) 
 		&i.Role,
 		&i.PassHash,
 		&i.TokenVersion,
+		&i.CreatedAt,
+		&i.UpdatedAt,
 	)
 	return i, err
 }
 
 const updateUsernameByID = `-- name: UpdateUsernameByID :one
 UPDATE users_secret
-SET username = $2
+SET
+    username = $2,
+    updated_at = now()
 WHERE id = $1
-    RETURNING id, username, email, role, pass_hash, token_version
+    RETURNING id, username, email, role, pass_hash, token_version, created_at, updated_at
 `
 
 type UpdateUsernameByIDParams struct {
@@ -321,6 +262,8 @@ func (q *Queries) UpdateUsernameByID(ctx context.Context, arg UpdateUsernameByID
 		&i.Role,
 		&i.PassHash,
 		&i.TokenVersion,
+		&i.CreatedAt,
+		&i.UpdatedAt,
 	)
 	return i, err
 }

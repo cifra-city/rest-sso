@@ -10,7 +10,9 @@ CREATE TABLE "users_secret" (
     "email" VARCHAR(255) NOT NULL UNIQUE,
     "role" role_type DEFAULT 'user' NOT NULL,
     "pass_hash" VARCHAR(255) NOT NULL,
-    "token_version" INTEGER DEFAULT 0 NOT NULL
+    "token_version" INTEGER DEFAULT 0 NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT now(),
+    updated_at TIMESTAMP NOT NULL DEFAULT now()
 );
 
 CREATE INDEX "user_public_username_index" ON "users_secret" ("username");
@@ -35,10 +37,10 @@ CREATE TABLE refresh_tokens (
     id UUID PRIMARY KEY NOT NULL,
     user_id UUID NOT NULL REFERENCES users_secret(id) ON DELETE CASCADE,
     token TEXT NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT now(),
     expires_at TIMESTAMP NOT NULL,
     device_id UUID NOT NULL REFERENCES devices(id) ON DELETE CASCADE,
-    ip_address TEXT NOT NULL
+    ip_address TEXT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT now()
 );
 
 CREATE INDEX refresh_token_device_index ON refresh_tokens ("device_id");
@@ -58,17 +60,25 @@ CREATE TYPE failure_reason AS ENUM (
     'success'
 );
 
-CREATE TABLE login_history (
+CREATE TYPE operation_type AS ENUM (
+    'login',
+    'change_username',
+    'change_password',
+    'change_email'
+);
+
+CREATE TABLE operation_history (
     id UUID PRIMARY KEY NOT NULL,
     user_id UUID NOT NULL REFERENCES users_secret(id) ON DELETE CASCADE,
     device_id UUID NOT NULL REFERENCES devices(id) ON DELETE CASCADE,
-    ip_address TEXT NOT NULL,
-    login_time TIMESTAMP NOT NULL DEFAULT now(),
+    operation operation_type NOT NULL,
     success BOOLEAN NOT NULL,
-    failure_reason failure_reason
+    failure_reason failure_reason,
+    ip_address TEXT NOT NULL,
+    operation_time TIMESTAMP NOT NULL DEFAULT now()
 );
 
-CREATE INDEX login_history_user_index ON login_history ("user_id");
-CREATE INDEX login_history_device_index ON login_history ("device_id");
-CREATE INDEX login_history_time_index ON login_history ("login_time");
-CREATE INDEX login_history_success_index ON login_history ("success");
+CREATE INDEX operation_history_user_index ON operation_history ("user_id");
+CREATE INDEX operation_history_device_index ON operation_history ("device_id");
+CREATE INDEX operation_history_time_index ON operation_history ("operation_time");
+CREATE INDEX operation_history_success_index ON operation_history ("success");

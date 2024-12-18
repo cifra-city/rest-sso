@@ -62,6 +62,50 @@ func (ns NullFailureReason) Value() (driver.Value, error) {
 	return string(ns.FailureReason), nil
 }
 
+type OperationType string
+
+const (
+	OperationTypeLogin          OperationType = "login"
+	OperationTypeChangeUsername OperationType = "change_username"
+	OperationTypeChangePassword OperationType = "change_password"
+	OperationTypeChangeEmail    OperationType = "change_email"
+)
+
+func (e *OperationType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = OperationType(s)
+	case string:
+		*e = OperationType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for OperationType: %T", src)
+	}
+	return nil
+}
+
+type NullOperationType struct {
+	OperationType OperationType
+	Valid         bool // Valid is true if OperationType is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullOperationType) Scan(value interface{}) error {
+	if value == nil {
+		ns.OperationType, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.OperationType.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullOperationType) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.OperationType), nil
+}
+
 type RoleType string
 
 const (
@@ -115,24 +159,25 @@ type Device struct {
 	LastUsed   time.Time
 }
 
-type LoginHistory struct {
+type OperationHistory struct {
 	ID            uuid.UUID
 	UserID        uuid.UUID
 	DeviceID      uuid.UUID
-	IpAddress     string
-	LoginTime     time.Time
+	Operation     OperationType
 	Success       bool
 	FailureReason NullFailureReason
+	IpAddress     string
+	OperationTime time.Time
 }
 
 type RefreshToken struct {
 	ID        uuid.UUID
 	UserID    uuid.UUID
 	Token     string
-	CreatedAt time.Time
 	ExpiresAt time.Time
 	DeviceID  uuid.UUID
 	IpAddress string
+	CreatedAt time.Time
 }
 
 type UsersSecret struct {
@@ -142,4 +187,6 @@ type UsersSecret struct {
 	Role         RoleType
 	PassHash     string
 	TokenVersion int32
+	CreatedAt    time.Time
+	UpdatedAt    time.Time
 }

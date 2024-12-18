@@ -38,9 +38,19 @@ FROM refresh_tokens
 WHERE token = $1
 `
 
-func (q *Queries) GetRefreshToken(ctx context.Context, token string) (RefreshToken, error) {
+type GetRefreshTokenRow struct {
+	ID        uuid.UUID
+	UserID    uuid.UUID
+	Token     string
+	CreatedAt time.Time
+	ExpiresAt time.Time
+	DeviceID  uuid.UUID
+	IpAddress string
+}
+
+func (q *Queries) GetRefreshToken(ctx context.Context, token string) (GetRefreshTokenRow, error) {
 	row := q.db.QueryRowContext(ctx, getRefreshToken, token)
-	var i RefreshToken
+	var i GetRefreshTokenRow
 	err := row.Scan(
 		&i.ID,
 		&i.UserID,
@@ -64,9 +74,19 @@ type GetTokenByUserIdAndDeviceIdParams struct {
 	DeviceID uuid.UUID
 }
 
-func (q *Queries) GetTokenByUserIdAndDeviceId(ctx context.Context, arg GetTokenByUserIdAndDeviceIdParams) (RefreshToken, error) {
+type GetTokenByUserIdAndDeviceIdRow struct {
+	ID        uuid.UUID
+	UserID    uuid.UUID
+	Token     string
+	CreatedAt time.Time
+	ExpiresAt time.Time
+	DeviceID  uuid.UUID
+	IpAddress string
+}
+
+func (q *Queries) GetTokenByUserIdAndDeviceId(ctx context.Context, arg GetTokenByUserIdAndDeviceIdParams) (GetTokenByUserIdAndDeviceIdRow, error) {
 	row := q.db.QueryRowContext(ctx, getTokenByUserIdAndDeviceId, arg.UserID, arg.DeviceID)
-	var i RefreshToken
+	var i GetTokenByUserIdAndDeviceIdRow
 	err := row.Scan(
 		&i.ID,
 		&i.UserID,
@@ -85,15 +105,25 @@ FROM refresh_tokens
 WHERE user_id = $1
 `
 
-func (q *Queries) GetTokensByUserID(ctx context.Context, userID uuid.UUID) ([]RefreshToken, error) {
+type GetTokensByUserIDRow struct {
+	ID        uuid.UUID
+	UserID    uuid.UUID
+	Token     string
+	CreatedAt time.Time
+	ExpiresAt time.Time
+	DeviceID  uuid.UUID
+	IpAddress string
+}
+
+func (q *Queries) GetTokensByUserID(ctx context.Context, userID uuid.UUID) ([]GetTokensByUserIDRow, error) {
 	rows, err := q.db.QueryContext(ctx, getTokensByUserID, userID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []RefreshToken
+	var items []GetTokensByUserIDRow
 	for rows.Next() {
-		var i RefreshToken
+		var i GetTokensByUserIDRow
 		if err := rows.Scan(
 			&i.ID,
 			&i.UserID,
