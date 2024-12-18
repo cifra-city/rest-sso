@@ -15,7 +15,7 @@ import (
 type OperationType string
 
 const (
-	FORGOT_PASSWORD OperationType = "forgot_password"
+	FORGOT_PASSWORD OperationType = "reset_password"
 	REGISTRATION    OperationType = "registration"
 )
 
@@ -31,6 +31,7 @@ func (op OperationType) IsValid() bool {
 func ApproveOperation(w http.ResponseWriter, r *http.Request) {
 	req, err := requests.NewApproveOperation(r)
 	if err != nil {
+		logrus.Errorf("error decoding request: %v", err)
 		httpresp.RenderErr(w, problems.BadRequest(err)...)
 		return
 	}
@@ -39,29 +40,30 @@ func ApproveOperation(w http.ResponseWriter, r *http.Request) {
 	code := req.Data.Attributes.Code
 	opTypeStr := req.Data.Attributes.Operation
 
-	opType := OperationType(opTypeStr)
-	if !opType.IsValid() {
-		httpresp.RenderErr(w, problems.BadRequest(errors.New("invalid operation type"))...)
-		return
-	}
-
 	Server, err := cifractx.GetValue[*config.Service](r.Context(), config.SERVICE)
 	if err != nil {
 		logrus.Errorf("error getting db queries: %v", err)
-		http.Error(w, "Database queries not found", http.StatusInternalServerError)
+		httpresp.RenderErr(w, problems.InternalError("database queries not found"))
 		return
 	}
 
 	log := Server.Logger
 
-	if Server.Mailman.CheckCode(email, string(opType), code) {
-		Server.Mailman.AddAccessForUser(email, string(opType), 15)
-
-		log.Debugf("code is correct add access for email: %s", email)
-		httpresp.Render(w, http.StatusOK)
+	opType := OperationType(opTypeStr)
+	if !opType.IsValid() {
+		log.Errorf("invalid operation type: %s", opTypeStr)
+		httpresp.RenderErr(w, problems.BadRequest(errors.New("invalid operation type"))...)
 		return
 	}
 
-	log.Debugf("code is incorrect for email: %s", email)
-	httpresp.Render(w, http.StatusForbidden)
+	if !Server.Mailman.CheckCode(email, code, string(opType)) {
+		log.Debugf("code is incorrect for email: %s", email)
+		httpresp.RenderErr(w, problems.Forbidden("incorrect code"))
+		return
+	}
+
+	Server.Mailman.AddAccessForUser(email, string(opType), 15)
+	log.Debugf("code is correct add access for email: %s", email)
+	httpresp.Render(w, http.StatusOK)
+	return
 }

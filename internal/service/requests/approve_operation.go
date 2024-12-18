@@ -15,7 +15,7 @@ func NewApproveOperation(r *http.Request) (req resources.ApproveOperationReq, er
 	}
 
 	errs := validation.Errors{
-		"data/type":       validation.Validate(req.Data.Type, validation.Required, validation.In("activate_email")),
+		"data/type":       validation.Validate(req.Data.Type, validation.Required, validation.In("approve_operation")),
 		"data/attributes": validation.Validate(req.Data.Attributes, validation.Required),
 	}
 	return req, errs.Filter()

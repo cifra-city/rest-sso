@@ -26,7 +26,7 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 	Server, err := cifractx.GetValue[*config.Service](r.Context(), config.SERVICE)
 	if err != nil {
 		logrus.Errorf("error getting db queries: %v", err)
-		http.Error(w, "Database queries not found", http.StatusInternalServerError)
+		httpresp.RenderErr(w, problems.InternalError("database queries not found"))
 		return
 	}
 
@@ -54,12 +54,14 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = Server.Mailman.SendList(username, "registration", em, 300)
-	if err != nil {
-		log.Errorf("error sending email: %v", err)
-		httpresp.RenderErr(w, problems.InternalError())
-		return
-	}
+	go func() {
+		err = Server.Mailman.SendList(em, string(REGISTRATION), "email_list.html", 300)
+		if err != nil {
+			log.Errorf("error sending email: %v", err)
+		} else {
+			log.Infof("Email sent successfully to: %s", em)
+		}
+	}()
 
-	httpresp.Render(w, http.StatusFound)
+	httpresp.Render(w, http.StatusAccepted)
 }

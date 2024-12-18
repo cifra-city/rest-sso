@@ -9,7 +9,7 @@ properties:
     properties:
       type:
         type: string
-        enum: [ approve-operation ]
+        enum: [ approve_operation ]
       attributes:
         type: object
         required:

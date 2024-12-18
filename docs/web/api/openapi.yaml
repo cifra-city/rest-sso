@@ -136,7 +136,7 @@ components:
       properties:
         type:
           enum:
-          - approve-operation
+          - approve_operation
           type: string
         attributes:
           $ref: '#/components/schemas/ApproveOperationReq_data_attributes'

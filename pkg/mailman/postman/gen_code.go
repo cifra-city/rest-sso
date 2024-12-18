@@ -3,14 +3,20 @@ package postman
 import (
 	"crypto/rand"
 	"fmt"
+	"math/big"
+
+	"github.com/sirupsen/logrus"
 )
 
 func (p *Postman) GenCode() (string, error) {
-	b := make([]byte, 3)
-	_, err := rand.Read(b)
+	newInt := big.NewInt(900000) // 999999 - 100000 + 1
+	n, err := rand.Int(rand.Reader, newInt)
 	if err != nil {
 		return "", err
 	}
-	code := fmt.Sprintf("%06d", int(b[0])<<16|int(b[1])<<8|int(b[2]))
-	return code, nil
+
+	code := 100000 + n.Int64()
+
+	logrus.Debugf("Generated code: %d", code)
+	return fmt.Sprintf("%06d", code), nil
 }

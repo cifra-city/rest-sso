@@ -41,14 +41,14 @@ func RegistrationConfirm(w http.ResponseWriter, r *http.Request) {
 	Server, err := cifractx.GetValue[*config.Service](r.Context(), config.SERVICE)
 	if err != nil {
 		logrus.Errorf("error getting db queries: %v", err)
-		http.Error(w, "Database queries not found", http.StatusInternalServerError)
+		httpresp.RenderErr(w, problems.InternalError("database queries not found"))
 		return
 	}
 
 	log := Server.Logger
 
 	_, err = Server.Queries.GetUserByEmail(r.Context(), em)
-	if errors.Is(err, sql.ErrNoRows) {
+	if !errors.Is(err, sql.ErrNoRows) {
 		log.Errorf("User already created: %v", err)
 		httpresp.RenderErr(w, problems.Conflict("this email address already exists"))
 		return
@@ -60,9 +60,9 @@ func RegistrationConfirm(w http.ResponseWriter, r *http.Request) {
 	}
 
 	_, err = Server.Queries.GetUserByUsername(r.Context(), username)
-	if errors.Is(err, sql.ErrNoRows) {
+	if !errors.Is(err, sql.ErrNoRows) {
 		log.Errorf("User already created: %v", err)
-		httpresp.RenderErr(w, problems.Conflict("this email address already exists"))
+		httpresp.RenderErr(w, problems.Conflict("this username already exists"))
 		return
 	}
 	if err != nil && !errors.Is(err, sql.ErrNoRows) {
@@ -73,7 +73,7 @@ func RegistrationConfirm(w http.ResponseWriter, r *http.Request) {
 
 	if !Server.Mailman.CheckAndDeleteAccessForUser(em, "registration") {
 		log.Warnf("email haven`t access: %s", em)
-		httpresp.RenderErr(w, problems.BadRequest(errors.New("email haven`t access"))...)
+		httpresp.RenderErr(w, problems.Forbidden("email haven`t access"))
 		return
 	}
 

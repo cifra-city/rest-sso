@@ -64,9 +64,9 @@ type Config struct {
 
 // LoadConfig - функция для загрузки конфигурации из файла.
 func LoadConfig(path string) (*Config, error) {
-	viper.SetConfigName("config") // Имя файла конфигурации (без расширения).
-	viper.SetConfigType("yaml")   // Формат файла.
-	viper.AddConfigPath(path)     // Путь к директории, где находится файл конфигурации.
+	viper.SetConfigName("local_config") // Имя файла конфигурации (без расширения).
+	viper.SetConfigType("yaml")         // Формат файла.
+	viper.AddConfigPath(path)           // Путь к директории, где находится файл конфигурации.
 
 	// Читаем конфигурационный файл.
 	if err := viper.ReadInConfig(); err != nil {

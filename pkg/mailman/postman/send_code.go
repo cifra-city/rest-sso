@@ -50,5 +50,6 @@ func (p *Postman) SendCode(to string, code string, templateList string) error {
 		return err
 	}
 
+	logrus.Debugf("Code sent to %s", to)
 	return nil
 }
