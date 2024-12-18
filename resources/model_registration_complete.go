@@ -16,38 +16,38 @@ import (
 	"fmt"
 )
 
-// checks if the RegistrationReq type satisfies the MappedNullable interface at compile time
-var _ MappedNullable = &RegistrationReq{}
+// checks if the RegistrationComplete type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &RegistrationComplete{}
 
-// RegistrationReq struct for RegistrationReq
-type RegistrationReq struct {
-	Data RegistrationReqData `json:"data"`
+// RegistrationComplete struct for RegistrationComplete
+type RegistrationComplete struct {
+	Data RegistrationCompleteData `json:"data"`
 }
 
-type _RegistrationReq RegistrationReq
+type _RegistrationComplete RegistrationComplete
 
-// NewRegistrationReq instantiates a new RegistrationReq object
+// NewRegistrationComplete instantiates a new RegistrationComplete object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewRegistrationReq(data RegistrationReqData) *RegistrationReq {
-	this := RegistrationReq{}
+func NewRegistrationComplete(data RegistrationCompleteData) *RegistrationComplete {
+	this := RegistrationComplete{}
 	this.Data = data
 	return &this
 }
 
-// NewRegistrationReqWithDefaults instantiates a new RegistrationReq object
+// NewRegistrationCompleteWithDefaults instantiates a new RegistrationComplete object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewRegistrationReqWithDefaults() *RegistrationReq {
-	this := RegistrationReq{}
+func NewRegistrationCompleteWithDefaults() *RegistrationComplete {
+	this := RegistrationComplete{}
 	return &this
 }
 
 // GetData returns the Data field value
-func (o *RegistrationReq) GetData() RegistrationReqData {
+func (o *RegistrationComplete) GetData() RegistrationCompleteData {
 	if o == nil {
-		var ret RegistrationReqData
+		var ret RegistrationCompleteData
 		return ret
 	}
 
@@ -56,7 +56,7 @@ func (o *RegistrationReq) GetData() RegistrationReqData {
 
 // GetDataOk returns a tuple with the Data field value
 // and a boolean to check if the value has been set.
-func (o *RegistrationReq) GetDataOk() (*RegistrationReqData, bool) {
+func (o *RegistrationComplete) GetDataOk() (*RegistrationCompleteData, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -64,11 +64,11 @@ func (o *RegistrationReq) GetDataOk() (*RegistrationReqData, bool) {
 }
 
 // SetData sets field value
-func (o *RegistrationReq) SetData(v RegistrationReqData) {
+func (o *RegistrationComplete) SetData(v RegistrationCompleteData) {
 	o.Data = v
 }
 
-func (o RegistrationReq) MarshalJSON() ([]byte, error) {
+func (o RegistrationComplete) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
@@ -76,13 +76,13 @@ func (o RegistrationReq) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-func (o RegistrationReq) ToMap() (map[string]interface{}, error) {
+func (o RegistrationComplete) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["data"] = o.Data
 	return toSerialize, nil
 }
 
-func (o *RegistrationReq) UnmarshalJSON(data []byte) (err error) {
+func (o *RegistrationComplete) UnmarshalJSON(data []byte) (err error) {
 	// This validates that all required properties are included in the JSON object
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
@@ -104,53 +104,53 @@ func (o *RegistrationReq) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varRegistrationReq := _RegistrationReq{}
+	varRegistrationComplete := _RegistrationComplete{}
 
 	decoder := json.NewDecoder(bytes.NewReader(data))
 	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varRegistrationReq)
+	err = decoder.Decode(&varRegistrationComplete)
 
 	if err != nil {
 		return err
 	}
 
-	*o = RegistrationReq(varRegistrationReq)
+	*o = RegistrationComplete(varRegistrationComplete)
 
 	return err
 }
 
-type NullableRegistrationReq struct {
-	value *RegistrationReq
+type NullableRegistrationComplete struct {
+	value *RegistrationComplete
 	isSet bool
 }
 
-func (v NullableRegistrationReq) Get() *RegistrationReq {
+func (v NullableRegistrationComplete) Get() *RegistrationComplete {
 	return v.value
 }
 
-func (v *NullableRegistrationReq) Set(val *RegistrationReq) {
+func (v *NullableRegistrationComplete) Set(val *RegistrationComplete) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableRegistrationReq) IsSet() bool {
+func (v NullableRegistrationComplete) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableRegistrationReq) Unset() {
+func (v *NullableRegistrationComplete) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableRegistrationReq(val *RegistrationReq) *NullableRegistrationReq {
-	return &NullableRegistrationReq{value: val, isSet: true}
+func NewNullableRegistrationComplete(val *RegistrationComplete) *NullableRegistrationComplete {
+	return &NullableRegistrationComplete{value: val, isSet: true}
 }
 
-func (v NullableRegistrationReq) MarshalJSON() ([]byte, error) {
+func (v NullableRegistrationComplete) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableRegistrationReq) UnmarshalJSON(src []byte) error {
+func (v *NullableRegistrationComplete) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

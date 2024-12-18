@@ -5,16 +5,16 @@ info:
   version: 1.0.0
 
 paths:
-  /register-confirm:
+  /register:
     post:
-      summary: Confirm register a new user
-      description: Endpoint to register a new user with email, username, and password
+      summary: Send a request to register a new user
+      description: Send code to email for user to confirm registration
       requestBody:
         required: true
         content:
           application/vnd.api+json:
             schema:
-              $ref: '../spec/components/schemas/RegistrationConfirmReq.yaml'
+              $ref: '../spec/components/schemas/RegistrationInitiate.yaml'
       responses:
         '201':
           description: User successfully registered

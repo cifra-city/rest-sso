@@ -6,9 +6,9 @@ info:
 
 paths:
   /register:
-    $ref: './paths/Registration.yaml'
+    $ref: './paths/RegistrationInitiate.yaml'
   /registration-confirm:
-    $ref: './paths/RegistrationConfirm.yaml'
+    $ref: './paths/RegistrationComplete.yaml'
   /activate-email:
     $ref: './paths/ApproveOperation.yaml'
   /login:
@@ -24,12 +24,12 @@ paths:
 
 components:
   schemas:
-    RegistrationReq:
-      $ref: './spec/components/schemas/RegistrationReq.yaml'
+    RegistrationInitiate:
+      $ref: './spec/components/schemas/RegistrationInitiate.yaml'
     ApproveOperationReq:
       $ref: './spec/components/schemas/ApproveOperationReq.yaml'
-    RegistrationConfirmReq:
-        $ref: './spec/components/schemas/RegistrationConfirmReq.yaml'
+    RegistrationComplete:
+        $ref: './spec/components/schemas/RegistrationComplete.yaml'
     LoginReq:
         $ref: './spec/components/schemas/LoginReq.yaml'
     LoginResp:

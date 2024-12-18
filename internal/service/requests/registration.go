@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strings"
 
 	"github.com/cifra-city/rest-sso/resources"
 	validation "github.com/go-ozzo/ozzo-validation/v4"
@@ -16,16 +15,13 @@ func newDecodeError(what string, err error) error {
 	}
 }
 
-func NewRegistration(r *http.Request) (req resources.RegistrationReq, err error) {
+func NewRegistrationInitiate(r *http.Request) (req resources.RegistrationInitiate, err error) {
 	if err = json.NewDecoder(r.Body).Decode(&req); err != nil {
 		err = newDecodeError("body", err)
 		return
 	}
 
-	req.Data.Id = strings.ToLower(req.Data.Id)
-
 	errs := validation.Errors{
-		"data/id":         validation.Validate(req.Data.Id, validation.Required),
 		"data/type":       validation.Validate(req.Data.Type, validation.Required, validation.In("registration")),
 		"data/attributes": validation.Validate(req.Data.Attributes, validation.Required),
 	}

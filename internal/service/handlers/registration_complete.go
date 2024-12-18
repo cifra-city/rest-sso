@@ -17,8 +17,8 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func RegistrationConfirm(w http.ResponseWriter, r *http.Request) {
-	req, err := requests.NewRegistrationConfirm(r)
+func RegistrationComplete(w http.ResponseWriter, r *http.Request) {
+	req, err := requests.NewRegistrationComplete(r)
 	if err != nil {
 		httpresp.RenderErr(w, problems.BadRequest(err)...)
 		return
@@ -36,7 +36,7 @@ func RegistrationConfirm(w http.ResponseWriter, r *http.Request) {
 	}
 
 	em := req.Data.Attributes.Email
-	username := req.Data.Id
+	username := req.Data.Attributes.Username
 
 	Server, err := cifractx.GetValue[*config.Service](r.Context(), config.SERVICE)
 	if err != nil {
@@ -59,7 +59,7 @@ func RegistrationConfirm(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = Server.Queries.GetUserByUsername(r.Context(), username)
+	_, err = Server.Queries.GetUserByUsername(r.Context(), *username)
 	if !errors.Is(err, sql.ErrNoRows) {
 		log.Errorf("User already created: %v", err)
 		httpresp.RenderErr(w, problems.Conflict("this username already exists"))
@@ -88,7 +88,7 @@ func RegistrationConfirm(w http.ResponseWriter, r *http.Request) {
 
 	params := data.InsertUserParams{
 		ID:          newUuid,
-		Username:    username,
+		Username:    *username,
 		Email:       em,
 		EmailStatus: false,
 		PassHash:    string(hashedPassword),

@@ -28,8 +28,8 @@ func Run(ctx context.Context) {
 			r.Route("/public", func(r chi.Router) {
 				r.Post("/approve-operation", handlers.ApproveOperation) // approval operation with use email for 15 minutes
 
-				r.Post("/registration", handlers.Registration)                // check if email exists, send code to email
-				r.Post("/registration-confirm", handlers.RegistrationConfirm) // check for approved email address for use
+				r.Post("/registration-initiate", handlers.RegistrationInitiate) // check if email exists, send code to email
+				r.Post("/registration-complete", handlers.RegistrationComplete) // check for approved email address for use
 
 				r.Post("/login", handlers.Login)
 

@@ -4,13 +4,9 @@ required:
 properties:
   data:
     required:
-      - id
       - type
       - attributes
     properties:
-      id:
-        type: string
-        description: "Unique identifier username"
       type:
         type: string
         enum: [ registration ]

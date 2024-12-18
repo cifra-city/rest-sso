@@ -16,11 +16,11 @@ import (
 	"fmt"
 )
 
-// checks if the RegistrationConfirmReqDataAttributes type satisfies the MappedNullable interface at compile time
-var _ MappedNullable = &RegistrationConfirmReqDataAttributes{}
+// checks if the RegistrationCompleteDataAttributes type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &RegistrationCompleteDataAttributes{}
 
-// RegistrationConfirmReqDataAttributes struct for RegistrationConfirmReqDataAttributes
-type RegistrationConfirmReqDataAttributes struct {
+// RegistrationCompleteDataAttributes struct for RegistrationCompleteDataAttributes
+type RegistrationCompleteDataAttributes struct {
 	// First password
 	FirstPassword string `json:"first_password"`
 	// Second password
@@ -31,30 +31,30 @@ type RegistrationConfirmReqDataAttributes struct {
 	Username *string `json:"username,omitempty"`
 }
 
-type _RegistrationConfirmReqDataAttributes RegistrationConfirmReqDataAttributes
+type _RegistrationCompleteDataAttributes RegistrationCompleteDataAttributes
 
-// NewRegistrationConfirmReqDataAttributes instantiates a new RegistrationConfirmReqDataAttributes object
+// NewRegistrationCompleteDataAttributes instantiates a new RegistrationCompleteDataAttributes object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewRegistrationConfirmReqDataAttributes(firstPassword string, secondPassword string, email string) *RegistrationConfirmReqDataAttributes {
-	this := RegistrationConfirmReqDataAttributes{}
+func NewRegistrationCompleteDataAttributes(firstPassword string, secondPassword string, email string) *RegistrationCompleteDataAttributes {
+	this := RegistrationCompleteDataAttributes{}
 	this.FirstPassword = firstPassword
 	this.SecondPassword = secondPassword
 	this.Email = email
 	return &this
 }
 
-// NewRegistrationConfirmReqDataAttributesWithDefaults instantiates a new RegistrationConfirmReqDataAttributes object
+// NewRegistrationCompleteDataAttributesWithDefaults instantiates a new RegistrationCompleteDataAttributes object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewRegistrationConfirmReqDataAttributesWithDefaults() *RegistrationConfirmReqDataAttributes {
-	this := RegistrationConfirmReqDataAttributes{}
+func NewRegistrationCompleteDataAttributesWithDefaults() *RegistrationCompleteDataAttributes {
+	this := RegistrationCompleteDataAttributes{}
 	return &this
 }
 
 // GetFirstPassword returns the FirstPassword field value
-func (o *RegistrationConfirmReqDataAttributes) GetFirstPassword() string {
+func (o *RegistrationCompleteDataAttributes) GetFirstPassword() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -65,7 +65,7 @@ func (o *RegistrationConfirmReqDataAttributes) GetFirstPassword() string {
 
 // GetFirstPasswordOk returns a tuple with the FirstPassword field value
 // and a boolean to check if the value has been set.
-func (o *RegistrationConfirmReqDataAttributes) GetFirstPasswordOk() (*string, bool) {
+func (o *RegistrationCompleteDataAttributes) GetFirstPasswordOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -73,12 +73,12 @@ func (o *RegistrationConfirmReqDataAttributes) GetFirstPasswordOk() (*string, bo
 }
 
 // SetFirstPassword sets field value
-func (o *RegistrationConfirmReqDataAttributes) SetFirstPassword(v string) {
+func (o *RegistrationCompleteDataAttributes) SetFirstPassword(v string) {
 	o.FirstPassword = v
 }
 
 // GetSecondPassword returns the SecondPassword field value
-func (o *RegistrationConfirmReqDataAttributes) GetSecondPassword() string {
+func (o *RegistrationCompleteDataAttributes) GetSecondPassword() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -89,7 +89,7 @@ func (o *RegistrationConfirmReqDataAttributes) GetSecondPassword() string {
 
 // GetSecondPasswordOk returns a tuple with the SecondPassword field value
 // and a boolean to check if the value has been set.
-func (o *RegistrationConfirmReqDataAttributes) GetSecondPasswordOk() (*string, bool) {
+func (o *RegistrationCompleteDataAttributes) GetSecondPasswordOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -97,12 +97,12 @@ func (o *RegistrationConfirmReqDataAttributes) GetSecondPasswordOk() (*string, b
 }
 
 // SetSecondPassword sets field value
-func (o *RegistrationConfirmReqDataAttributes) SetSecondPassword(v string) {
+func (o *RegistrationCompleteDataAttributes) SetSecondPassword(v string) {
 	o.SecondPassword = v
 }
 
 // GetEmail returns the Email field value
-func (o *RegistrationConfirmReqDataAttributes) GetEmail() string {
+func (o *RegistrationCompleteDataAttributes) GetEmail() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -113,7 +113,7 @@ func (o *RegistrationConfirmReqDataAttributes) GetEmail() string {
 
 // GetEmailOk returns a tuple with the Email field value
 // and a boolean to check if the value has been set.
-func (o *RegistrationConfirmReqDataAttributes) GetEmailOk() (*string, bool) {
+func (o *RegistrationCompleteDataAttributes) GetEmailOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -121,12 +121,12 @@ func (o *RegistrationConfirmReqDataAttributes) GetEmailOk() (*string, bool) {
 }
 
 // SetEmail sets field value
-func (o *RegistrationConfirmReqDataAttributes) SetEmail(v string) {
+func (o *RegistrationCompleteDataAttributes) SetEmail(v string) {
 	o.Email = v
 }
 
 // GetUsername returns the Username field value if set, zero value otherwise.
-func (o *RegistrationConfirmReqDataAttributes) GetUsername() string {
+func (o *RegistrationCompleteDataAttributes) GetUsername() string {
 	if o == nil || IsNil(o.Username) {
 		var ret string
 		return ret
@@ -136,7 +136,7 @@ func (o *RegistrationConfirmReqDataAttributes) GetUsername() string {
 
 // GetUsernameOk returns a tuple with the Username field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *RegistrationConfirmReqDataAttributes) GetUsernameOk() (*string, bool) {
+func (o *RegistrationCompleteDataAttributes) GetUsernameOk() (*string, bool) {
 	if o == nil || IsNil(o.Username) {
 		return nil, false
 	}
@@ -144,7 +144,7 @@ func (o *RegistrationConfirmReqDataAttributes) GetUsernameOk() (*string, bool) {
 }
 
 // HasUsername returns a boolean if a field has been set.
-func (o *RegistrationConfirmReqDataAttributes) HasUsername() bool {
+func (o *RegistrationCompleteDataAttributes) HasUsername() bool {
 	if o != nil && !IsNil(o.Username) {
 		return true
 	}
@@ -153,11 +153,11 @@ func (o *RegistrationConfirmReqDataAttributes) HasUsername() bool {
 }
 
 // SetUsername gets a reference to the given string and assigns it to the Username field.
-func (o *RegistrationConfirmReqDataAttributes) SetUsername(v string) {
+func (o *RegistrationCompleteDataAttributes) SetUsername(v string) {
 	o.Username = &v
 }
 
-func (o RegistrationConfirmReqDataAttributes) MarshalJSON() ([]byte, error) {
+func (o RegistrationCompleteDataAttributes) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
@@ -165,7 +165,7 @@ func (o RegistrationConfirmReqDataAttributes) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-func (o RegistrationConfirmReqDataAttributes) ToMap() (map[string]interface{}, error) {
+func (o RegistrationCompleteDataAttributes) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["first_password"] = o.FirstPassword
 	toSerialize["second_password"] = o.SecondPassword
@@ -176,7 +176,7 @@ func (o RegistrationConfirmReqDataAttributes) ToMap() (map[string]interface{}, e
 	return toSerialize, nil
 }
 
-func (o *RegistrationConfirmReqDataAttributes) UnmarshalJSON(data []byte) (err error) {
+func (o *RegistrationCompleteDataAttributes) UnmarshalJSON(data []byte) (err error) {
 	// This validates that all required properties are included in the JSON object
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
@@ -200,53 +200,53 @@ func (o *RegistrationConfirmReqDataAttributes) UnmarshalJSON(data []byte) (err e
 		}
 	}
 
-	varRegistrationConfirmReqDataAttributes := _RegistrationConfirmReqDataAttributes{}
+	varRegistrationCompleteDataAttributes := _RegistrationCompleteDataAttributes{}
 
 	decoder := json.NewDecoder(bytes.NewReader(data))
 	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varRegistrationConfirmReqDataAttributes)
+	err = decoder.Decode(&varRegistrationCompleteDataAttributes)
 
 	if err != nil {
 		return err
 	}
 
-	*o = RegistrationConfirmReqDataAttributes(varRegistrationConfirmReqDataAttributes)
+	*o = RegistrationCompleteDataAttributes(varRegistrationCompleteDataAttributes)
 
 	return err
 }
 
-type NullableRegistrationConfirmReqDataAttributes struct {
-	value *RegistrationConfirmReqDataAttributes
+type NullableRegistrationCompleteDataAttributes struct {
+	value *RegistrationCompleteDataAttributes
 	isSet bool
 }
 
-func (v NullableRegistrationConfirmReqDataAttributes) Get() *RegistrationConfirmReqDataAttributes {
+func (v NullableRegistrationCompleteDataAttributes) Get() *RegistrationCompleteDataAttributes {
 	return v.value
 }
 
-func (v *NullableRegistrationConfirmReqDataAttributes) Set(val *RegistrationConfirmReqDataAttributes) {
+func (v *NullableRegistrationCompleteDataAttributes) Set(val *RegistrationCompleteDataAttributes) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableRegistrationConfirmReqDataAttributes) IsSet() bool {
+func (v NullableRegistrationCompleteDataAttributes) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableRegistrationConfirmReqDataAttributes) Unset() {
+func (v *NullableRegistrationCompleteDataAttributes) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableRegistrationConfirmReqDataAttributes(val *RegistrationConfirmReqDataAttributes) *NullableRegistrationConfirmReqDataAttributes {
-	return &NullableRegistrationConfirmReqDataAttributes{value: val, isSet: true}
+func NewNullableRegistrationCompleteDataAttributes(val *RegistrationCompleteDataAttributes) *NullableRegistrationCompleteDataAttributes {
+	return &NullableRegistrationCompleteDataAttributes{value: val, isSet: true}
 }
 
-func (v NullableRegistrationConfirmReqDataAttributes) MarshalJSON() ([]byte, error) {
+func (v NullableRegistrationCompleteDataAttributes) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableRegistrationConfirmReqDataAttributes) UnmarshalJSON(src []byte) error {
+func (v *NullableRegistrationCompleteDataAttributes) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

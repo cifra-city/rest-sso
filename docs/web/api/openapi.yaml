@@ -16,10 +16,10 @@ paths:
   /reset-password: {}
 components:
   schemas:
-    RegistrationReq:
+    RegistrationInitiate:
       properties:
         data:
-          $ref: '#/components/schemas/RegistrationReq_data'
+          $ref: '#/components/schemas/RegistrationInitiate_data'
       required:
       - data
       type: object
@@ -30,10 +30,10 @@ components:
       required:
       - data
       type: object
-    RegistrationConfirmReq:
+    RegistrationComplete:
       properties:
         data:
-          $ref: '#/components/schemas/RegistrationConfirmReq_data'
+          $ref: '#/components/schemas/RegistrationComplete_data'
       required:
       - data
       type: object
@@ -86,7 +86,7 @@ components:
       required:
       - data
       type: object
-    RegistrationReq_data_attributes:
+    RegistrationInitiate_data_attributes:
       properties:
         email:
           description: User email
@@ -99,20 +99,16 @@ components:
       - email
       - usernamev
       type: object
-    RegistrationReq_data:
+    RegistrationInitiate_data:
       properties:
-        id:
-          description: Unique identifier username
-          type: string
         type:
           enum:
           - registration
           type: string
         attributes:
-          $ref: '#/components/schemas/RegistrationReq_data_attributes'
+          $ref: '#/components/schemas/RegistrationInitiate_data_attributes'
       required:
       - attributes
-      - id
       - type
       type: object
     ApproveOperationReq_data_attributes:
@@ -144,7 +140,7 @@ components:
       - attributes
       - type
       type: object
-    RegistrationConfirmReq_data_attributes:
+    RegistrationComplete_data_attributes:
       properties:
         first_password:
           description: First password
@@ -165,20 +161,16 @@ components:
       - password
       - second_password
       type: object
-    RegistrationConfirmReq_data:
+    RegistrationComplete_data:
       properties:
-        id:
-          description: Unique identifier username
-          type: string
         type:
           enum:
           - registration_confirm
           type: string
         attributes:
-          $ref: '#/components/schemas/RegistrationConfirmReq_data_attributes'
+          $ref: '#/components/schemas/RegistrationComplete_data_attributes'
       required:
       - attributes
-      - id
       - type
       type: object
     LoginReq_data_attributes:

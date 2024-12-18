@@ -13,15 +13,15 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func Registration(w http.ResponseWriter, r *http.Request) {
-	req, err := requests.NewRegistration(r)
+func RegistrationInitiate(w http.ResponseWriter, r *http.Request) {
+	req, err := requests.NewRegistrationInitiate(r)
 	if err != nil {
 		httpresp.RenderErr(w, problems.BadRequest(err)...)
 		return
 	}
 
 	em := req.Data.Attributes.Email
-	username := req.Data.Id
+	username := req.Data.Attributes.Username
 
 	Server, err := cifractx.GetValue[*config.Service](r.Context(), config.SERVICE)
 	if err != nil {
@@ -43,7 +43,7 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = Server.Queries.GetUserByUsername(r.Context(), username)
+	_, err = Server.Queries.GetUserByUsername(r.Context(), *username)
 	if err != nil && !errors.Is(err, sql.ErrNoRows) {
 		log.Errorf("error getting user by username: %v", err)
 		httpresp.RenderErr(w, problems.InternalError())
