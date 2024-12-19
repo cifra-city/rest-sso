@@ -24,6 +24,9 @@ func ResetPasswordInitiate(w http.ResponseWriter, r *http.Request) {
 	email := req.Data.Attributes.Email
 	username := req.Data.Attributes.Username
 
+	IP := httpresp.GetClientIP(r)
+	UserAgent := httpresp.GetUserAgent(r)
+
 	var user data.UsersSecret
 
 	Server, err := cifractx.GetValue[*config.Service](r.Context(), config.SERVICE)
@@ -49,7 +52,7 @@ func ResetPasswordInitiate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	go func() {
-		err = Server.Mailman.SendList(user.Email, string(RESET_PASSWORD), "email_list.html", 300)
+		err = Server.Mailman.SendList(user.Email, string(RESET_PASSWORD), "email_list.html", UserAgent, IP, 300)
 		if err != nil {
 			log.Errorf("error sending email: %v", err)
 		} else {

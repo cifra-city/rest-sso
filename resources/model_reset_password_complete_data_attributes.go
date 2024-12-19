@@ -29,14 +29,10 @@ type ResetPasswordCompleteDataAttributes struct {
 	FirstPassword string `json:"first_password"`
 	// User password.
 	SecondPassword string `json:"second_password"`
-	// Unique identifier for the user's device.
-	FactoryId string `json:"factory_id"`
 	// Human-readable name for the user's device (e.g., 'iPhone 14').
 	DeviceName string `json:"device_name"`
 	// Operating system version of the user's device.
 	OsVersion string `json:"os_version"`
-	// IP address of the user's device.
-	IpAddress string `json:"ip_address"`
 }
 
 type _ResetPasswordCompleteDataAttributes ResetPasswordCompleteDataAttributes
@@ -45,14 +41,12 @@ type _ResetPasswordCompleteDataAttributes ResetPasswordCompleteDataAttributes
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewResetPasswordCompleteDataAttributes(firstPassword string, secondPassword string, factoryId string, deviceName string, osVersion string, ipAddress string) *ResetPasswordCompleteDataAttributes {
+func NewResetPasswordCompleteDataAttributes(firstPassword string, secondPassword string, deviceName string, osVersion string) *ResetPasswordCompleteDataAttributes {
 	this := ResetPasswordCompleteDataAttributes{}
 	this.FirstPassword = firstPassword
 	this.SecondPassword = secondPassword
-	this.FactoryId = factoryId
 	this.DeviceName = deviceName
 	this.OsVersion = osVersion
-	this.IpAddress = ipAddress
 	return &this
 }
 
@@ -176,30 +170,6 @@ func (o *ResetPasswordCompleteDataAttributes) SetSecondPassword(v string) {
 	o.SecondPassword = v
 }
 
-// GetFactoryId returns the FactoryId field value
-func (o *ResetPasswordCompleteDataAttributes) GetFactoryId() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.FactoryId
-}
-
-// GetFactoryIdOk returns a tuple with the FactoryId field value
-// and a boolean to check if the value has been set.
-func (o *ResetPasswordCompleteDataAttributes) GetFactoryIdOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.FactoryId, true
-}
-
-// SetFactoryId sets field value
-func (o *ResetPasswordCompleteDataAttributes) SetFactoryId(v string) {
-	o.FactoryId = v
-}
-
 // GetDeviceName returns the DeviceName field value
 func (o *ResetPasswordCompleteDataAttributes) GetDeviceName() string {
 	if o == nil {
@@ -248,30 +218,6 @@ func (o *ResetPasswordCompleteDataAttributes) SetOsVersion(v string) {
 	o.OsVersion = v
 }
 
-// GetIpAddress returns the IpAddress field value
-func (o *ResetPasswordCompleteDataAttributes) GetIpAddress() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.IpAddress
-}
-
-// GetIpAddressOk returns a tuple with the IpAddress field value
-// and a boolean to check if the value has been set.
-func (o *ResetPasswordCompleteDataAttributes) GetIpAddressOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.IpAddress, true
-}
-
-// SetIpAddress sets field value
-func (o *ResetPasswordCompleteDataAttributes) SetIpAddress(v string) {
-	o.IpAddress = v
-}
-
 func (o ResetPasswordCompleteDataAttributes) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -290,10 +236,8 @@ func (o ResetPasswordCompleteDataAttributes) ToMap() (map[string]interface{}, er
 	}
 	toSerialize["first_password"] = o.FirstPassword
 	toSerialize["second_password"] = o.SecondPassword
-	toSerialize["factory_id"] = o.FactoryId
 	toSerialize["device_name"] = o.DeviceName
 	toSerialize["os_version"] = o.OsVersion
-	toSerialize["ip_address"] = o.IpAddress
 	return toSerialize, nil
 }
 
@@ -304,10 +248,8 @@ func (o *ResetPasswordCompleteDataAttributes) UnmarshalJSON(data []byte) (err er
 	requiredProperties := []string{
 		"first_password",
 		"second_password",
-		"factory_id",
 		"device_name",
 		"os_version",
-		"ip_address",
 	}
 
 	allProperties := make(map[string]interface{})

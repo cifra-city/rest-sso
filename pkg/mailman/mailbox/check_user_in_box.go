@@ -1,31 +1,27 @@
 package mailbox
 
 import (
-	"github.com/cifra-city/rest-sso/pkg/mailman/crypto"
 	"github.com/sirupsen/logrus"
-
-	"log"
 )
 
-func (m *Service) CheckUserInBox(username string, operationType string) bool {
+func (m *Service) CheckUserInBox(email string, operationType string, ConfidenceCode string) (*Data, error) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
-	if operations, exists := m.listCode[username]; exists {
-		if encryptedData, opExists := operations[operationType]; opExists {
-			_, err := crypto.Decrypt(encryptedData.ConfidenceCode, string(m.key))
-			if err != nil {
-				log.Printf("Failed to decrypt data for user '%s' and operation '%s': %v", username, operationType, err)
-				return false
+	if operations, exists := m.listCode[email]; exists {
+		if data, opExists := operations[operationType]; opExists {
+			if data.ConfidenceCode == ConfidenceCode {
+				logrus.Infof("Code for user '%s' and operation '%s' is correct and has been used", email, operationType)
+				return &data, nil
+			} else {
+				logrus.Warnf("Code for user '%s' and operation '%s' is incorrect", email, operationType)
 			}
-			logrus.Infof("Code for user '%s' and operation '%s' exists", username, operationType)
-			return true
 		} else {
-			logrus.Warnf("No operation '%s' found for user '%s'", operationType, username)
+			logrus.Warnf("No operation '%s' found for user '%s'", operationType, email)
 		}
 	} else {
-		logrus.Warnf("No codes found for user '%s'", username)
+		logrus.Warnf("No codes found for user '%s'", email)
 	}
 
-	return false
+	return nil, nil
 }

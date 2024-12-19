@@ -9,13 +9,12 @@ Name | Type | Description | Notes
 **FactoryId** | **string** | Unique identifier for the user&#39;s device. | 
 **DeviceName** | **string** | Human-readable name for the user&#39;s device (e.g., &#39;iPhone 14&#39;). | 
 **OsVersion** | **string** | Operating system version of the user&#39;s device. | 
-**IpAddress** | **string** | IP address of the user&#39;s device. | 
 
 ## Methods
 
 ### NewRefreshReqDataAttributes
 
-`func NewRefreshReqDataAttributes(refreshToken string, deviceId string, factoryId string, deviceName string, osVersion string, ipAddress string, ) *RefreshReqDataAttributes`
+`func NewRefreshReqDataAttributes(refreshToken string, deviceId string, factoryId string, deviceName string, osVersion string, ) *RefreshReqDataAttributes`
 
 NewRefreshReqDataAttributes instantiates a new RefreshReqDataAttributes object
 This constructor will assign default values to properties that have it defined,
@@ -128,26 +127,6 @@ and a boolean to check if the value has been set.
 `func (o *RefreshReqDataAttributes) SetOsVersion(v string)`
 
 SetOsVersion sets OsVersion field to given value.
-
-
-### GetIpAddress
-
-`func (o *RefreshReqDataAttributes) GetIpAddress() string`
-
-GetIpAddress returns the IpAddress field if non-nil, zero value otherwise.
-
-### GetIpAddressOk
-
-`func (o *RefreshReqDataAttributes) GetIpAddressOk() (*string, bool)`
-
-GetIpAddressOk returns a tuple with the IpAddress field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetIpAddress
-
-`func (o *RefreshReqDataAttributes) SetIpAddress(v string)`
-
-SetIpAddress sets IpAddress field to given value.
 
 
 

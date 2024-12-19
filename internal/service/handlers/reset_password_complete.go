@@ -14,6 +14,7 @@ import (
 	"github.com/cifra-city/rest-sso/pkg/httpresp"
 	"github.com/cifra-city/rest-sso/pkg/httpresp/problems"
 	"github.com/cifra-city/rest-sso/pkg/sectools"
+	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -29,6 +30,9 @@ func ResetPasswordComplete(w http.ResponseWriter, r *http.Request) {
 	username := req.Data.Attributes.Username
 	firstPassword := req.Data.Attributes.FirstPassword
 	secondPassword := req.Data.Attributes.SecondPassword
+
+	IP := httpresp.GetClientIP(r)
+	UserAgent := httpresp.GetUserAgent(r)
 
 	if email == nil && username == nil {
 		httpresp.RenderErr(w, problems.BadRequest(errors.New("email or username is required"))...)
@@ -65,8 +69,18 @@ func ResetPasswordComplete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if !Server.Mailman.CheckAndDeleteAccessForUser(user.Email, string(RESET_PASSWORD)) {
+	err = Server.Mailman.CheckAccess(user.Email, string(RESET_PASSWORD), UserAgent, IP)
+	if err != nil {
 		log.Debugf("User %s has no access to reset password", user.Email)
+		err = Server.Queries.InsertOperationHistory(r.Context(), data.InsertOperationHistoryParams{
+			ID:            uuid.New(),
+			UserID:        user.ID,
+			DeviceData:    httpresp.GenerateFingerprint(r),
+			Operation:     data.OperationTypeResetPassword,
+			Success:       false,
+			FailureReason: data.FailureReasonNoAccess,
+			IpAddress:     IP,
+		})
 		httpresp.RenderErr(w, problems.Forbidden())
 		return
 	}
@@ -94,7 +108,7 @@ func ResetPasswordComplete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = Server.Queries.ResetPassword(r.Context(), &user, encryptedToken, expiresAt, string(hashedPassword))
+	err = Server.Queries.ResetPasswordTransaction(r.Context(), &user, encryptedToken, expiresAt, string(hashedPassword), httpresp.GenerateFingerprint(r), IP)
 	if err != nil {
 		log.Errorf("error make transaction reset pasword: %v", err)
 		httpresp.RenderErr(w, problems.InternalError())

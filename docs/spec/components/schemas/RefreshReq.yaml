@@ -20,7 +20,6 @@ properties:
           - factory_id
           - device_name
           - os_version
-          - ip_address
         properties:
           refresh_token:
             type: string
@@ -40,8 +39,4 @@ properties:
           os_version:
             type: string
             description: "Operating system version of the user's device."
-          ip_address:
-            type: string
-            format: string
-            description: "IP address of the user's device."
 

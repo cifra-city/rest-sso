@@ -9,7 +9,7 @@ properties:
     properties:
       type:
         type: string
-        enum: [ registration_confirm ]
+        enum: [ registration_complete ]
       attributes:
         type: object
         required:

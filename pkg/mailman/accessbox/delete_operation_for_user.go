@@ -1,6 +1,8 @@
 package accessbox
 
-func (a *Service) DeleteOperationForUser(email string, operationType string) {
+import "errors"
+
+func (a *Service) DeleteOperationForUser(email string, operationType string) error {
 	a.mu.Lock()
 	defer a.mu.Unlock()
 
@@ -11,8 +13,10 @@ func (a *Service) DeleteOperationForUser(email string, operationType string) {
 				if len(a.usersList[email]) == 0 {
 					delete(a.usersList, email)
 				}
-				return
+				return nil
 			}
 		}
 	}
+
+	return errors.New("operation not found")
 }

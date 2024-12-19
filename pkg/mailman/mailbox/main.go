@@ -25,13 +25,11 @@ type Mailbox interface {
 type Service struct {
 	mu       *sync.Mutex
 	listCode map[string]map[string]Data // email -> operationType -> Data
-	key      []byte
 }
 
-func NewMailbox(key []byte) *Service {
+func NewMailbox() *Service {
 	return &Service{
 		mu:       &sync.Mutex{},
 		listCode: make(map[string]map[string]Data),
-		key:      key,
 	}
 }

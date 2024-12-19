@@ -12,6 +12,8 @@ package resources
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the ResetPasswordInitiateDataAttributes type satisfies the MappedNullable interface at compile time
@@ -23,14 +25,22 @@ type ResetPasswordInitiateDataAttributes struct {
 	Email *string `json:"email,omitempty"`
 	// User username (required if email is not provided).
 	Username *string `json:"username,omitempty"`
+	// Human-readable name for the user's device (e.g., 'iPhone 14').
+	DeviceName string `json:"device_name"`
+	// Operating system version of the user's device.
+	OsVersion string `json:"os_version"`
 }
+
+type _ResetPasswordInitiateDataAttributes ResetPasswordInitiateDataAttributes
 
 // NewResetPasswordInitiateDataAttributes instantiates a new ResetPasswordInitiateDataAttributes object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewResetPasswordInitiateDataAttributes() *ResetPasswordInitiateDataAttributes {
+func NewResetPasswordInitiateDataAttributes(deviceName string, osVersion string) *ResetPasswordInitiateDataAttributes {
 	this := ResetPasswordInitiateDataAttributes{}
+	this.DeviceName = deviceName
+	this.OsVersion = osVersion
 	return &this
 }
 
@@ -106,6 +116,54 @@ func (o *ResetPasswordInitiateDataAttributes) SetUsername(v string) {
 	o.Username = &v
 }
 
+// GetDeviceName returns the DeviceName field value
+func (o *ResetPasswordInitiateDataAttributes) GetDeviceName() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.DeviceName
+}
+
+// GetDeviceNameOk returns a tuple with the DeviceName field value
+// and a boolean to check if the value has been set.
+func (o *ResetPasswordInitiateDataAttributes) GetDeviceNameOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.DeviceName, true
+}
+
+// SetDeviceName sets field value
+func (o *ResetPasswordInitiateDataAttributes) SetDeviceName(v string) {
+	o.DeviceName = v
+}
+
+// GetOsVersion returns the OsVersion field value
+func (o *ResetPasswordInitiateDataAttributes) GetOsVersion() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.OsVersion
+}
+
+// GetOsVersionOk returns a tuple with the OsVersion field value
+// and a boolean to check if the value has been set.
+func (o *ResetPasswordInitiateDataAttributes) GetOsVersionOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.OsVersion, true
+}
+
+// SetOsVersion sets field value
+func (o *ResetPasswordInitiateDataAttributes) SetOsVersion(v string) {
+	o.OsVersion = v
+}
+
 func (o ResetPasswordInitiateDataAttributes) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -122,7 +180,47 @@ func (o ResetPasswordInitiateDataAttributes) ToMap() (map[string]interface{}, er
 	if !IsNil(o.Username) {
 		toSerialize["username"] = o.Username
 	}
+	toSerialize["device_name"] = o.DeviceName
+	toSerialize["os_version"] = o.OsVersion
 	return toSerialize, nil
+}
+
+func (o *ResetPasswordInitiateDataAttributes) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"device_name",
+		"os_version",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varResetPasswordInitiateDataAttributes := _ResetPasswordInitiateDataAttributes{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varResetPasswordInitiateDataAttributes)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ResetPasswordInitiateDataAttributes(varResetPasswordInitiateDataAttributes)
+
+	return err
 }
 
 type NullableResetPasswordInitiateDataAttributes struct {

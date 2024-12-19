@@ -57,28 +57,31 @@ CREATE TYPE failure_reason AS ENUM (
     'invalid_device_factory_id',
     'invalid_user_id',
     'too_many_attempts',
+    'no_access',
     'success'
 );
 
 CREATE TYPE operation_type AS ENUM (
     'login',
+    'refresh_token',
     'change_username',
     'change_password',
+    'reset_password',
     'change_email'
 );
 
 CREATE TABLE operation_history (
-    id UUID PRIMARY KEY NOT NULL,
-    user_id UUID NOT NULL REFERENCES users_secret(id) ON DELETE CASCADE,
-    device_id UUID NOT NULL REFERENCES devices(id) ON DELETE CASCADE,
-    operation operation_type NOT NULL,
-    success BOOLEAN NOT NULL,
-    failure_reason failure_reason,
-    ip_address TEXT NOT NULL,
-    operation_time TIMESTAMP NOT NULL DEFAULT now()
+   id UUID PRIMARY KEY NOT NULL,
+   user_id UUID NOT NULL REFERENCES users_secret(id) ON DELETE CASCADE,
+   device_data TEXT NOT NULL,
+   ip_address TEXT NOT NULL,
+   operation operation_type NOT NULL,
+   success BOOLEAN NOT NULL,
+   failure_reason failure_reason NOT NULL,
+   operation_time TIMESTAMP NOT NULL DEFAULT now()
 );
 
 CREATE INDEX operation_history_user_index ON operation_history ("user_id");
-CREATE INDEX operation_history_device_index ON operation_history ("device_id");
+CREATE INDEX operation_history_device_data ON operation_history ("device_data");
 CREATE INDEX operation_history_time_index ON operation_history ("operation_time");
 CREATE INDEX operation_history_success_index ON operation_history ("success");

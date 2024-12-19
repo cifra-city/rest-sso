@@ -23,6 +23,9 @@ func RegistrationInitiate(w http.ResponseWriter, r *http.Request) {
 	em := req.Data.Attributes.Email
 	username := req.Data.Attributes.Username
 
+	IP := httpresp.GetClientIP(r)
+	UserAgent := httpresp.GetUserAgent(r)
+
 	Server, err := cifractx.GetValue[*config.Service](r.Context(), config.SERVICE)
 	if err != nil {
 		logrus.Errorf("error getting db queries: %v", err)
@@ -55,7 +58,7 @@ func RegistrationInitiate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	go func() {
-		err = Server.Mailman.SendList(em, string(REGISTRATION), "email_list.html", 300)
+		err = Server.Mailman.SendList(em, string(REGISTRATION), "email_list.html", UserAgent, IP, 300)
 		if err != nil {
 			log.Errorf("error sending email: %v", err)
 		} else {

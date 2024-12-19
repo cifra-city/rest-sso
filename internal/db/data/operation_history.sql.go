@@ -12,17 +12,17 @@ import (
 )
 
 const insertOperationHistory = `-- name: InsertOperationHistory :exec
-INSERT INTO operation_history (id, user_id, device_id, operation, success, failure_reason, ip_address)
+INSERT INTO operation_history (id, user_id, device_data, operation, success, failure_reason, ip_address)
 VALUES ($1, $2, $3, $4, $5, $6, $7)
 `
 
 type InsertOperationHistoryParams struct {
 	ID            uuid.UUID
 	UserID        uuid.UUID
-	DeviceID      uuid.UUID
+	DeviceData    string
 	Operation     OperationType
 	Success       bool
-	FailureReason NullFailureReason
+	FailureReason FailureReason
 	IpAddress     string
 }
 
@@ -30,7 +30,7 @@ func (q *Queries) InsertOperationHistory(ctx context.Context, arg InsertOperatio
 	_, err := q.db.ExecContext(ctx, insertOperationHistory,
 		arg.ID,
 		arg.UserID,
-		arg.DeviceID,
+		arg.DeviceData,
 		arg.Operation,
 		arg.Success,
 		arg.FailureReason,

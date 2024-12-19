@@ -8,16 +8,14 @@ Name | Type | Description | Notes
 **Username** | Pointer to **string** | User username (required if email is not provided). | [optional] 
 **FirstPassword** | **string** | User password. | 
 **SecondPassword** | **string** | User password. | 
-**FactoryId** | **string** | Unique identifier for the user&#39;s device. | 
 **DeviceName** | **string** | Human-readable name for the user&#39;s device (e.g., &#39;iPhone 14&#39;). | 
 **OsVersion** | **string** | Operating system version of the user&#39;s device. | 
-**IpAddress** | **string** | IP address of the user&#39;s device. | 
 
 ## Methods
 
 ### NewResetPasswordCompleteDataAttributes
 
-`func NewResetPasswordCompleteDataAttributes(firstPassword string, secondPassword string, factoryId string, deviceName string, osVersion string, ipAddress string, ) *ResetPasswordCompleteDataAttributes`
+`func NewResetPasswordCompleteDataAttributes(firstPassword string, secondPassword string, deviceName string, osVersion string, ) *ResetPasswordCompleteDataAttributes`
 
 NewResetPasswordCompleteDataAttributes instantiates a new ResetPasswordCompleteDataAttributes object
 This constructor will assign default values to properties that have it defined,
@@ -122,26 +120,6 @@ and a boolean to check if the value has been set.
 SetSecondPassword sets SecondPassword field to given value.
 
 
-### GetFactoryId
-
-`func (o *ResetPasswordCompleteDataAttributes) GetFactoryId() string`
-
-GetFactoryId returns the FactoryId field if non-nil, zero value otherwise.
-
-### GetFactoryIdOk
-
-`func (o *ResetPasswordCompleteDataAttributes) GetFactoryIdOk() (*string, bool)`
-
-GetFactoryIdOk returns a tuple with the FactoryId field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetFactoryId
-
-`func (o *ResetPasswordCompleteDataAttributes) SetFactoryId(v string)`
-
-SetFactoryId sets FactoryId field to given value.
-
-
 ### GetDeviceName
 
 `func (o *ResetPasswordCompleteDataAttributes) GetDeviceName() string`
@@ -180,26 +158,6 @@ and a boolean to check if the value has been set.
 `func (o *ResetPasswordCompleteDataAttributes) SetOsVersion(v string)`
 
 SetOsVersion sets OsVersion field to given value.
-
-
-### GetIpAddress
-
-`func (o *ResetPasswordCompleteDataAttributes) GetIpAddress() string`
-
-GetIpAddress returns the IpAddress field if non-nil, zero value otherwise.
-
-### GetIpAddressOk
-
-`func (o *ResetPasswordCompleteDataAttributes) GetIpAddressOk() (*string, bool)`
-
-GetIpAddressOk returns a tuple with the IpAddress field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetIpAddress
-
-`func (o *ResetPasswordCompleteDataAttributes) SetIpAddress(v string)`
-
-SetIpAddress sets IpAddress field to given value.
 
 
 

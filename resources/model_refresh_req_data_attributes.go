@@ -31,8 +31,6 @@ type RefreshReqDataAttributes struct {
 	DeviceName string `json:"device_name"`
 	// Operating system version of the user's device.
 	OsVersion string `json:"os_version"`
-	// IP address of the user's device.
-	IpAddress string `json:"ip_address"`
 }
 
 type _RefreshReqDataAttributes RefreshReqDataAttributes
@@ -41,14 +39,13 @@ type _RefreshReqDataAttributes RefreshReqDataAttributes
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewRefreshReqDataAttributes(refreshToken string, deviceId string, factoryId string, deviceName string, osVersion string, ipAddress string) *RefreshReqDataAttributes {
+func NewRefreshReqDataAttributes(refreshToken string, deviceId string, factoryId string, deviceName string, osVersion string) *RefreshReqDataAttributes {
 	this := RefreshReqDataAttributes{}
 	this.RefreshToken = refreshToken
 	this.DeviceId = deviceId
 	this.FactoryId = factoryId
 	this.DeviceName = deviceName
 	this.OsVersion = osVersion
-	this.IpAddress = ipAddress
 	return &this
 }
 
@@ -180,30 +177,6 @@ func (o *RefreshReqDataAttributes) SetOsVersion(v string) {
 	o.OsVersion = v
 }
 
-// GetIpAddress returns the IpAddress field value
-func (o *RefreshReqDataAttributes) GetIpAddress() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.IpAddress
-}
-
-// GetIpAddressOk returns a tuple with the IpAddress field value
-// and a boolean to check if the value has been set.
-func (o *RefreshReqDataAttributes) GetIpAddressOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.IpAddress, true
-}
-
-// SetIpAddress sets field value
-func (o *RefreshReqDataAttributes) SetIpAddress(v string) {
-	o.IpAddress = v
-}
-
 func (o RefreshReqDataAttributes) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -219,7 +192,6 @@ func (o RefreshReqDataAttributes) ToMap() (map[string]interface{}, error) {
 	toSerialize["factory_id"] = o.FactoryId
 	toSerialize["device_name"] = o.DeviceName
 	toSerialize["os_version"] = o.OsVersion
-	toSerialize["ip_address"] = o.IpAddress
 	return toSerialize, nil
 }
 
@@ -233,7 +205,6 @@ func (o *RefreshReqDataAttributes) UnmarshalJSON(data []byte) (err error) {
 		"factory_id",
 		"device_name",
 		"os_version",
-		"ip_address",
 	}
 
 	allProperties := make(map[string]interface{})

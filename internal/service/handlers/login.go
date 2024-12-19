@@ -33,7 +33,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	factoryId := req.Data.Attributes.FactoryId
 	deviceName := req.Data.Attributes.DeviceName
 	osVersion := req.Data.Attributes.OsVersion
-	ipAddress := req.Data.Attributes.IpAddress
+
+	IP := httpresp.GetClientIP(r)
 
 	if email == nil && username == nil {
 		httpresp.RenderErr(w, problems.BadRequest(errors.New("email or username is required"))...)
@@ -67,16 +68,14 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	err = bcrypt.CompareHashAndPassword([]byte(user.PassHash), []byte(pass))
 	if err != nil {
-		err = Server.Queries.InsertLoginHistory(r.Context(), data.InsertLoginHistoryParams{
-			ID:        uuid.New(),
-			UserID:    user.ID,
-			DeviceID:  uuid.UUID{},
-			IpAddress: ipAddress,
-			LoginTime: time.Now().UTC(),
-			Success:   false,
-			FailureReason: data.NullFailureReason{
-				FailureReason: data.FailureReasonInvalidPassword,
-			},
+		err = Server.Queries.InsertOperationHistory(r.Context(), data.InsertOperationHistoryParams{
+			ID:     uuid.New(),
+			UserID: user.ID,
+
+			Operation:     data.OperationTypeLogin,
+			Success:       false,
+			FailureReason: data.FailureReasonInvalidPassword,
+			IpAddress:     IP,
 		})
 
 		log.Debugf("Incorrect password for user: %s, error: %s", user.Username, err)
@@ -107,7 +106,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = Server.Queries.UpdateRefreshTokenTransaction(r.Context(), &user, factoryId, deviceName, osVersion, encryptedToken, expiresAt, ipAddress)
+	err = Server.Queries.UpdateRefreshTokenTransaction(r.Context(), &user, factoryId, deviceName, osVersion, encryptedToken, expiresAt, IP)
 	if err != nil {
 		log.Errorf("error updating last used and refresh token: %v", err)
 		httpresp.RenderErr(w, problems.InternalError())

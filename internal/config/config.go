@@ -38,6 +38,7 @@ type EmailConfig struct {
 	Address  string `mapstructure:"address"`
 	SmtpHost string `mapstructure:"smtp_host"`
 	SmtpPort string `mapstructure:"smtp_port"`
+	Key      string `mapstructure:"key"`
 }
 
 type SwaggerConfig struct {

@@ -1,14 +1,16 @@
 package mailman
 
-func (m *Mailman) CheckAccessForUser(email string, operationType string) bool {
-	accesses := m.AccessBox.GetOperationsForUser(email)
-	if accesses == nil {
-		return false
+import (
+	"errors"
+)
+
+func (m *Mailman) CheckAccess(email string, operationType string, userAgent string, IP string) error {
+	access := m.AccessBox.GetSuccessForUser(email, operationType)
+	if access == nil {
+		return errors.New("not found")
 	}
-	for _, access := range accesses {
-		if access == operationType {
-			return true
-		}
+	if access.Meta.IP == IP && access.Meta.UserAgent == userAgent {
+		return nil // Доступ предоставлен
 	}
-	return false
+	return errors.New("access denied")
 }

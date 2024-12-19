@@ -33,8 +33,6 @@ type LoginReqDataAttributes struct {
 	DeviceName string `json:"device_name"`
 	// Operating system version of the user's device.
 	OsVersion string `json:"os_version"`
-	// IP address of the user's device.
-	IpAddress string `json:"ip_address"`
 }
 
 type _LoginReqDataAttributes LoginReqDataAttributes
@@ -43,13 +41,12 @@ type _LoginReqDataAttributes LoginReqDataAttributes
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewLoginReqDataAttributes(password string, factoryId string, deviceName string, osVersion string, ipAddress string) *LoginReqDataAttributes {
+func NewLoginReqDataAttributes(password string, factoryId string, deviceName string, osVersion string) *LoginReqDataAttributes {
 	this := LoginReqDataAttributes{}
 	this.Password = password
 	this.FactoryId = factoryId
 	this.DeviceName = deviceName
 	this.OsVersion = osVersion
-	this.IpAddress = ipAddress
 	return &this
 }
 
@@ -221,30 +218,6 @@ func (o *LoginReqDataAttributes) SetOsVersion(v string) {
 	o.OsVersion = v
 }
 
-// GetIpAddress returns the IpAddress field value
-func (o *LoginReqDataAttributes) GetIpAddress() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.IpAddress
-}
-
-// GetIpAddressOk returns a tuple with the IpAddress field value
-// and a boolean to check if the value has been set.
-func (o *LoginReqDataAttributes) GetIpAddressOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.IpAddress, true
-}
-
-// SetIpAddress sets field value
-func (o *LoginReqDataAttributes) SetIpAddress(v string) {
-	o.IpAddress = v
-}
-
 func (o LoginReqDataAttributes) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -265,7 +238,6 @@ func (o LoginReqDataAttributes) ToMap() (map[string]interface{}, error) {
 	toSerialize["factory_id"] = o.FactoryId
 	toSerialize["device_name"] = o.DeviceName
 	toSerialize["os_version"] = o.OsVersion
-	toSerialize["ip_address"] = o.IpAddress
 	return toSerialize, nil
 }
 
@@ -278,7 +250,6 @@ func (o *LoginReqDataAttributes) UnmarshalJSON(data []byte) (err error) {
 		"factory_id",
 		"device_name",
 		"os_version",
-		"ip_address",
 	}
 
 	allProperties := make(map[string]interface{})

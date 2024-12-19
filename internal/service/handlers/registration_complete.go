@@ -25,6 +25,12 @@ func RegistrationComplete(w http.ResponseWriter, r *http.Request) {
 	}
 
 	password := req.Data.Attributes.FirstPassword
+	em := req.Data.Attributes.Email
+	username := req.Data.Attributes.Username
+
+	IP := httpresp.GetClientIP(r)
+	UserAgent := httpresp.GetUserAgent(r)
+
 	if len(password) < 8 || !sectools.HasRequiredChars(password) {
 		httpresp.RenderErr(w, problems.BadRequest(errors.New("invalid password requirements"))...)
 		return
@@ -34,9 +40,6 @@ func RegistrationComplete(w http.ResponseWriter, r *http.Request) {
 		httpresp.RenderErr(w, problems.BadRequest(errors.New("passwords do not match"))...)
 		return
 	}
-
-	em := req.Data.Attributes.Email
-	username := req.Data.Attributes.Username
 
 	Server, err := cifractx.GetValue[*config.Service](r.Context(), config.SERVICE)
 	if err != nil {
@@ -71,9 +74,20 @@ func RegistrationComplete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if !Server.Mailman.CheckAndDeleteAccessForUser(em, "registration") {
-		log.Warnf("email haven`t access: %s", em)
-		httpresp.RenderErr(w, problems.Forbidden("email haven`t access"))
+	err = Server.Mailman.CheckAccess(em, "registration", UserAgent, IP)
+	if err != nil {
+		if errors.Is(err, errors.New("not found")) {
+			log.Warnf("email haven`t access: %s", em)
+			httpresp.RenderErr(w, problems.NotFound("email haven`t access"))
+			return
+		}
+		if errors.Is(err, errors.New("access denied")) {
+			log.Warnf("failed to decrypt ConfidenceCode for email: %s", em)
+			httpresp.RenderErr(w, problems.Forbidden("failed to decrypt ConfidenceCode"))
+			return
+		}
+		log.Warnf("Access denied %s, %s %s", err, IP, UserAgent)
+		httpresp.RenderErr(w, problems.InternalError())
 		return
 	}
 

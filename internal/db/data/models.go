@@ -24,6 +24,7 @@ const (
 	FailureReasonInvalidDeviceFactoryID FailureReason = "invalid_device_factory_id"
 	FailureReasonInvalidUserID          FailureReason = "invalid_user_id"
 	FailureReasonTooManyAttempts        FailureReason = "too_many_attempts"
+	FailureReasonNoAccess               FailureReason = "no_access"
 	FailureReasonSuccess                FailureReason = "success"
 )
 
@@ -66,8 +67,10 @@ type OperationType string
 
 const (
 	OperationTypeLogin          OperationType = "login"
+	OperationTypeRefreshToken   OperationType = "refresh_token"
 	OperationTypeChangeUsername OperationType = "change_username"
 	OperationTypeChangePassword OperationType = "change_password"
+	OperationTypeResetPassword  OperationType = "reset_password"
 	OperationTypeChangeEmail    OperationType = "change_email"
 )
 
@@ -162,11 +165,11 @@ type Device struct {
 type OperationHistory struct {
 	ID            uuid.UUID
 	UserID        uuid.UUID
-	DeviceID      uuid.UUID
+	DeviceData    string
+	IpAddress     string
 	Operation     OperationType
 	Success       bool
-	FailureReason NullFailureReason
-	IpAddress     string
+	FailureReason FailureReason
 	OperationTime time.Time
 }
 

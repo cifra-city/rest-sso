@@ -20,7 +20,8 @@ type Service struct {
 type AccessBox interface {
 	AddAccessForOperation(email string, operationType string, metadata meta.Data, minutes time.Duration)
 	DeleteOperationForUser(email string, operation string)
-	GetAndDeleteOperation(email string, operation string, metadata meta.Data)
+	GetAndDeleteOperation(email string, operation string, metadata meta.Data) *Data
+	GetOperation(email string, operationType string) *Data
 	GetOperationsForUser(email string) []Data
 }
 

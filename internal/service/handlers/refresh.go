@@ -41,21 +41,20 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 	factoryId := req.Data.Attributes.FactoryId
 	deviceName := req.Data.Attributes.DeviceName
 	osVersion := req.Data.Attributes.OsVersion
-	ipAddress := req.Data.Attributes.IpAddress
 
-	//JWT Middleware
+	IP := httpresp.GetClientIP(r)
 
 	authHeader := r.Header.Get("Authorization")
 	if authHeader == "" {
 		log.Warn("Missing Authorization header")
-		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		httpresp.RenderErr(w, problems.Unauthorized("Missing Authorization header"))
 		return
 	}
 
 	parts := strings.Split(authHeader, " ")
 	if len(parts) != 2 || strings.ToLower(parts[0]) != "bearer" {
 		log.Warn("Invalid Authorization header format")
-		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		httpresp.RenderErr(w, problems.Unauthorized("Invalid Authorization header format"))
 		return
 	}
 	tokenString := parts[1]
@@ -69,20 +68,18 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil && !errors.Is(err, jwt.ErrTokenExpired) {
 		log.Warnf("Invalid token: %v", err)
-		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		httpresp.RenderErr(w, problems.Unauthorized("Invalid token"))
 		return
 	}
 
 	userID, err := uuid.Parse(claims.Subject)
 	if err != nil {
 		log.Errorf("Invalid user ID in token claims: %v", err)
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		httpresp.RenderErr(w, problems.Unauthorized("Invalid token"))
 		return
 	}
 
 	log.Infof("Claims Subject (UserID): %s", userID)
-
-	//END JWT Middleware
 
 	user, err := Server.Queries.GetUserByID(r.Context(), userID)
 	if err != nil {
@@ -115,17 +112,14 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 
 	if device.UserID != userID {
 		log.Warn("Device does not belong to user")
-		_ = Server.Queries.InsertLoginHistory(r.Context(), data.InsertLoginHistoryParams{
-			ID:        uuid.New(),
-			UserID:    userID,
-			DeviceID:  deviceId,
-			IpAddress: ipAddress,
-			LoginTime: time.Now().UTC(),
-			Success:   false,
-			FailureReason: data.NullFailureReason{
-				FailureReason: data.FailureReasonInvalidDeviceID,
-				Valid:         true,
-			},
+		_ = Server.Queries.InsertOperationHistory(r.Context(), data.InsertOperationHistoryParams{
+			ID:            uuid.New(),
+			UserID:        userID,
+			DeviceData:    httpresp.GenerateFingerprint(r),
+			Operation:     data.OperationTypeRefreshToken,
+			Success:       false,
+			FailureReason: data.FailureReasonInvalidDeviceID,
+			IpAddress:     IP,
 		})
 		httpresp.RenderErr(w, problems.Unauthorized("Device does not belong to user"))
 		return
@@ -133,17 +127,14 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 
 	if device.FactoryID != factoryId {
 		log.Warn("Factory ID does not match")
-		_ = Server.Queries.InsertLoginHistory(r.Context(), data.InsertLoginHistoryParams{
-			ID:        uuid.New(),
-			UserID:    userID,
-			DeviceID:  deviceId,
-			IpAddress: ipAddress,
-			LoginTime: time.Now().UTC(),
-			Success:   false,
-			FailureReason: data.NullFailureReason{
-				FailureReason: data.FailureReasonInvalidDeviceFactoryID,
-				Valid:         true,
-			},
+		_ = Server.Queries.InsertOperationHistory(r.Context(), data.InsertOperationHistoryParams{
+			ID:            uuid.New(),
+			UserID:        userID,
+			DeviceData:    httpresp.GenerateFingerprint(r),
+			Operation:     data.OperationTypeRefreshToken,
+			Success:       false,
+			FailureReason: data.FailureReasonInvalidDeviceFactoryID,
+			IpAddress:     IP,
 		})
 		httpresp.RenderErr(w, problems.Unauthorized("Factory ID does not match"))
 		return
@@ -155,16 +146,14 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 	})
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			_ = Server.Queries.InsertLoginHistory(r.Context(), data.InsertLoginHistoryParams{
-				ID:        uuid.New(),
-				UserID:    userID,
-				DeviceID:  deviceId,
-				IpAddress: ipAddress,
-				LoginTime: time.Now().UTC(),
-				Success:   false,
-				FailureReason: data.NullFailureReason{
-					FailureReason: data.FailureReasonInvalidRefreshToken,
-				},
+			_ = Server.Queries.InsertOperationHistory(r.Context(), data.InsertOperationHistoryParams{
+				ID:            uuid.New(),
+				UserID:        userID,
+				DeviceData:    httpresp.GenerateFingerprint(r),
+				Operation:     data.OperationTypeRefreshToken,
+				Success:       false,
+				FailureReason: data.FailureReasonInvalidRefreshToken,
+				IpAddress:     IP,
 			})
 			httpresp.RenderErr(w, problems.Unauthorized("Token not found"))
 			return
@@ -210,7 +199,7 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = Server.Queries.UpdateRefreshTokenTransaction(r.Context(), &user, device.FactoryID, deviceName, osVersion, encryptedToken, expiresAt, ipAddress)
+	err = Server.Queries.UpdateRefreshTokenTransaction(r.Context(), &user, device.FactoryID, deviceName, osVersion, encryptedToken, expiresAt, IP)
 	if err != nil {
 		log.Errorf("Error updating last used and refresh token: %v", err)
 		httpresp.RenderErr(w, problems.InternalError())
