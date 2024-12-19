@@ -7,14 +7,14 @@ import (
 )
 
 type Mailman struct {
-	Mailbox   *mailbox.Mailbox
-	AccessBox *accessbox.AccessBox
+	Mailbox   *mailbox.Service
+	AccessBox *accessbox.Service
 	Postman   *postman.Postman
 }
 
-func NewMailman(port string, host string, address string, password string) *Mailman {
+func NewMailman(port string, host string, address string, password string, key []byte) *Mailman {
 	return &Mailman{
-		Mailbox:   mailbox.NewMailbox(),
+		Mailbox:   mailbox.NewMailbox(key),
 		Postman:   postman.NewPostman(port, host, address, password),
 		AccessBox: accessbox.NewAccessBox(),
 	}

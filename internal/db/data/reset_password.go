@@ -107,7 +107,7 @@ func (q *Queries) UpdateRefreshTokenTransaction(
 		return err
 	}
 
-	err = queries.InsertLoginHistory(ctx, InsertLoginHistoryParams{
+	err = queries.InsertOperationHistory(ctx, InsertLoginHistoryParams{
 		ID:        uuid.New(),
 		UserID:    user.ID,
 		DeviceID:  device.ID,

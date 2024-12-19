@@ -1,16 +1,33 @@
 package accessbox
 
-import "sync"
+import (
+	"sync"
+	"time"
 
-type AccessBox struct {
-	mu        *sync.Mutex
-	usersList map[string][]string // username -> operationType
+	"github.com/cifra-city/rest-sso/pkg/mailman/meta"
+)
+
+type Data struct {
+	OperationType string
+	Meta          meta.Data
 }
 
-func NewAccessBox() *AccessBox {
-	return &AccessBox{
+type Service struct {
+	mu        *sync.Mutex
+	usersList map[string][]Data // username -> operationType
+}
+
+type AccessBox interface {
+	AddAccessForOperation(email string, operationType string, metadata meta.Data, minutes time.Duration)
+	DeleteOperationForUser(email string, operation string)
+	GetAndDeleteOperation(email string, operation string, metadata meta.Data)
+	GetOperationsForUser(email string) []Data
+}
+
+func NewAccessBox() *Service {
+	return &Service{
 		mu:        &sync.Mutex{},
-		usersList: make(map[string][]string),
+		usersList: make(map[string][]Data),
 	}
 }
 

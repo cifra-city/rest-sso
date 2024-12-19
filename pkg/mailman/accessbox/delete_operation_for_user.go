@@ -1,17 +1,15 @@
 package accessbox
 
-func (a *AccessBox) DeleteOperationForUser(username, operation string) {
+func (a *Service) DeleteOperationForUser(email string, operationType string) {
 	a.mu.Lock()
 	defer a.mu.Unlock()
 
-	if operations, exists := a.usersList[username]; exists {
-		for i, op := range operations {
-			if op == operation {
-				// Удаляем операцию из списка
-				a.usersList[username] = append(operations[:i], operations[i+1:]...)
-				// Если список пуст, удаляем пользователя
-				if len(a.usersList[username]) == 0 {
-					delete(a.usersList, username)
+	if operations, exists := a.usersList[email]; exists {
+		for i, operation := range operations {
+			if operation.OperationType == operationType {
+				a.usersList[email] = append(operations[:i], operations[i+1:]...)
+				if len(a.usersList[email]) == 0 {
+					delete(a.usersList, email)
 				}
 				return
 			}
