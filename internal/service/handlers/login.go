@@ -42,6 +42,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var user data.UsersSecret
+	var user2 data.UsersSecret
 
 	Server, err := cifractx.GetValue[*config.Service](r.Context(), config.SERVICE)
 	if err != nil {
@@ -53,8 +54,9 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	if username != nil {
 		user, err = Server.Queries.GetUserByUsername(r.Context(), *username)
-	} else {
-		user, err = Server.Queries.GetUserByEmail(r.Context(), *email)
+	}
+	if email != nil {
+		user2, err = Server.Queries.GetUserByEmail(r.Context(), *email)
 	}
 	if err != nil {
 		log.Errorf("Failed to get user: %v", err)
@@ -63,6 +65,10 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		httpresp.RenderErr(w, problems.InternalError())
+		return
+	}
+	if user2.ID != user.ID {
+		httpresp.RenderErr(w, problems.BadRequest(errors.New("email and username do not match"))...)
 		return
 	}
 

@@ -4,18 +4,16 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Email** | Pointer to **string** | User email (required if username is not provided). | [optional] 
-**Username** | Pointer to **string** | User username (required if email is not provided). | [optional] 
 **FirstPassword** | **string** | User password. | 
 **SecondPassword** | **string** | User password. | 
-**DeviceName** | **string** | Human-readable name for the user&#39;s device (e.g., &#39;iPhone 14&#39;). | 
-**OsVersion** | **string** | Operating system version of the user&#39;s device. | 
+**Email** | Pointer to **string** | User email (required if username is not provided). | [optional] 
+**Username** | Pointer to **string** | User username (required if email is not provided). | [optional] 
 
 ## Methods
 
 ### NewResetPasswordCompleteDataAttributes
 
-`func NewResetPasswordCompleteDataAttributes(firstPassword string, secondPassword string, deviceName string, osVersion string, ) *ResetPasswordCompleteDataAttributes`
+`func NewResetPasswordCompleteDataAttributes(firstPassword string, secondPassword string, ) *ResetPasswordCompleteDataAttributes`
 
 NewResetPasswordCompleteDataAttributes instantiates a new ResetPasswordCompleteDataAttributes object
 This constructor will assign default values to properties that have it defined,
@@ -29,6 +27,46 @@ will change when the set of required properties is changed
 NewResetPasswordCompleteDataAttributesWithDefaults instantiates a new ResetPasswordCompleteDataAttributes object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
+
+### GetFirstPassword
+
+`func (o *ResetPasswordCompleteDataAttributes) GetFirstPassword() string`
+
+GetFirstPassword returns the FirstPassword field if non-nil, zero value otherwise.
+
+### GetFirstPasswordOk
+
+`func (o *ResetPasswordCompleteDataAttributes) GetFirstPasswordOk() (*string, bool)`
+
+GetFirstPasswordOk returns a tuple with the FirstPassword field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetFirstPassword
+
+`func (o *ResetPasswordCompleteDataAttributes) SetFirstPassword(v string)`
+
+SetFirstPassword sets FirstPassword field to given value.
+
+
+### GetSecondPassword
+
+`func (o *ResetPasswordCompleteDataAttributes) GetSecondPassword() string`
+
+GetSecondPassword returns the SecondPassword field if non-nil, zero value otherwise.
+
+### GetSecondPasswordOk
+
+`func (o *ResetPasswordCompleteDataAttributes) GetSecondPasswordOk() (*string, bool)`
+
+GetSecondPasswordOk returns a tuple with the SecondPassword field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetSecondPassword
+
+`func (o *ResetPasswordCompleteDataAttributes) SetSecondPassword(v string)`
+
+SetSecondPassword sets SecondPassword field to given value.
+
 
 ### GetEmail
 
@@ -79,86 +117,6 @@ SetUsername sets Username field to given value.
 `func (o *ResetPasswordCompleteDataAttributes) HasUsername() bool`
 
 HasUsername returns a boolean if a field has been set.
-
-### GetFirstPassword
-
-`func (o *ResetPasswordCompleteDataAttributes) GetFirstPassword() string`
-
-GetFirstPassword returns the FirstPassword field if non-nil, zero value otherwise.
-
-### GetFirstPasswordOk
-
-`func (o *ResetPasswordCompleteDataAttributes) GetFirstPasswordOk() (*string, bool)`
-
-GetFirstPasswordOk returns a tuple with the FirstPassword field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetFirstPassword
-
-`func (o *ResetPasswordCompleteDataAttributes) SetFirstPassword(v string)`
-
-SetFirstPassword sets FirstPassword field to given value.
-
-
-### GetSecondPassword
-
-`func (o *ResetPasswordCompleteDataAttributes) GetSecondPassword() string`
-
-GetSecondPassword returns the SecondPassword field if non-nil, zero value otherwise.
-
-### GetSecondPasswordOk
-
-`func (o *ResetPasswordCompleteDataAttributes) GetSecondPasswordOk() (*string, bool)`
-
-GetSecondPasswordOk returns a tuple with the SecondPassword field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetSecondPassword
-
-`func (o *ResetPasswordCompleteDataAttributes) SetSecondPassword(v string)`
-
-SetSecondPassword sets SecondPassword field to given value.
-
-
-### GetDeviceName
-
-`func (o *ResetPasswordCompleteDataAttributes) GetDeviceName() string`
-
-GetDeviceName returns the DeviceName field if non-nil, zero value otherwise.
-
-### GetDeviceNameOk
-
-`func (o *ResetPasswordCompleteDataAttributes) GetDeviceNameOk() (*string, bool)`
-
-GetDeviceNameOk returns a tuple with the DeviceName field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetDeviceName
-
-`func (o *ResetPasswordCompleteDataAttributes) SetDeviceName(v string)`
-
-SetDeviceName sets DeviceName field to given value.
-
-
-### GetOsVersion
-
-`func (o *ResetPasswordCompleteDataAttributes) GetOsVersion() string`
-
-GetOsVersion returns the OsVersion field if non-nil, zero value otherwise.
-
-### GetOsVersionOk
-
-`func (o *ResetPasswordCompleteDataAttributes) GetOsVersionOk() (*string, bool)`
-
-GetOsVersionOk returns a tuple with the OsVersion field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetOsVersion
-
-`func (o *ResetPasswordCompleteDataAttributes) SetOsVersion(v string)`
-
-SetOsVersion sets OsVersion field to given value.
-
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

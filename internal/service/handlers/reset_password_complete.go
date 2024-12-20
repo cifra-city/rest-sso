@@ -4,16 +4,13 @@ import (
 	"database/sql"
 	"errors"
 	"net/http"
-	"time"
 
 	"github.com/cifra-city/rest-sso/internal/config"
 	"github.com/cifra-city/rest-sso/internal/db/data"
 	"github.com/cifra-city/rest-sso/internal/service/requests"
 	"github.com/cifra-city/rest-sso/pkg/cifractx"
-	"github.com/cifra-city/rest-sso/pkg/cifrajwt"
 	"github.com/cifra-city/rest-sso/pkg/httpresp"
 	"github.com/cifra-city/rest-sso/pkg/httpresp/problems"
-	"github.com/cifra-city/rest-sso/pkg/sectools"
 	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
@@ -92,23 +89,7 @@ func ResetPasswordComplete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tokenRefresh, err := cifrajwt.GenerateJWT(user.ID, string(user.Role), int(user.TokenVersion+1), Server.Config.JWT.RefreshToken.TokenLifetime, Server.Config.JWT.RefreshToken.SecretKey)
-	if err != nil {
-		log.Errorf("error generating token access jwt: %v", err)
-		httpresp.RenderErr(w, problems.InternalError())
-		return
-	}
-
-	expiresAt := time.Now().UTC().Add(Server.Config.JWT.RefreshToken.TokenLifetime)
-
-	encryptedToken, err := sectools.EncryptToken(tokenRefresh, Server.Config.JWT.RefreshToken.EncryptionKey)
-	if err != nil {
-		log.Errorf("Failed to encrypt refresh token: %v", err)
-		httpresp.RenderErr(w, problems.InternalError())
-		return
-	}
-
-	err = Server.Queries.ResetPasswordTransaction(r.Context(), &user, encryptedToken, expiresAt, string(hashedPassword), httpresp.GenerateFingerprint(r), IP)
+	err = Server.Queries.ResetPasswordTransaction(r.Context(), &user, string(hashedPassword), httpresp.GenerateFingerprint(r), IP)
 	if err != nil {
 		log.Errorf("error make transaction reset pasword: %v", err)
 		httpresp.RenderErr(w, problems.InternalError())

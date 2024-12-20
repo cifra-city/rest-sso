@@ -97,7 +97,7 @@ components:
           type: string
       required:
       - email
-      - usernamev
+      - username
       type: object
     RegistrationInitiate_data:
       properties:
@@ -136,7 +136,7 @@ components:
       properties:
         type:
           enum:
-          - registration_confirm
+          - registration_complete
           type: string
         attributes:
           $ref: '#/components/schemas/RegistrationComplete_data_attributes'
@@ -154,7 +154,7 @@ components:
           type: string
         operation:
           description: Type of operation
-          example: reset-password
+          example: reset_password
           type: string
       required:
       - code
@@ -249,16 +249,6 @@ components:
         username:
           description: User username (required if email is not provided).
           type: string
-        device_name:
-          description: "Human-readable name for the user's device (e.g., 'iPhone 14')."
-          type: string
-        os_version:
-          description: Operating system version of the user's device.
-          type: string
-      required:
-      - device_name
-      - factory_id
-      - os_version
       type: object
     ResetPasswordInitiate_data:
       properties:
@@ -274,6 +264,12 @@ components:
       type: object
     ResetPasswordComplete_data_attributes:
       properties:
+        first_password:
+          description: User password.
+          type: string
+        second_password:
+          description: User password.
+          type: string
         email:
           description: User email (required if username is not provided).
           format: email
@@ -281,25 +277,8 @@ components:
         username:
           description: User username (required if email is not provided).
           type: string
-        first_password:
-          description: User password.
-          type: string
-        second_password:
-          description: User password.
-          type: string
-        device_name:
-          description: "Human-readable name for the user's device (e.g., 'iPhone 14')."
-          type: string
-        os_version:
-          description: Operating system version of the user's device.
-          type: string
       required:
-      - device_id
-      - device_name
-      - factory_id
       - first_password
-      - ip_address
-      - os_version
       - second_password
       type: object
     ResetPasswordComplete_data:

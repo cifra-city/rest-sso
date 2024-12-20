@@ -26,4 +26,4 @@ properties:
           operation:
             type: string
             description: "Type of operation"
-            example: "reset-password"
+            example: "reset_password"

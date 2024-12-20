@@ -39,3 +39,7 @@ WHERE user_id = $1;
 SELECT id, user_id, token, created_at, expires_at, device_id, ip_address
 FROM refresh_tokens
 WHERE user_id = $1 AND device_id = $2;
+
+-- name: DeleteTokensByUserId :exec
+DELETE FROM refresh_tokens
+WHERE user_id = $1;

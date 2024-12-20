@@ -4,7 +4,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func (m *Service) CheckUserInBox(email string, operationType string, ConfidenceCode string) (*Data, error) {
+func (m *Service) CheckUserInBox(email string, operationType string, ConfidenceCode string) *Data {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
@@ -12,7 +12,7 @@ func (m *Service) CheckUserInBox(email string, operationType string, ConfidenceC
 		if data, opExists := operations[operationType]; opExists {
 			if data.ConfidenceCode == ConfidenceCode {
 				logrus.Infof("Code for user '%s' and operation '%s' is correct and has been used", email, operationType)
-				return &data, nil
+				return &data
 			} else {
 				logrus.Warnf("Code for user '%s' and operation '%s' is incorrect", email, operationType)
 			}
@@ -23,5 +23,5 @@ func (m *Service) CheckUserInBox(email string, operationType string, ConfidenceC
 		logrus.Warnf("No codes found for user '%s'", email)
 	}
 
-	return nil, nil
+	return nil
 }

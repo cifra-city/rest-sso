@@ -25,6 +25,9 @@ func ChangeUsername(w http.ResponseWriter, r *http.Request) {
 	oldPassword := req.Data.Attributes.Password
 	newUsername := req.Data.Attributes.NewUsername
 
+	IP := httpresp.GetClientIP(r)
+	fingerprint := httpresp.GenerateFingerprint(r)
+
 	service, err := cifractx.GetValue[*config.Service](r.Context(), config.SERVICE)
 	if err != nil {
 		httpresp.RenderErr(w, problems.InternalError("Failed to retrieve service configuration"))
@@ -48,6 +51,18 @@ func ChangeUsername(w http.ResponseWriter, r *http.Request) {
 
 	err = bcrypt.CompareHashAndPassword([]byte(user.PassHash), []byte(oldPassword))
 	if err != nil {
+		err = service.Queries.InsertOperationHistory(r.Context(), data.InsertOperationHistoryParams{
+			ID:            uuid.New(),
+			UserID:        userID,
+			DeviceData:    fingerprint,
+			Operation:     data.OperationTypeChangeUsername,
+			Success:       false,
+			IpAddress:     IP,
+			FailureReason: data.FailureReasonInvalidPassword,
+		})
+		if err != nil {
+			logrus.Errorf("Failed to insert operation history: %v", err)
+		}
 		httpresp.RenderErr(w, problems.Unauthorized("Invalid password"))
 		return
 	}
@@ -65,6 +80,19 @@ func ChangeUsername(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		httpresp.RenderErr(w, problems.InternalError("Failed to update username"))
 		return
+	}
+
+	err = service.Queries.InsertOperationHistory(r.Context(), data.InsertOperationHistoryParams{
+		ID:            uuid.New(),
+		UserID:        userID,
+		DeviceData:    fingerprint,
+		Operation:     data.OperationTypeChangeUsername,
+		Success:       true,
+		IpAddress:     IP,
+		FailureReason: data.FailureReasonSuccess,
+	})
+	if err != nil {
+		logrus.Errorf("Failed to insert operation history: %v", err)
 	}
 
 	httpresp.Render(w, map[string]string{"message": "Username updated successfully"})

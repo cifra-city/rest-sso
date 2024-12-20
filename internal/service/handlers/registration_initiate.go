@@ -46,7 +46,7 @@ func RegistrationInitiate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = Server.Queries.GetUserByUsername(r.Context(), *username)
+	_, err = Server.Queries.GetUserByUsername(r.Context(), username)
 	if err != nil && !errors.Is(err, sql.ErrNoRows) {
 		log.Errorf("error getting user by username: %v", err)
 		httpresp.RenderErr(w, problems.InternalError())

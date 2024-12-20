@@ -24,7 +24,7 @@ type RegistrationInitiateDataAttributes struct {
 	// User email
 	Email string `json:"email"`
 	// User username
-	Username *string `json:"username,omitempty"`
+	Username string `json:"username"`
 }
 
 type _RegistrationInitiateDataAttributes RegistrationInitiateDataAttributes
@@ -33,9 +33,10 @@ type _RegistrationInitiateDataAttributes RegistrationInitiateDataAttributes
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewRegistrationInitiateDataAttributes(email string) *RegistrationInitiateDataAttributes {
+func NewRegistrationInitiateDataAttributes(email string, username string) *RegistrationInitiateDataAttributes {
 	this := RegistrationInitiateDataAttributes{}
 	this.Email = email
+	this.Username = username
 	return &this
 }
 
@@ -71,36 +72,28 @@ func (o *RegistrationInitiateDataAttributes) SetEmail(v string) {
 	o.Email = v
 }
 
-// GetUsername returns the Username field value if set, zero value otherwise.
+// GetUsername returns the Username field value
 func (o *RegistrationInitiateDataAttributes) GetUsername() string {
-	if o == nil || IsNil(o.Username) {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.Username
+
+	return o.Username
 }
 
-// GetUsernameOk returns a tuple with the Username field value if set, nil otherwise
+// GetUsernameOk returns a tuple with the Username field value
 // and a boolean to check if the value has been set.
 func (o *RegistrationInitiateDataAttributes) GetUsernameOk() (*string, bool) {
-	if o == nil || IsNil(o.Username) {
+	if o == nil {
 		return nil, false
 	}
-	return o.Username, true
+	return &o.Username, true
 }
 
-// HasUsername returns a boolean if a field has been set.
-func (o *RegistrationInitiateDataAttributes) HasUsername() bool {
-	if o != nil && !IsNil(o.Username) {
-		return true
-	}
-
-	return false
-}
-
-// SetUsername gets a reference to the given string and assigns it to the Username field.
+// SetUsername sets field value
 func (o *RegistrationInitiateDataAttributes) SetUsername(v string) {
-	o.Username = &v
+	o.Username = v
 }
 
 func (o RegistrationInitiateDataAttributes) MarshalJSON() ([]byte, error) {
@@ -114,9 +107,7 @@ func (o RegistrationInitiateDataAttributes) MarshalJSON() ([]byte, error) {
 func (o RegistrationInitiateDataAttributes) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["email"] = o.Email
-	if !IsNil(o.Username) {
-		toSerialize["username"] = o.Username
-	}
+	toSerialize["username"] = o.Username
 	return toSerialize, nil
 }
 
@@ -126,6 +117,7 @@ func (o *RegistrationInitiateDataAttributes) UnmarshalJSON(data []byte) (err err
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
 		"email",
+		"username",
 	}
 
 	allProperties := make(map[string]interface{})

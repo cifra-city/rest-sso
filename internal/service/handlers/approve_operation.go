@@ -9,14 +9,17 @@ import (
 	"github.com/cifra-city/rest-sso/pkg/cifractx"
 	"github.com/cifra-city/rest-sso/pkg/httpresp"
 	"github.com/cifra-city/rest-sso/pkg/httpresp/problems"
+	"github.com/cifra-city/rest-sso/pkg/mailman"
 	"github.com/sirupsen/logrus"
 )
 
 type OperationType string
 
 const (
-	RESET_PASSWORD OperationType = "reset_password"
-	REGISTRATION   OperationType = "registration"
+	RESET_PASSWORD  OperationType = "reset_password"
+	CHANGE_PASSWIRD OperationType = "change_password"
+	CHANGE_EMAIL    OperationType = "change_email"
+	REGISTRATION    OperationType = "registration"
 )
 
 func (op OperationType) IsValid() bool {
@@ -61,17 +64,17 @@ func ApproveOperation(w http.ResponseWriter, r *http.Request) {
 
 	err = Server.Mailman.CheckCode(email, string(opType), code, UserAgent, IP)
 	if err != nil {
-		if errors.Is(err, errors.New("not found")) {
+		if errors.Is(err, mailman.ErrNotFound) {
 			log.Debugf("code not found for email: %s", email)
 			httpresp.RenderErr(w, problems.NotFound("code not found"))
 			return
 		}
-		if errors.Is(err, errors.New("access denied")) {
+		if errors.Is(err, mailman.ErrAccessDenied) {
 			log.Errorf("failed to decrypt ConfidenceCode for email: %s", email)
 			httpresp.RenderErr(w, problems.InternalError("failed to decrypt ConfidenceCode"))
 			return
 		}
-		log.Debugf("Access denied %s", email)
+		log.Debugf("Unhadler denied err: %s", err)
 		httpresp.RenderErr(w, problems.Forbidden("incorrect code"))
 		return
 	}

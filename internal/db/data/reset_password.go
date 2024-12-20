@@ -3,7 +3,6 @@ package data
 import (
 	"context"
 	"database/sql"
-	"time"
 
 	"github.com/google/uuid"
 )
@@ -12,11 +11,10 @@ import (
 func (q *Queries) ResetPasswordTransaction(
 	ctx context.Context,
 	user *UsersSecret,
-	newToken string,
-	expiresAt time.Time,
 	hashedPassword string,
-	deviceData string,
-	ipAddress string) error {
+	fingerprint string,
+	ipAddress string,
+) error {
 
 	tx, err := q.db.(*sql.DB).BeginTx(ctx, nil)
 	if err != nil {
@@ -30,22 +28,7 @@ func (q *Queries) ResetPasswordTransaction(
 		}
 	}()
 
-	devices, err := queries.GetDevicesByUserID(ctx, user.ID)
-	if err != nil {
-		return err
-	}
-
-	for _, device := range devices {
-		err = queries.UpdateRefreshTokenByDeviceAndUserID(ctx, UpdateRefreshTokenByDeviceAndUserIDParams{
-			UserID:    user.ID,
-			DeviceID:  device.ID,
-			Token:     newToken,
-			ExpiresAt: expiresAt,
-		})
-		if err != nil {
-			return err
-		}
-	}
+	err = queries.DeleteAllTokensForUser(ctx, user.ID)
 
 	_, err = queries.UpdateUserPasswordByID(ctx, UpdateUserPasswordByIDParams{
 		ID:       user.ID,
@@ -63,7 +46,7 @@ func (q *Queries) ResetPasswordTransaction(
 	err = queries.InsertOperationHistory(ctx, InsertOperationHistoryParams{
 		ID:            uuid.New(),
 		UserID:        user.ID,
-		DeviceData:    deviceData,
+		DeviceData:    fingerprint,
 		Operation:     OperationTypeChangePassword,
 		Success:       true,
 		FailureReason: FailureReasonSuccess,
