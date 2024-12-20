@@ -2,9 +2,11 @@ package service
 
 import (
 	"context"
+	"time"
 
 	"github.com/cifra-city/rest-sso/internal/config"
 	"github.com/cifra-city/rest-sso/internal/service/handlers"
+	"github.com/cifra-city/rest-sso/internal/service/middleware"
 	"github.com/cifra-city/rest-sso/pkg/cifractx"
 	"github.com/cifra-city/rest-sso/pkg/cifrajwt"
 	"github.com/cifra-city/rest-sso/pkg/httpresp"
@@ -22,9 +24,10 @@ func Run(ctx context.Context) {
 
 	r.Use(cifractx.MiddlewareWithContext(config.SERVICE, service))
 	authMW := cifrajwt.JWTMiddleware(service.Config.JWT.AccessToken.SecretKey, service.Logger)
-
+	rateLimiter := middleware.NewRateLimiter(5, 10*time.Second, 5*time.Minute)
 	r.Route("/cifra-sso", func(r chi.Router) {
 		r.Route("/v1", func(r chi.Router) {
+			r.Use(rateLimiter.Middleware)
 			r.Route("/public", func(r chi.Router) {
 				r.Post("/approve-operation", handlers.ApproveOperation) // approval operation with use email for 15 minutes
 
