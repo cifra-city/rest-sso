@@ -1,8 +1,8 @@
 package config
 
 import (
+	"github.com/cifra-city/mailman"
 	"github.com/cifra-city/rest-sso/internal/db/data"
-	"github.com/cifra-city/rest-sso/pkg/mailman"
 	"github.com/sirupsen/logrus"
 )
 

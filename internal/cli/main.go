@@ -8,9 +8,9 @@ import (
 	"sync"
 	"syscall"
 
+	"github.com/cifra-city/cifractx"
 	"github.com/cifra-city/rest-sso/internal/config"
 	"github.com/cifra-city/rest-sso/internal/db/data"
-	"github.com/cifra-city/rest-sso/pkg/cifractx"
 )
 
 func Run(args []string) bool {

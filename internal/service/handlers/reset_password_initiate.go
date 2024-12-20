@@ -5,27 +5,27 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/cifra-city/cifractx"
+	"github.com/cifra-city/httpkit"
+	"github.com/cifra-city/httpkit/problems"
 	"github.com/cifra-city/rest-sso/internal/config"
 	"github.com/cifra-city/rest-sso/internal/db/data"
 	"github.com/cifra-city/rest-sso/internal/service/requests"
-	"github.com/cifra-city/rest-sso/pkg/cifractx"
-	"github.com/cifra-city/rest-sso/pkg/httpresp"
-	"github.com/cifra-city/rest-sso/pkg/httpresp/problems"
 	"github.com/sirupsen/logrus"
 )
 
 func ResetPasswordInitiate(w http.ResponseWriter, r *http.Request) {
 	req, err := requests.NewResetPasswordInitiate(r)
 	if err != nil {
-		httpresp.RenderErr(w, problems.BadRequest(err)...)
+		httpkit.RenderErr(w, problems.BadRequest(err)...)
 		return
 	}
 
 	email := req.Data.Attributes.Email
 	username := req.Data.Attributes.Username
 
-	IP := httpresp.GetClientIP(r)
-	UserAgent := httpresp.GetUserAgent(r)
+	IP := httpkit.GetClientIP(r)
+	UserAgent := httpkit.GetUserAgent(r)
 
 	var user data.UsersSecret
 	var user2 data.UsersSecret
@@ -47,17 +47,17 @@ func ResetPasswordInitiate(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Errorf("Failed to get user: %v", err)
 		if errors.Is(err, sql.ErrNoRows) {
-			httpresp.RenderErr(w, problems.Unauthorized())
+			httpkit.RenderErr(w, problems.Unauthorized())
 			return
 		}
-		httpresp.RenderErr(w, problems.InternalError())
+		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
 	if user2.ID != user.ID {
-		httpresp.RenderErr(w, problems.BadRequest(errors.New("email and username do not match"))...)
+		httpkit.RenderErr(w, problems.BadRequest(errors.New("email and username do not match"))...)
 		return
 	}
-	
+
 	go func() {
 		err = Server.Mailman.SendList(user.Email, string(RESET_PASSWORD), "email_list.html", UserAgent, IP, 300)
 		if err != nil {
@@ -67,5 +67,5 @@ func ResetPasswordInitiate(w http.ResponseWriter, r *http.Request) {
 		}
 	}()
 
-	httpresp.Render(w, http.StatusOK)
+	httpkit.Render(w, http.StatusOK)
 }

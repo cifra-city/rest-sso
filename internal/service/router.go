@@ -4,12 +4,11 @@ import (
 	"context"
 	"time"
 
+	"github.com/cifra-city/cifractx"
+	"github.com/cifra-city/httpkit"
 	"github.com/cifra-city/rest-sso/internal/config"
 	"github.com/cifra-city/rest-sso/internal/service/handlers"
-	"github.com/cifra-city/rest-sso/internal/service/middleware"
-	"github.com/cifra-city/rest-sso/pkg/cifractx"
-	"github.com/cifra-city/rest-sso/pkg/cifrajwt"
-	"github.com/cifra-city/rest-sso/pkg/httpresp"
+	"github.com/cifra-city/tokens"
 	"github.com/go-chi/chi"
 	"github.com/sirupsen/logrus"
 )
@@ -23,8 +22,8 @@ func Run(ctx context.Context) {
 	}
 
 	r.Use(cifractx.MiddlewareWithContext(config.SERVICE, service))
-	authMW := cifrajwt.JWTMiddleware(service.Config.JWT.AccessToken.SecretKey, service.Logger)
-	rateLimiter := middleware.NewRateLimiter(5, 10*time.Second, 5*time.Minute)
+	authMW := tokens.JWTMiddleware(service.Config.JWT.AccessToken.SecretKey, service.Logger)
+	rateLimiter := httpkit.NewRateLimiter(5, 10*time.Second, 5*time.Minute)
 	r.Route("/cifra-sso", func(r chi.Router) {
 		r.Route("/v1", func(r chi.Router) {
 			r.Use(rateLimiter.Middleware)
@@ -43,9 +42,6 @@ func Run(ctx context.Context) {
 					r.Use(authMW)
 					r.Route("/change", func(r chi.Router) {
 						r.Post("/username", handlers.ChangeUsername) // user sends new username and code
-						//r.Post("/password", handlers.ChangePassword)          // user sends new password and code
-						//r.Post("/email", handlers.ChangeEmail)                // user sends new email and code
-						//r.Post("/email-confirm", handlers.ChangeEmailConfirm) // user sends code to confirm new email
 					})
 
 					r.Post("/logout", handlers.Logout)
@@ -56,8 +52,8 @@ func Run(ctx context.Context) {
 		})
 	})
 
-	server := httpresp.StartServer(ctx, service.Config.Server.Port, r)
+	server := httpkit.StartServer(ctx, service.Config.Server.Port, r, service.Logger)
 
 	<-ctx.Done()
-	httpresp.StopServer(context.Background(), server)
+	httpkit.StopServer(context.Background(), server, service.Logger)
 }

@@ -5,31 +5,31 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/cifra-city/cifractx"
+	"github.com/cifra-city/httpkit"
+	"github.com/cifra-city/httpkit/problems"
 	"github.com/cifra-city/rest-sso/internal/config"
 	"github.com/cifra-city/rest-sso/internal/service/requests"
-	"github.com/cifra-city/rest-sso/pkg/cifractx"
-	"github.com/cifra-city/rest-sso/pkg/httpresp"
-	"github.com/cifra-city/rest-sso/pkg/httpresp/problems"
 	"github.com/sirupsen/logrus"
 )
 
 func RegistrationInitiate(w http.ResponseWriter, r *http.Request) {
 	req, err := requests.NewRegistrationInitiate(r)
 	if err != nil {
-		httpresp.RenderErr(w, problems.BadRequest(err)...)
+		httpkit.RenderErr(w, problems.BadRequest(err)...)
 		return
 	}
 
 	em := req.Data.Attributes.Email
 	username := req.Data.Attributes.Username
 
-	IP := httpresp.GetClientIP(r)
-	UserAgent := httpresp.GetUserAgent(r)
+	IP := httpkit.GetClientIP(r)
+	UserAgent := httpkit.GetUserAgent(r)
 
 	Server, err := cifractx.GetValue[*config.Service](r.Context(), config.SERVICE)
 	if err != nil {
 		logrus.Errorf("error getting db queries: %v", err)
-		httpresp.RenderErr(w, problems.InternalError("database queries not found"))
+		httpkit.RenderErr(w, problems.InternalError("database queries not found"))
 		return
 	}
 
@@ -38,22 +38,22 @@ func RegistrationInitiate(w http.ResponseWriter, r *http.Request) {
 	_, err = Server.Queries.GetUserByEmail(r.Context(), em)
 	if err != nil && !errors.Is(err, sql.ErrNoRows) {
 		log.Errorf("error getting user by email: %v", err)
-		httpresp.RenderErr(w, problems.InternalError())
+		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
 	if err == nil {
-		httpresp.RenderErr(w, problems.Conflict("this email address already exists"))
+		httpkit.RenderErr(w, problems.Conflict("this email address already exists"))
 		return
 	}
 
 	_, err = Server.Queries.GetUserByUsername(r.Context(), username)
 	if err != nil && !errors.Is(err, sql.ErrNoRows) {
 		log.Errorf("error getting user by username: %v", err)
-		httpresp.RenderErr(w, problems.InternalError())
+		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
 	if err == nil {
-		httpresp.RenderErr(w, problems.Conflict("this username already exists"))
+		httpkit.RenderErr(w, problems.Conflict("this username already exists"))
 		return
 	}
 
@@ -66,5 +66,5 @@ func RegistrationInitiate(w http.ResponseWriter, r *http.Request) {
 		}
 	}()
 
-	httpresp.Render(w, http.StatusAccepted)
+	httpkit.Render(w, http.StatusAccepted)
 }

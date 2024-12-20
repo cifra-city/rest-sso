@@ -5,12 +5,12 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/cifra-city/cifractx"
+	"github.com/cifra-city/httpkit"
+	"github.com/cifra-city/httpkit/problems"
 	"github.com/cifra-city/rest-sso/internal/config"
 	"github.com/cifra-city/rest-sso/internal/db/data"
 	"github.com/cifra-city/rest-sso/internal/service/requests"
-	"github.com/cifra-city/rest-sso/pkg/cifractx"
-	"github.com/cifra-city/rest-sso/pkg/httpresp"
-	"github.com/cifra-city/rest-sso/pkg/httpresp/problems"
 	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
@@ -19,7 +19,7 @@ import (
 func ResetPasswordComplete(w http.ResponseWriter, r *http.Request) {
 	req, err := requests.NewResetPasswordComplete(r)
 	if err != nil {
-		httpresp.RenderErr(w, problems.BadRequest(err)...)
+		httpkit.RenderErr(w, problems.BadRequest(err)...)
 		return
 	}
 
@@ -28,16 +28,16 @@ func ResetPasswordComplete(w http.ResponseWriter, r *http.Request) {
 	firstPassword := req.Data.Attributes.FirstPassword
 	secondPassword := req.Data.Attributes.SecondPassword
 
-	IP := httpresp.GetClientIP(r)
-	UserAgent := httpresp.GetUserAgent(r)
+	IP := httpkit.GetClientIP(r)
+	UserAgent := httpkit.GetUserAgent(r)
 
 	if email == nil && username == nil {
-		httpresp.RenderErr(w, problems.BadRequest(errors.New("email or username is required"))...)
+		httpkit.RenderErr(w, problems.BadRequest(errors.New("email or username is required"))...)
 		return
 	}
 
 	if firstPassword != secondPassword {
-		httpresp.RenderErr(w, problems.BadRequest(errors.New("passwords do not match"))...)
+		httpkit.RenderErr(w, problems.BadRequest(errors.New("passwords do not match"))...)
 		return
 	}
 
@@ -59,10 +59,10 @@ func ResetPasswordComplete(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Errorf("Failed to get user: %v", err)
 		if errors.Is(err, sql.ErrNoRows) {
-			httpresp.RenderErr(w, problems.Unauthorized())
+			httpkit.RenderErr(w, problems.Unauthorized())
 			return
 		}
-		httpresp.RenderErr(w, problems.InternalError())
+		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
 
@@ -72,30 +72,30 @@ func ResetPasswordComplete(w http.ResponseWriter, r *http.Request) {
 		err = Server.Queries.InsertOperationHistory(r.Context(), data.InsertOperationHistoryParams{
 			ID:            uuid.New(),
 			UserID:        user.ID,
-			DeviceData:    httpresp.GenerateFingerprint(r),
+			DeviceData:    httpkit.GenerateFingerprint(r),
 			Operation:     data.OperationTypeResetPassword,
 			Success:       false,
 			FailureReason: data.FailureReasonNoAccess,
 			IpAddress:     IP,
 		})
-		httpresp.RenderErr(w, problems.Forbidden())
+		httpkit.RenderErr(w, problems.Forbidden())
 		return
 	}
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(firstPassword), bcrypt.DefaultCost)
 	if err != nil {
 		logrus.Errorf("error hashing password: %v", err)
-		httpresp.RenderErr(w, problems.InternalError())
+		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
 
-	err = Server.Queries.ResetPasswordTransaction(r.Context(), &user, string(hashedPassword), httpresp.GenerateFingerprint(r), IP)
+	err = Server.Queries.ResetPasswordTransaction(r.Context(), &user, string(hashedPassword), httpkit.GenerateFingerprint(r), IP)
 	if err != nil {
 		log.Errorf("error make transaction reset pasword: %v", err)
-		httpresp.RenderErr(w, problems.InternalError())
+		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
 	log.Infof("user logged in: %s", user.Username)
 
-	httpresp.Render(w, http.StatusAccepted)
+	httpkit.Render(w, http.StatusAccepted)
 }

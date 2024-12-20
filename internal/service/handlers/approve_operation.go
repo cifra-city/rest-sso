@@ -4,12 +4,12 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/cifra-city/cifractx"
+	"github.com/cifra-city/httpkit"
+	"github.com/cifra-city/httpkit/problems"
+	"github.com/cifra-city/mailman"
 	"github.com/cifra-city/rest-sso/internal/config"
 	"github.com/cifra-city/rest-sso/internal/service/requests"
-	"github.com/cifra-city/rest-sso/pkg/cifractx"
-	"github.com/cifra-city/rest-sso/pkg/httpresp"
-	"github.com/cifra-city/rest-sso/pkg/httpresp/problems"
-	"github.com/cifra-city/rest-sso/pkg/mailman"
 	"github.com/sirupsen/logrus"
 )
 
@@ -35,7 +35,7 @@ func ApproveOperation(w http.ResponseWriter, r *http.Request) {
 	req, err := requests.NewApproveOperation(r)
 	if err != nil {
 		logrus.Errorf("error decoding request: %v", err)
-		httpresp.RenderErr(w, problems.BadRequest(err)...)
+		httpkit.RenderErr(w, problems.BadRequest(err)...)
 		return
 	}
 
@@ -43,13 +43,13 @@ func ApproveOperation(w http.ResponseWriter, r *http.Request) {
 	code := req.Data.Attributes.Code
 	opTypeStr := req.Data.Attributes.Operation
 
-	IP := httpresp.GetClientIP(r)
-	UserAgent := httpresp.GetUserAgent(r)
+	IP := httpkit.GetClientIP(r)
+	UserAgent := httpkit.GetUserAgent(r)
 
 	Server, err := cifractx.GetValue[*config.Service](r.Context(), config.SERVICE)
 	if err != nil {
 		logrus.Errorf("error getting db queries: %v", err)
-		httpresp.RenderErr(w, problems.InternalError("database queries not found"))
+		httpkit.RenderErr(w, problems.InternalError("database queries not found"))
 		return
 	}
 
@@ -58,7 +58,7 @@ func ApproveOperation(w http.ResponseWriter, r *http.Request) {
 	opType := OperationType(opTypeStr)
 	if !opType.IsValid() {
 		log.Errorf("invalid operation type: %s", opTypeStr)
-		httpresp.RenderErr(w, problems.BadRequest(errors.New("invalid operation type"))...)
+		httpkit.RenderErr(w, problems.BadRequest(errors.New("invalid operation type"))...)
 		return
 	}
 
@@ -66,21 +66,21 @@ func ApproveOperation(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		if errors.Is(err, mailman.ErrNotFound) {
 			log.Debugf("code not found for email: %s", email)
-			httpresp.RenderErr(w, problems.NotFound("code not found"))
+			httpkit.RenderErr(w, problems.NotFound("code not found"))
 			return
 		}
 		if errors.Is(err, mailman.ErrAccessDenied) {
 			log.Errorf("failed to decrypt ConfidenceCode for email: %s", email)
-			httpresp.RenderErr(w, problems.InternalError("failed to decrypt ConfidenceCode"))
+			httpkit.RenderErr(w, problems.InternalError("failed to decrypt ConfidenceCode"))
 			return
 		}
 		log.Debugf("Unhadler denied err: %s", err)
-		httpresp.RenderErr(w, problems.Forbidden("incorrect code"))
+		httpkit.RenderErr(w, problems.Forbidden("incorrect code"))
 		return
 	}
 
 	Server.Mailman.AddAccess(email, string(opType), UserAgent, IP, 15)
 	log.Debugf("code is correct add access for email: %s", email)
-	httpresp.Render(w, http.StatusOK)
+	httpkit.Render(w, http.StatusOK)
 	return
 }

@@ -6,15 +6,15 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/cifra-city/cifractx"
+	"github.com/cifra-city/httpkit"
+	"github.com/cifra-city/httpkit/problems"
 	"github.com/cifra-city/rest-sso/internal/config"
 	"github.com/cifra-city/rest-sso/internal/db/data"
+	"github.com/cifra-city/rest-sso/internal/sectools"
 	"github.com/cifra-city/rest-sso/internal/service/requests"
-	"github.com/cifra-city/rest-sso/pkg/cifractx"
-	"github.com/cifra-city/rest-sso/pkg/cifrajwt"
-	"github.com/cifra-city/rest-sso/pkg/httpresp"
-	"github.com/cifra-city/rest-sso/pkg/httpresp/problems"
-	"github.com/cifra-city/rest-sso/pkg/sectools"
 	"github.com/cifra-city/rest-sso/resources"
+	"github.com/cifra-city/tokens"
 	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
@@ -23,7 +23,7 @@ import (
 func Login(w http.ResponseWriter, r *http.Request) {
 	req, err := requests.NewLogin(r)
 	if err != nil {
-		httpresp.RenderErr(w, problems.BadRequest(err)...)
+		httpkit.RenderErr(w, problems.BadRequest(err)...)
 		return
 	}
 
@@ -34,10 +34,10 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	deviceName := req.Data.Attributes.DeviceName
 	osVersion := req.Data.Attributes.OsVersion
 
-	IP := httpresp.GetClientIP(r)
+	IP := httpkit.GetClientIP(r)
 
 	if email == nil && username == nil {
-		httpresp.RenderErr(w, problems.BadRequest(errors.New("email or username is required"))...)
+		httpkit.RenderErr(w, problems.BadRequest(errors.New("email or username is required"))...)
 		return
 	}
 
@@ -61,14 +61,14 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Errorf("Failed to get user: %v", err)
 		if errors.Is(err, sql.ErrNoRows) {
-			httpresp.RenderErr(w, problems.Unauthorized())
+			httpkit.RenderErr(w, problems.Unauthorized())
 			return
 		}
-		httpresp.RenderErr(w, problems.InternalError())
+		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
 	if user2.ID != user.ID {
-		httpresp.RenderErr(w, problems.BadRequest(errors.New("email and username do not match"))...)
+		httpkit.RenderErr(w, problems.BadRequest(errors.New("email and username do not match"))...)
 		return
 	}
 
@@ -85,21 +85,21 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		})
 
 		log.Debugf("Incorrect password for user: %s, error: %s", user.Username, err)
-		httpresp.RenderErr(w, problems.Unauthorized())
+		httpkit.RenderErr(w, problems.Unauthorized())
 		return
 	}
 
-	tokenAccess, err := cifrajwt.GenerateJWT(user.ID, string(user.Role), int(user.TokenVersion), Server.Config.JWT.AccessToken.TokenLifetime, Server.Config.JWT.AccessToken.SecretKey)
+	tokenAccess, err := tokens.GenerateJWT(user.ID, string(user.Role), int(user.TokenVersion), Server.Config.JWT.AccessToken.TokenLifetime, Server.Config.JWT.AccessToken.SecretKey)
 	if err != nil {
 		log.Errorf("error generating token access jwt: %v", err)
-		httpresp.RenderErr(w, problems.InternalError())
+		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
 
-	tokenRefresh, err := cifrajwt.GenerateJWT(user.ID, string(user.Role), int(user.TokenVersion), Server.Config.JWT.RefreshToken.TokenLifetime, Server.Config.JWT.RefreshToken.SecretKey)
+	tokenRefresh, err := tokens.GenerateJWT(user.ID, string(user.Role), int(user.TokenVersion), Server.Config.JWT.RefreshToken.TokenLifetime, Server.Config.JWT.RefreshToken.SecretKey)
 	if err != nil {
 		log.Errorf("error generating token access jwt: %v", err)
-		httpresp.RenderErr(w, problems.InternalError())
+		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
 
@@ -108,19 +108,19 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	encryptedToken, err := sectools.EncryptToken(tokenRefresh, Server.Config.JWT.RefreshToken.EncryptionKey)
 	if err != nil {
 		log.Errorf("Failed to encrypt refresh token: %v", err)
-		httpresp.RenderErr(w, problems.InternalError())
+		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
 
 	err = Server.Queries.UpdateRefreshTokenTransaction(r.Context(), &user, factoryId, deviceName, osVersion, encryptedToken, expiresAt, IP)
 	if err != nil {
 		log.Errorf("error updating last used and refresh token: %v", err)
-		httpresp.RenderErr(w, problems.InternalError())
+		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
 	log.Infof("user logged in: %s", user.Username)
 
-	httpresp.Render(w, resources.LoginResp{
+	httpkit.Render(w, resources.LoginResp{
 		Data: resources.LoginRespData{
 			Type: "login",
 			Attributes: resources.LoginRespDataAttributes{

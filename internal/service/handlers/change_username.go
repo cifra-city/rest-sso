@@ -3,13 +3,13 @@ package handlers
 import (
 	"net/http"
 
+	"github.com/cifra-city/cifractx"
+	"github.com/cifra-city/httpkit"
+	"github.com/cifra-city/httpkit/problems"
 	"github.com/cifra-city/rest-sso/internal/config"
 	"github.com/cifra-city/rest-sso/internal/db/data"
 	"github.com/cifra-city/rest-sso/internal/service/requests"
-	"github.com/cifra-city/rest-sso/pkg/cifractx"
-	"github.com/cifra-city/rest-sso/pkg/cifrajwt"
-	"github.com/cifra-city/rest-sso/pkg/httpresp"
-	"github.com/cifra-city/rest-sso/pkg/httpresp/problems"
+	"github.com/cifra-city/tokens"
 	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
@@ -18,26 +18,26 @@ import (
 func ChangeUsername(w http.ResponseWriter, r *http.Request) {
 	req, err := requests.NewChangeUsername(r)
 	if err != nil {
-		httpresp.RenderErr(w, problems.BadRequest(err)...)
+		httpkit.RenderErr(w, problems.BadRequest(err)...)
 		return
 	}
 
 	oldPassword := req.Data.Attributes.Password
 	newUsername := req.Data.Attributes.NewUsername
 
-	IP := httpresp.GetClientIP(r)
-	fingerprint := httpresp.GenerateFingerprint(r)
+	IP := httpkit.GetClientIP(r)
+	fingerprint := httpkit.GenerateFingerprint(r)
 
 	service, err := cifractx.GetValue[*config.Service](r.Context(), config.SERVICE)
 	if err != nil {
-		httpresp.RenderErr(w, problems.InternalError("Failed to retrieve service configuration"))
+		httpkit.RenderErr(w, problems.InternalError("Failed to retrieve service configuration"))
 		return
 	}
 
-	userID, ok := r.Context().Value(cifrajwt.UserIDKey).(uuid.UUID)
+	userID, ok := r.Context().Value(tokens.UserIDKey).(uuid.UUID)
 	if !ok {
 		logrus.Warn("UserID not found in context")
-		httpresp.RenderErr(w, problems.Unauthorized("User not authenticated"))
+		httpkit.RenderErr(w, problems.Unauthorized("User not authenticated"))
 		return
 	}
 
@@ -45,7 +45,7 @@ func ChangeUsername(w http.ResponseWriter, r *http.Request) {
 
 	user, err := service.Queries.GetUserByID(r.Context(), userID)
 	if err != nil {
-		httpresp.RenderErr(w, problems.InternalError("Failed to retrieve user information"))
+		httpkit.RenderErr(w, problems.InternalError("Failed to retrieve user information"))
 		return
 	}
 
@@ -63,13 +63,13 @@ func ChangeUsername(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			logrus.Errorf("Failed to insert operation history: %v", err)
 		}
-		httpresp.RenderErr(w, problems.Unauthorized("Invalid password"))
+		httpkit.RenderErr(w, problems.Unauthorized("Invalid password"))
 		return
 	}
 
 	_, err = service.Queries.GetUserByUsername(r.Context(), *newUsername)
 	if err == nil {
-		httpresp.RenderErr(w, problems.Conflict("Username already exists"))
+		httpkit.RenderErr(w, problems.Conflict("Username already exists"))
 		return
 	}
 
@@ -78,7 +78,7 @@ func ChangeUsername(w http.ResponseWriter, r *http.Request) {
 		Username: *newUsername,
 	})
 	if err != nil {
-		httpresp.RenderErr(w, problems.InternalError("Failed to update username"))
+		httpkit.RenderErr(w, problems.InternalError("Failed to update username"))
 		return
 	}
 
@@ -95,5 +95,5 @@ func ChangeUsername(w http.ResponseWriter, r *http.Request) {
 		logrus.Errorf("Failed to insert operation history: %v", err)
 	}
 
-	httpresp.Render(w, map[string]string{"message": "Username updated successfully"})
+	httpkit.Render(w, map[string]string{"message": "Username updated successfully"})
 }
