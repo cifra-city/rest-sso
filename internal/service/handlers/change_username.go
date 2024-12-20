@@ -11,7 +11,6 @@ import (
 	"github.com/cifra-city/rest-sso/internal/service/requests"
 	"github.com/cifra-city/tokens"
 	"github.com/google/uuid"
-	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -28,22 +27,24 @@ func ChangeUsername(w http.ResponseWriter, r *http.Request) {
 	IP := httpkit.GetClientIP(r)
 	fingerprint := httpkit.GenerateFingerprint(r)
 
-	service, err := cifractx.GetValue[*config.Service](r.Context(), config.SERVICE)
+	Server, err := cifractx.GetValue[*config.Service](r.Context(), config.SERVICE)
 	if err != nil {
 		httpkit.RenderErr(w, problems.InternalError("Failed to retrieve service configuration"))
 		return
 	}
 
+	log := Server.Logger
+
 	userID, ok := r.Context().Value(tokens.UserIDKey).(uuid.UUID)
 	if !ok {
-		logrus.Warn("UserID not found in context")
+		log.Warn("UserID not found in context")
 		httpkit.RenderErr(w, problems.Unauthorized("User not authenticated"))
 		return
 	}
 
-	logrus.Infof("userID: %v", userID)
+	log.Infof("userID: %v", userID)
 
-	user, err := service.Queries.GetUserByID(r.Context(), userID)
+	user, err := Server.Queries.GetUserByID(r.Context(), userID)
 	if err != nil {
 		httpkit.RenderErr(w, problems.InternalError("Failed to retrieve user information"))
 		return
@@ -51,7 +52,7 @@ func ChangeUsername(w http.ResponseWriter, r *http.Request) {
 
 	err = bcrypt.CompareHashAndPassword([]byte(user.PassHash), []byte(oldPassword))
 	if err != nil {
-		err = service.Queries.InsertOperationHistory(r.Context(), data.InsertOperationHistoryParams{
+		err = Server.Queries.InsertOperationHistory(r.Context(), data.InsertOperationHistoryParams{
 			ID:            uuid.New(),
 			UserID:        userID,
 			DeviceData:    fingerprint,
@@ -61,19 +62,19 @@ func ChangeUsername(w http.ResponseWriter, r *http.Request) {
 			FailureReason: data.FailureReasonInvalidPassword,
 		})
 		if err != nil {
-			logrus.Errorf("Failed to insert operation history: %v", err)
+			log.Errorf("Failed to insert operation history: %v", err)
 		}
 		httpkit.RenderErr(w, problems.Unauthorized("Invalid password"))
 		return
 	}
 
-	_, err = service.Queries.GetUserByUsername(r.Context(), *newUsername)
+	_, err = Server.Queries.GetUserByUsername(r.Context(), *newUsername)
 	if err == nil {
 		httpkit.RenderErr(w, problems.Conflict("Username already exists"))
 		return
 	}
 
-	_, err = service.Queries.UpdateUsernameByID(r.Context(), data.UpdateUsernameByIDParams{
+	_, err = Server.Queries.UpdateUsernameByID(r.Context(), data.UpdateUsernameByIDParams{
 		ID:       userID,
 		Username: *newUsername,
 	})
@@ -82,7 +83,7 @@ func ChangeUsername(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = service.Queries.InsertOperationHistory(r.Context(), data.InsertOperationHistoryParams{
+	err = Server.Queries.InsertOperationHistory(r.Context(), data.InsertOperationHistoryParams{
 		ID:            uuid.New(),
 		UserID:        userID,
 		DeviceData:    fingerprint,
@@ -92,7 +93,7 @@ func ChangeUsername(w http.ResponseWriter, r *http.Request) {
 		FailureReason: data.FailureReasonSuccess,
 	})
 	if err != nil {
-		logrus.Errorf("Failed to insert operation history: %v", err)
+		log.Errorf("Failed to insert operation history: %v", err)
 	}
 
 	httpkit.Render(w, map[string]string{"message": "Username updated successfully"})
