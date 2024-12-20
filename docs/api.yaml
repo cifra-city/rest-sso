@@ -5,42 +5,53 @@ info:
   version: 1.0.0
 
 paths:
+  /aprove-operation:
+    $ref: './paths/ApproveOperation.yaml'
   /registertion-initiate:
     $ref: './paths/RegistrationInitiate.yaml'
   /registration-complete:
     $ref: './paths/RegistrationComplete.yaml'
-  /aprove-operation:
-    $ref: './paths/ApproveOperation.yaml'
-  /login:
-    $ref: './paths/Login.yaml'
-  /change-username:
-    $ref: './paths/ChangeUsername.yaml'
+  /login-initiate:
+    $ref: './paths/LoginInitiate.yaml'
+  /login-complete:
+    $ref: './paths/LoginComplete.yaml'
   /refresh:
     $ref: './paths/Refresh.yaml'
   /reset-password-initiate:
     $ref: './paths/ResetPasswordInitiate.yaml'
   /reset-password-complete:
     $ref: './paths/ResetPasswordComplete.yaml'
+  /user/change/username:
+    $ref: './paths/ChangeUsername.yaml'
+  /user/change/sessions:
+    $ref: './paths/GetUserSession.yaml'
+  /user/change/logout:
+    $ref: './paths/Logout.yaml'
+
 
 components:
   schemas:
+    ApproveOperationReq:
+      $ref: './spec/components/schemas/ApproveOperationReq.yaml'
     RegistrationInitiate:
       $ref: './spec/components/schemas/RegistrationInitiate.yaml'
     RegistrationComplete:
-        $ref: './spec/components/schemas/RegistrationComplete.yaml'
-    ApproveOperationReq:
-      $ref: './spec/components/schemas/ApproveOperationReq.yaml'
-    LoginReq:
-        $ref: './spec/components/schemas/LoginReq.yaml'
-    LoginResp:
-        $ref: './spec/components/schemas/LoginResp.yaml'
+      $ref: './spec/components/schemas/RegistrationComplete.yaml'
+    LoginInitiate:
+      $ref: './spec/components/schemas/LoginInitiate.yaml'
+    LoginCompleteReq:
+      $ref: './spec/components/schemas/LoginCompleteReq.yaml'
+    LoginCompleteResp:
+      $ref: './spec/components/schemas/LoginCompleteResp.yaml'
     ResetPasswordInitiate:
-        $ref: './spec/components/schemas/ResetPasswordInitiate.yaml'
+      $ref: './spec/components/schemas/ResetPasswordInitiate.yaml'
     ResetPasswordComplete:
-        $ref: './spec/components/schemas/ResetPasswordComplete.yaml'
-    ChangeUsernameReq:
-        $ref: './spec/components/schemas/ChangeUsernameReq.yaml'
+      $ref: './spec/components/schemas/ResetPasswordComplete.yaml'
     RefreshReq:
-        $ref: './spec/components/schemas/RefreshReq.yaml'
+      $ref: './spec/components/schemas/RefreshReq.yaml'
     RefreshResp:
-        $ref: './spec/components/schemas/RefreshResp.yaml'
+      $ref: './spec/components/schemas/RefreshResp.yaml'
+    ChangeUsername:
+      $ref: './spec/components/schemas/ChangeUsername.yaml'
+    UserSession:
+      $ref: './spec/components/schemas/UserSessions.yaml'

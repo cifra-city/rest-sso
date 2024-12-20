@@ -16,39 +16,39 @@ import (
 	"fmt"
 )
 
-// checks if the ChangeUsernameReqDataAttributes type satisfies the MappedNullable interface at compile time
-var _ MappedNullable = &ChangeUsernameReqDataAttributes{}
+// checks if the ChangeUsernameDataAttributes type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ChangeUsernameDataAttributes{}
 
-// ChangeUsernameReqDataAttributes struct for ChangeUsernameReqDataAttributes
-type ChangeUsernameReqDataAttributes struct {
+// ChangeUsernameDataAttributes struct for ChangeUsernameDataAttributes
+type ChangeUsernameDataAttributes struct {
 	// New username
 	NewUsername *string `json:"new_username,omitempty"`
 	// User password
 	Password string `json:"password"`
 }
 
-type _ChangeUsernameReqDataAttributes ChangeUsernameReqDataAttributes
+type _ChangeUsernameDataAttributes ChangeUsernameDataAttributes
 
-// NewChangeUsernameReqDataAttributes instantiates a new ChangeUsernameReqDataAttributes object
+// NewChangeUsernameDataAttributes instantiates a new ChangeUsernameDataAttributes object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewChangeUsernameReqDataAttributes(password string) *ChangeUsernameReqDataAttributes {
-	this := ChangeUsernameReqDataAttributes{}
+func NewChangeUsernameDataAttributes(password string) *ChangeUsernameDataAttributes {
+	this := ChangeUsernameDataAttributes{}
 	this.Password = password
 	return &this
 }
 
-// NewChangeUsernameReqDataAttributesWithDefaults instantiates a new ChangeUsernameReqDataAttributes object
+// NewChangeUsernameDataAttributesWithDefaults instantiates a new ChangeUsernameDataAttributes object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewChangeUsernameReqDataAttributesWithDefaults() *ChangeUsernameReqDataAttributes {
-	this := ChangeUsernameReqDataAttributes{}
+func NewChangeUsernameDataAttributesWithDefaults() *ChangeUsernameDataAttributes {
+	this := ChangeUsernameDataAttributes{}
 	return &this
 }
 
 // GetNewUsername returns the NewUsername field value if set, zero value otherwise.
-func (o *ChangeUsernameReqDataAttributes) GetNewUsername() string {
+func (o *ChangeUsernameDataAttributes) GetNewUsername() string {
 	if o == nil || IsNil(o.NewUsername) {
 		var ret string
 		return ret
@@ -58,7 +58,7 @@ func (o *ChangeUsernameReqDataAttributes) GetNewUsername() string {
 
 // GetNewUsernameOk returns a tuple with the NewUsername field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ChangeUsernameReqDataAttributes) GetNewUsernameOk() (*string, bool) {
+func (o *ChangeUsernameDataAttributes) GetNewUsernameOk() (*string, bool) {
 	if o == nil || IsNil(o.NewUsername) {
 		return nil, false
 	}
@@ -66,7 +66,7 @@ func (o *ChangeUsernameReqDataAttributes) GetNewUsernameOk() (*string, bool) {
 }
 
 // HasNewUsername returns a boolean if a field has been set.
-func (o *ChangeUsernameReqDataAttributes) HasNewUsername() bool {
+func (o *ChangeUsernameDataAttributes) HasNewUsername() bool {
 	if o != nil && !IsNil(o.NewUsername) {
 		return true
 	}
@@ -75,12 +75,12 @@ func (o *ChangeUsernameReqDataAttributes) HasNewUsername() bool {
 }
 
 // SetNewUsername gets a reference to the given string and assigns it to the NewUsername field.
-func (o *ChangeUsernameReqDataAttributes) SetNewUsername(v string) {
+func (o *ChangeUsernameDataAttributes) SetNewUsername(v string) {
 	o.NewUsername = &v
 }
 
 // GetPassword returns the Password field value
-func (o *ChangeUsernameReqDataAttributes) GetPassword() string {
+func (o *ChangeUsernameDataAttributes) GetPassword() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -91,7 +91,7 @@ func (o *ChangeUsernameReqDataAttributes) GetPassword() string {
 
 // GetPasswordOk returns a tuple with the Password field value
 // and a boolean to check if the value has been set.
-func (o *ChangeUsernameReqDataAttributes) GetPasswordOk() (*string, bool) {
+func (o *ChangeUsernameDataAttributes) GetPasswordOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -99,11 +99,11 @@ func (o *ChangeUsernameReqDataAttributes) GetPasswordOk() (*string, bool) {
 }
 
 // SetPassword sets field value
-func (o *ChangeUsernameReqDataAttributes) SetPassword(v string) {
+func (o *ChangeUsernameDataAttributes) SetPassword(v string) {
 	o.Password = v
 }
 
-func (o ChangeUsernameReqDataAttributes) MarshalJSON() ([]byte, error) {
+func (o ChangeUsernameDataAttributes) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
@@ -111,7 +111,7 @@ func (o ChangeUsernameReqDataAttributes) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-func (o ChangeUsernameReqDataAttributes) ToMap() (map[string]interface{}, error) {
+func (o ChangeUsernameDataAttributes) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	if !IsNil(o.NewUsername) {
 		toSerialize["new_username"] = o.NewUsername
@@ -120,7 +120,7 @@ func (o ChangeUsernameReqDataAttributes) ToMap() (map[string]interface{}, error)
 	return toSerialize, nil
 }
 
-func (o *ChangeUsernameReqDataAttributes) UnmarshalJSON(data []byte) (err error) {
+func (o *ChangeUsernameDataAttributes) UnmarshalJSON(data []byte) (err error) {
 	// This validates that all required properties are included in the JSON object
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
@@ -142,53 +142,53 @@ func (o *ChangeUsernameReqDataAttributes) UnmarshalJSON(data []byte) (err error)
 		}
 	}
 
-	varChangeUsernameReqDataAttributes := _ChangeUsernameReqDataAttributes{}
+	varChangeUsernameDataAttributes := _ChangeUsernameDataAttributes{}
 
 	decoder := json.NewDecoder(bytes.NewReader(data))
 	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varChangeUsernameReqDataAttributes)
+	err = decoder.Decode(&varChangeUsernameDataAttributes)
 
 	if err != nil {
 		return err
 	}
 
-	*o = ChangeUsernameReqDataAttributes(varChangeUsernameReqDataAttributes)
+	*o = ChangeUsernameDataAttributes(varChangeUsernameDataAttributes)
 
 	return err
 }
 
-type NullableChangeUsernameReqDataAttributes struct {
-	value *ChangeUsernameReqDataAttributes
+type NullableChangeUsernameDataAttributes struct {
+	value *ChangeUsernameDataAttributes
 	isSet bool
 }
 
-func (v NullableChangeUsernameReqDataAttributes) Get() *ChangeUsernameReqDataAttributes {
+func (v NullableChangeUsernameDataAttributes) Get() *ChangeUsernameDataAttributes {
 	return v.value
 }
 
-func (v *NullableChangeUsernameReqDataAttributes) Set(val *ChangeUsernameReqDataAttributes) {
+func (v *NullableChangeUsernameDataAttributes) Set(val *ChangeUsernameDataAttributes) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableChangeUsernameReqDataAttributes) IsSet() bool {
+func (v NullableChangeUsernameDataAttributes) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableChangeUsernameReqDataAttributes) Unset() {
+func (v *NullableChangeUsernameDataAttributes) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableChangeUsernameReqDataAttributes(val *ChangeUsernameReqDataAttributes) *NullableChangeUsernameReqDataAttributes {
-	return &NullableChangeUsernameReqDataAttributes{value: val, isSet: true}
+func NewNullableChangeUsernameDataAttributes(val *ChangeUsernameDataAttributes) *NullableChangeUsernameDataAttributes {
+	return &NullableChangeUsernameDataAttributes{value: val, isSet: true}
 }
 
-func (v NullableChangeUsernameReqDataAttributes) MarshalJSON() ([]byte, error) {
+func (v NullableChangeUsernameDataAttributes) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableChangeUsernameReqDataAttributes) UnmarshalJSON(src []byte) error {
+func (v *NullableChangeUsernameDataAttributes) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

@@ -16,17 +16,15 @@ import (
 	"fmt"
 )
 
-// checks if the LoginReqDataAttributes type satisfies the MappedNullable interface at compile time
-var _ MappedNullable = &LoginReqDataAttributes{}
+// checks if the LoginCompleteReqDataAttributes type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &LoginCompleteReqDataAttributes{}
 
-// LoginReqDataAttributes struct for LoginReqDataAttributes
-type LoginReqDataAttributes struct {
-	// User email (required if username is not provided).
+// LoginCompleteReqDataAttributes struct for LoginCompleteReqDataAttributes
+type LoginCompleteReqDataAttributes struct {
+	// User email
 	Email *string `json:"email,omitempty"`
-	// User username (required if email is not provided).
+	// User username
 	Username *string `json:"username,omitempty"`
-	// User password.
-	Password string `json:"password"`
 	// Unique identifier for the user's device.
 	FactoryId string `json:"factory_id"`
 	// Human-readable name for the user's device (e.g., 'iPhone 14').
@@ -35,31 +33,30 @@ type LoginReqDataAttributes struct {
 	OsVersion string `json:"os_version"`
 }
 
-type _LoginReqDataAttributes LoginReqDataAttributes
+type _LoginCompleteReqDataAttributes LoginCompleteReqDataAttributes
 
-// NewLoginReqDataAttributes instantiates a new LoginReqDataAttributes object
+// NewLoginCompleteReqDataAttributes instantiates a new LoginCompleteReqDataAttributes object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewLoginReqDataAttributes(password string, factoryId string, deviceName string, osVersion string) *LoginReqDataAttributes {
-	this := LoginReqDataAttributes{}
-	this.Password = password
+func NewLoginCompleteReqDataAttributes(factoryId string, deviceName string, osVersion string) *LoginCompleteReqDataAttributes {
+	this := LoginCompleteReqDataAttributes{}
 	this.FactoryId = factoryId
 	this.DeviceName = deviceName
 	this.OsVersion = osVersion
 	return &this
 }
 
-// NewLoginReqDataAttributesWithDefaults instantiates a new LoginReqDataAttributes object
+// NewLoginCompleteReqDataAttributesWithDefaults instantiates a new LoginCompleteReqDataAttributes object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewLoginReqDataAttributesWithDefaults() *LoginReqDataAttributes {
-	this := LoginReqDataAttributes{}
+func NewLoginCompleteReqDataAttributesWithDefaults() *LoginCompleteReqDataAttributes {
+	this := LoginCompleteReqDataAttributes{}
 	return &this
 }
 
 // GetEmail returns the Email field value if set, zero value otherwise.
-func (o *LoginReqDataAttributes) GetEmail() string {
+func (o *LoginCompleteReqDataAttributes) GetEmail() string {
 	if o == nil || IsNil(o.Email) {
 		var ret string
 		return ret
@@ -69,7 +66,7 @@ func (o *LoginReqDataAttributes) GetEmail() string {
 
 // GetEmailOk returns a tuple with the Email field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *LoginReqDataAttributes) GetEmailOk() (*string, bool) {
+func (o *LoginCompleteReqDataAttributes) GetEmailOk() (*string, bool) {
 	if o == nil || IsNil(o.Email) {
 		return nil, false
 	}
@@ -77,7 +74,7 @@ func (o *LoginReqDataAttributes) GetEmailOk() (*string, bool) {
 }
 
 // HasEmail returns a boolean if a field has been set.
-func (o *LoginReqDataAttributes) HasEmail() bool {
+func (o *LoginCompleteReqDataAttributes) HasEmail() bool {
 	if o != nil && !IsNil(o.Email) {
 		return true
 	}
@@ -86,12 +83,12 @@ func (o *LoginReqDataAttributes) HasEmail() bool {
 }
 
 // SetEmail gets a reference to the given string and assigns it to the Email field.
-func (o *LoginReqDataAttributes) SetEmail(v string) {
+func (o *LoginCompleteReqDataAttributes) SetEmail(v string) {
 	o.Email = &v
 }
 
 // GetUsername returns the Username field value if set, zero value otherwise.
-func (o *LoginReqDataAttributes) GetUsername() string {
+func (o *LoginCompleteReqDataAttributes) GetUsername() string {
 	if o == nil || IsNil(o.Username) {
 		var ret string
 		return ret
@@ -101,7 +98,7 @@ func (o *LoginReqDataAttributes) GetUsername() string {
 
 // GetUsernameOk returns a tuple with the Username field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *LoginReqDataAttributes) GetUsernameOk() (*string, bool) {
+func (o *LoginCompleteReqDataAttributes) GetUsernameOk() (*string, bool) {
 	if o == nil || IsNil(o.Username) {
 		return nil, false
 	}
@@ -109,7 +106,7 @@ func (o *LoginReqDataAttributes) GetUsernameOk() (*string, bool) {
 }
 
 // HasUsername returns a boolean if a field has been set.
-func (o *LoginReqDataAttributes) HasUsername() bool {
+func (o *LoginCompleteReqDataAttributes) HasUsername() bool {
 	if o != nil && !IsNil(o.Username) {
 		return true
 	}
@@ -118,36 +115,12 @@ func (o *LoginReqDataAttributes) HasUsername() bool {
 }
 
 // SetUsername gets a reference to the given string and assigns it to the Username field.
-func (o *LoginReqDataAttributes) SetUsername(v string) {
+func (o *LoginCompleteReqDataAttributes) SetUsername(v string) {
 	o.Username = &v
 }
 
-// GetPassword returns the Password field value
-func (o *LoginReqDataAttributes) GetPassword() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.Password
-}
-
-// GetPasswordOk returns a tuple with the Password field value
-// and a boolean to check if the value has been set.
-func (o *LoginReqDataAttributes) GetPasswordOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.Password, true
-}
-
-// SetPassword sets field value
-func (o *LoginReqDataAttributes) SetPassword(v string) {
-	o.Password = v
-}
-
 // GetFactoryId returns the FactoryId field value
-func (o *LoginReqDataAttributes) GetFactoryId() string {
+func (o *LoginCompleteReqDataAttributes) GetFactoryId() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -158,7 +131,7 @@ func (o *LoginReqDataAttributes) GetFactoryId() string {
 
 // GetFactoryIdOk returns a tuple with the FactoryId field value
 // and a boolean to check if the value has been set.
-func (o *LoginReqDataAttributes) GetFactoryIdOk() (*string, bool) {
+func (o *LoginCompleteReqDataAttributes) GetFactoryIdOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -166,12 +139,12 @@ func (o *LoginReqDataAttributes) GetFactoryIdOk() (*string, bool) {
 }
 
 // SetFactoryId sets field value
-func (o *LoginReqDataAttributes) SetFactoryId(v string) {
+func (o *LoginCompleteReqDataAttributes) SetFactoryId(v string) {
 	o.FactoryId = v
 }
 
 // GetDeviceName returns the DeviceName field value
-func (o *LoginReqDataAttributes) GetDeviceName() string {
+func (o *LoginCompleteReqDataAttributes) GetDeviceName() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -182,7 +155,7 @@ func (o *LoginReqDataAttributes) GetDeviceName() string {
 
 // GetDeviceNameOk returns a tuple with the DeviceName field value
 // and a boolean to check if the value has been set.
-func (o *LoginReqDataAttributes) GetDeviceNameOk() (*string, bool) {
+func (o *LoginCompleteReqDataAttributes) GetDeviceNameOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -190,12 +163,12 @@ func (o *LoginReqDataAttributes) GetDeviceNameOk() (*string, bool) {
 }
 
 // SetDeviceName sets field value
-func (o *LoginReqDataAttributes) SetDeviceName(v string) {
+func (o *LoginCompleteReqDataAttributes) SetDeviceName(v string) {
 	o.DeviceName = v
 }
 
 // GetOsVersion returns the OsVersion field value
-func (o *LoginReqDataAttributes) GetOsVersion() string {
+func (o *LoginCompleteReqDataAttributes) GetOsVersion() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -206,7 +179,7 @@ func (o *LoginReqDataAttributes) GetOsVersion() string {
 
 // GetOsVersionOk returns a tuple with the OsVersion field value
 // and a boolean to check if the value has been set.
-func (o *LoginReqDataAttributes) GetOsVersionOk() (*string, bool) {
+func (o *LoginCompleteReqDataAttributes) GetOsVersionOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -214,11 +187,11 @@ func (o *LoginReqDataAttributes) GetOsVersionOk() (*string, bool) {
 }
 
 // SetOsVersion sets field value
-func (o *LoginReqDataAttributes) SetOsVersion(v string) {
+func (o *LoginCompleteReqDataAttributes) SetOsVersion(v string) {
 	o.OsVersion = v
 }
 
-func (o LoginReqDataAttributes) MarshalJSON() ([]byte, error) {
+func (o LoginCompleteReqDataAttributes) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
@@ -226,7 +199,7 @@ func (o LoginReqDataAttributes) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-func (o LoginReqDataAttributes) ToMap() (map[string]interface{}, error) {
+func (o LoginCompleteReqDataAttributes) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	if !IsNil(o.Email) {
 		toSerialize["email"] = o.Email
@@ -234,19 +207,17 @@ func (o LoginReqDataAttributes) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Username) {
 		toSerialize["username"] = o.Username
 	}
-	toSerialize["password"] = o.Password
 	toSerialize["factory_id"] = o.FactoryId
 	toSerialize["device_name"] = o.DeviceName
 	toSerialize["os_version"] = o.OsVersion
 	return toSerialize, nil
 }
 
-func (o *LoginReqDataAttributes) UnmarshalJSON(data []byte) (err error) {
+func (o *LoginCompleteReqDataAttributes) UnmarshalJSON(data []byte) (err error) {
 	// This validates that all required properties are included in the JSON object
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"password",
 		"factory_id",
 		"device_name",
 		"os_version",
@@ -266,53 +237,53 @@ func (o *LoginReqDataAttributes) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varLoginReqDataAttributes := _LoginReqDataAttributes{}
+	varLoginCompleteReqDataAttributes := _LoginCompleteReqDataAttributes{}
 
 	decoder := json.NewDecoder(bytes.NewReader(data))
 	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varLoginReqDataAttributes)
+	err = decoder.Decode(&varLoginCompleteReqDataAttributes)
 
 	if err != nil {
 		return err
 	}
 
-	*o = LoginReqDataAttributes(varLoginReqDataAttributes)
+	*o = LoginCompleteReqDataAttributes(varLoginCompleteReqDataAttributes)
 
 	return err
 }
 
-type NullableLoginReqDataAttributes struct {
-	value *LoginReqDataAttributes
+type NullableLoginCompleteReqDataAttributes struct {
+	value *LoginCompleteReqDataAttributes
 	isSet bool
 }
 
-func (v NullableLoginReqDataAttributes) Get() *LoginReqDataAttributes {
+func (v NullableLoginCompleteReqDataAttributes) Get() *LoginCompleteReqDataAttributes {
 	return v.value
 }
 
-func (v *NullableLoginReqDataAttributes) Set(val *LoginReqDataAttributes) {
+func (v *NullableLoginCompleteReqDataAttributes) Set(val *LoginCompleteReqDataAttributes) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableLoginReqDataAttributes) IsSet() bool {
+func (v NullableLoginCompleteReqDataAttributes) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableLoginReqDataAttributes) Unset() {
+func (v *NullableLoginCompleteReqDataAttributes) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableLoginReqDataAttributes(val *LoginReqDataAttributes) *NullableLoginReqDataAttributes {
-	return &NullableLoginReqDataAttributes{value: val, isSet: true}
+func NewNullableLoginCompleteReqDataAttributes(val *LoginCompleteReqDataAttributes) *NullableLoginCompleteReqDataAttributes {
+	return &NullableLoginCompleteReqDataAttributes{value: val, isSet: true}
 }
 
-func (v NullableLoginReqDataAttributes) MarshalJSON() ([]byte, error) {
+func (v NullableLoginCompleteReqDataAttributes) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableLoginReqDataAttributes) UnmarshalJSON(src []byte) error {
+func (v *NullableLoginCompleteReqDataAttributes) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

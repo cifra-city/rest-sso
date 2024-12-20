@@ -5,29 +5,23 @@ info:
   version: 1.0.0
 
 paths:
-  /register-initiate:
-    post:
-      summary: Send a request to register a new user
-      description: Send code to email for user to initiate registration
-      requestBody:
-        required: true
-        content:
-          application/vnd.api+json:
-            schema:
-              $ref: '../spec/components/schemas/RegistrationInitiate.yaml'
+  /get-user-session:
+    get:
+      summary: Get user's session
+      description: Endpoint to get user's session
       responses:
         '201':
-          description: Successfully initiated registration
+          description: Updated username successfully
           content:
-            application/json:
+            application/vnd.api+json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: number
-                    example: 201
+                $ref: '../spec/components/schemas/UserSessions.yaml'
         '400':
           $ref: '../spec/components/responses/invalidParameter.yaml'
+        '401':
+          $ref: '../spec/components/responses/invalidAuth.yaml'
+        '403':
+          $ref: '../spec/components/responses/forbidden.yaml'
         '409':
           $ref: '../spec/components/responses/conflict.yaml'
         '415':

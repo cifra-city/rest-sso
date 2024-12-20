@@ -16,11 +16,11 @@ import (
 	"fmt"
 )
 
-// checks if the LoginRespDataAttributes type satisfies the MappedNullable interface at compile time
-var _ MappedNullable = &LoginRespDataAttributes{}
+// checks if the LoginCompleteRespDataAttributes type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &LoginCompleteRespDataAttributes{}
 
-// LoginRespDataAttributes struct for LoginRespDataAttributes
-type LoginRespDataAttributes struct {
+// LoginCompleteRespDataAttributes struct for LoginCompleteRespDataAttributes
+type LoginCompleteRespDataAttributes struct {
 	// Access Token для авторизации запросов.
 	AccessToken string `json:"access_token"`
 	// Refresh Token для обновления Access Token.
@@ -29,30 +29,30 @@ type LoginRespDataAttributes struct {
 	ExpiresIn int32 `json:"expires_in"`
 }
 
-type _LoginRespDataAttributes LoginRespDataAttributes
+type _LoginCompleteRespDataAttributes LoginCompleteRespDataAttributes
 
-// NewLoginRespDataAttributes instantiates a new LoginRespDataAttributes object
+// NewLoginCompleteRespDataAttributes instantiates a new LoginCompleteRespDataAttributes object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewLoginRespDataAttributes(accessToken string, refreshToken string, expiresIn int32) *LoginRespDataAttributes {
-	this := LoginRespDataAttributes{}
+func NewLoginCompleteRespDataAttributes(accessToken string, refreshToken string, expiresIn int32) *LoginCompleteRespDataAttributes {
+	this := LoginCompleteRespDataAttributes{}
 	this.AccessToken = accessToken
 	this.RefreshToken = refreshToken
 	this.ExpiresIn = expiresIn
 	return &this
 }
 
-// NewLoginRespDataAttributesWithDefaults instantiates a new LoginRespDataAttributes object
+// NewLoginCompleteRespDataAttributesWithDefaults instantiates a new LoginCompleteRespDataAttributes object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewLoginRespDataAttributesWithDefaults() *LoginRespDataAttributes {
-	this := LoginRespDataAttributes{}
+func NewLoginCompleteRespDataAttributesWithDefaults() *LoginCompleteRespDataAttributes {
+	this := LoginCompleteRespDataAttributes{}
 	return &this
 }
 
 // GetAccessToken returns the AccessToken field value
-func (o *LoginRespDataAttributes) GetAccessToken() string {
+func (o *LoginCompleteRespDataAttributes) GetAccessToken() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -63,7 +63,7 @@ func (o *LoginRespDataAttributes) GetAccessToken() string {
 
 // GetAccessTokenOk returns a tuple with the AccessToken field value
 // and a boolean to check if the value has been set.
-func (o *LoginRespDataAttributes) GetAccessTokenOk() (*string, bool) {
+func (o *LoginCompleteRespDataAttributes) GetAccessTokenOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -71,12 +71,12 @@ func (o *LoginRespDataAttributes) GetAccessTokenOk() (*string, bool) {
 }
 
 // SetAccessToken sets field value
-func (o *LoginRespDataAttributes) SetAccessToken(v string) {
+func (o *LoginCompleteRespDataAttributes) SetAccessToken(v string) {
 	o.AccessToken = v
 }
 
 // GetRefreshToken returns the RefreshToken field value
-func (o *LoginRespDataAttributes) GetRefreshToken() string {
+func (o *LoginCompleteRespDataAttributes) GetRefreshToken() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -87,7 +87,7 @@ func (o *LoginRespDataAttributes) GetRefreshToken() string {
 
 // GetRefreshTokenOk returns a tuple with the RefreshToken field value
 // and a boolean to check if the value has been set.
-func (o *LoginRespDataAttributes) GetRefreshTokenOk() (*string, bool) {
+func (o *LoginCompleteRespDataAttributes) GetRefreshTokenOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -95,12 +95,12 @@ func (o *LoginRespDataAttributes) GetRefreshTokenOk() (*string, bool) {
 }
 
 // SetRefreshToken sets field value
-func (o *LoginRespDataAttributes) SetRefreshToken(v string) {
+func (o *LoginCompleteRespDataAttributes) SetRefreshToken(v string) {
 	o.RefreshToken = v
 }
 
 // GetExpiresIn returns the ExpiresIn field value
-func (o *LoginRespDataAttributes) GetExpiresIn() int32 {
+func (o *LoginCompleteRespDataAttributes) GetExpiresIn() int32 {
 	if o == nil {
 		var ret int32
 		return ret
@@ -111,7 +111,7 @@ func (o *LoginRespDataAttributes) GetExpiresIn() int32 {
 
 // GetExpiresInOk returns a tuple with the ExpiresIn field value
 // and a boolean to check if the value has been set.
-func (o *LoginRespDataAttributes) GetExpiresInOk() (*int32, bool) {
+func (o *LoginCompleteRespDataAttributes) GetExpiresInOk() (*int32, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -119,11 +119,11 @@ func (o *LoginRespDataAttributes) GetExpiresInOk() (*int32, bool) {
 }
 
 // SetExpiresIn sets field value
-func (o *LoginRespDataAttributes) SetExpiresIn(v int32) {
+func (o *LoginCompleteRespDataAttributes) SetExpiresIn(v int32) {
 	o.ExpiresIn = v
 }
 
-func (o LoginRespDataAttributes) MarshalJSON() ([]byte, error) {
+func (o LoginCompleteRespDataAttributes) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
@@ -131,7 +131,7 @@ func (o LoginRespDataAttributes) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-func (o LoginRespDataAttributes) ToMap() (map[string]interface{}, error) {
+func (o LoginCompleteRespDataAttributes) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["access_token"] = o.AccessToken
 	toSerialize["refresh_token"] = o.RefreshToken
@@ -139,7 +139,7 @@ func (o LoginRespDataAttributes) ToMap() (map[string]interface{}, error) {
 	return toSerialize, nil
 }
 
-func (o *LoginRespDataAttributes) UnmarshalJSON(data []byte) (err error) {
+func (o *LoginCompleteRespDataAttributes) UnmarshalJSON(data []byte) (err error) {
 	// This validates that all required properties are included in the JSON object
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
@@ -163,53 +163,53 @@ func (o *LoginRespDataAttributes) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varLoginRespDataAttributes := _LoginRespDataAttributes{}
+	varLoginCompleteRespDataAttributes := _LoginCompleteRespDataAttributes{}
 
 	decoder := json.NewDecoder(bytes.NewReader(data))
 	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varLoginRespDataAttributes)
+	err = decoder.Decode(&varLoginCompleteRespDataAttributes)
 
 	if err != nil {
 		return err
 	}
 
-	*o = LoginRespDataAttributes(varLoginRespDataAttributes)
+	*o = LoginCompleteRespDataAttributes(varLoginCompleteRespDataAttributes)
 
 	return err
 }
 
-type NullableLoginRespDataAttributes struct {
-	value *LoginRespDataAttributes
+type NullableLoginCompleteRespDataAttributes struct {
+	value *LoginCompleteRespDataAttributes
 	isSet bool
 }
 
-func (v NullableLoginRespDataAttributes) Get() *LoginRespDataAttributes {
+func (v NullableLoginCompleteRespDataAttributes) Get() *LoginCompleteRespDataAttributes {
 	return v.value
 }
 
-func (v *NullableLoginRespDataAttributes) Set(val *LoginRespDataAttributes) {
+func (v *NullableLoginCompleteRespDataAttributes) Set(val *LoginCompleteRespDataAttributes) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableLoginRespDataAttributes) IsSet() bool {
+func (v NullableLoginCompleteRespDataAttributes) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableLoginRespDataAttributes) Unset() {
+func (v *NullableLoginCompleteRespDataAttributes) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableLoginRespDataAttributes(val *LoginRespDataAttributes) *NullableLoginRespDataAttributes {
-	return &NullableLoginRespDataAttributes{value: val, isSet: true}
+func NewNullableLoginCompleteRespDataAttributes(val *LoginCompleteRespDataAttributes) *NullableLoginCompleteRespDataAttributes {
+	return &NullableLoginCompleteRespDataAttributes{value: val, isSet: true}
 }
 
-func (v NullableLoginRespDataAttributes) MarshalJSON() ([]byte, error) {
+func (v NullableLoginCompleteRespDataAttributes) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableLoginRespDataAttributes) UnmarshalJSON(src []byte) error {
+func (v *NullableLoginCompleteRespDataAttributes) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

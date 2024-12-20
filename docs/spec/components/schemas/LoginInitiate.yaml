@@ -9,12 +9,11 @@ properties:
     properties:
       type:
         type: string
-        enum: [ registration_initiate ]
+        enum: [ login_initiate ]
       attributes:
         type: object
         required:
-          - email
-          - username
+          - password
         properties:
           email:
             type: string
@@ -23,3 +22,6 @@ properties:
           username:
             type: string
             description: "User username"
+          password:
+            type: string
+            description: "First password"

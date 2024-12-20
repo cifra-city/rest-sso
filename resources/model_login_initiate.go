@@ -16,38 +16,38 @@ import (
 	"fmt"
 )
 
-// checks if the LoginResp type satisfies the MappedNullable interface at compile time
-var _ MappedNullable = &LoginResp{}
+// checks if the LoginInitiate type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &LoginInitiate{}
 
-// LoginResp struct for LoginResp
-type LoginResp struct {
-	Data LoginRespData `json:"data"`
+// LoginInitiate struct for LoginInitiate
+type LoginInitiate struct {
+	Data LoginInitiateData `json:"data"`
 }
 
-type _LoginResp LoginResp
+type _LoginInitiate LoginInitiate
 
-// NewLoginResp instantiates a new LoginResp object
+// NewLoginInitiate instantiates a new LoginInitiate object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewLoginResp(data LoginRespData) *LoginResp {
-	this := LoginResp{}
+func NewLoginInitiate(data LoginInitiateData) *LoginInitiate {
+	this := LoginInitiate{}
 	this.Data = data
 	return &this
 }
 
-// NewLoginRespWithDefaults instantiates a new LoginResp object
+// NewLoginInitiateWithDefaults instantiates a new LoginInitiate object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewLoginRespWithDefaults() *LoginResp {
-	this := LoginResp{}
+func NewLoginInitiateWithDefaults() *LoginInitiate {
+	this := LoginInitiate{}
 	return &this
 }
 
 // GetData returns the Data field value
-func (o *LoginResp) GetData() LoginRespData {
+func (o *LoginInitiate) GetData() LoginInitiateData {
 	if o == nil {
-		var ret LoginRespData
+		var ret LoginInitiateData
 		return ret
 	}
 
@@ -56,7 +56,7 @@ func (o *LoginResp) GetData() LoginRespData {
 
 // GetDataOk returns a tuple with the Data field value
 // and a boolean to check if the value has been set.
-func (o *LoginResp) GetDataOk() (*LoginRespData, bool) {
+func (o *LoginInitiate) GetDataOk() (*LoginInitiateData, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -64,11 +64,11 @@ func (o *LoginResp) GetDataOk() (*LoginRespData, bool) {
 }
 
 // SetData sets field value
-func (o *LoginResp) SetData(v LoginRespData) {
+func (o *LoginInitiate) SetData(v LoginInitiateData) {
 	o.Data = v
 }
 
-func (o LoginResp) MarshalJSON() ([]byte, error) {
+func (o LoginInitiate) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
@@ -76,13 +76,13 @@ func (o LoginResp) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-func (o LoginResp) ToMap() (map[string]interface{}, error) {
+func (o LoginInitiate) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["data"] = o.Data
 	return toSerialize, nil
 }
 
-func (o *LoginResp) UnmarshalJSON(data []byte) (err error) {
+func (o *LoginInitiate) UnmarshalJSON(data []byte) (err error) {
 	// This validates that all required properties are included in the JSON object
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
@@ -104,53 +104,53 @@ func (o *LoginResp) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varLoginResp := _LoginResp{}
+	varLoginInitiate := _LoginInitiate{}
 
 	decoder := json.NewDecoder(bytes.NewReader(data))
 	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varLoginResp)
+	err = decoder.Decode(&varLoginInitiate)
 
 	if err != nil {
 		return err
 	}
 
-	*o = LoginResp(varLoginResp)
+	*o = LoginInitiate(varLoginInitiate)
 
 	return err
 }
 
-type NullableLoginResp struct {
-	value *LoginResp
+type NullableLoginInitiate struct {
+	value *LoginInitiate
 	isSet bool
 }
 
-func (v NullableLoginResp) Get() *LoginResp {
+func (v NullableLoginInitiate) Get() *LoginInitiate {
 	return v.value
 }
 
-func (v *NullableLoginResp) Set(val *LoginResp) {
+func (v *NullableLoginInitiate) Set(val *LoginInitiate) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableLoginResp) IsSet() bool {
+func (v NullableLoginInitiate) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableLoginResp) Unset() {
+func (v *NullableLoginInitiate) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableLoginResp(val *LoginResp) *NullableLoginResp {
-	return &NullableLoginResp{value: val, isSet: true}
+func NewNullableLoginInitiate(val *LoginInitiate) *NullableLoginInitiate {
+	return &NullableLoginInitiate{value: val, isSet: true}
 }
 
-func (v NullableLoginResp) MarshalJSON() ([]byte, error) {
+func (v NullableLoginInitiate) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableLoginResp) UnmarshalJSON(src []byte) error {
+func (v *NullableLoginInitiate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

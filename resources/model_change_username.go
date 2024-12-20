@@ -16,38 +16,38 @@ import (
 	"fmt"
 )
 
-// checks if the ChangeUsernameReq type satisfies the MappedNullable interface at compile time
-var _ MappedNullable = &ChangeUsernameReq{}
+// checks if the ChangeUsername type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ChangeUsername{}
 
-// ChangeUsernameReq struct for ChangeUsernameReq
-type ChangeUsernameReq struct {
-	Data ChangeUsernameReqData `json:"data"`
+// ChangeUsername struct for ChangeUsername
+type ChangeUsername struct {
+	Data ChangeUsernameData `json:"data"`
 }
 
-type _ChangeUsernameReq ChangeUsernameReq
+type _ChangeUsername ChangeUsername
 
-// NewChangeUsernameReq instantiates a new ChangeUsernameReq object
+// NewChangeUsername instantiates a new ChangeUsername object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewChangeUsernameReq(data ChangeUsernameReqData) *ChangeUsernameReq {
-	this := ChangeUsernameReq{}
+func NewChangeUsername(data ChangeUsernameData) *ChangeUsername {
+	this := ChangeUsername{}
 	this.Data = data
 	return &this
 }
 
-// NewChangeUsernameReqWithDefaults instantiates a new ChangeUsernameReq object
+// NewChangeUsernameWithDefaults instantiates a new ChangeUsername object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewChangeUsernameReqWithDefaults() *ChangeUsernameReq {
-	this := ChangeUsernameReq{}
+func NewChangeUsernameWithDefaults() *ChangeUsername {
+	this := ChangeUsername{}
 	return &this
 }
 
 // GetData returns the Data field value
-func (o *ChangeUsernameReq) GetData() ChangeUsernameReqData {
+func (o *ChangeUsername) GetData() ChangeUsernameData {
 	if o == nil {
-		var ret ChangeUsernameReqData
+		var ret ChangeUsernameData
 		return ret
 	}
 
@@ -56,7 +56,7 @@ func (o *ChangeUsernameReq) GetData() ChangeUsernameReqData {
 
 // GetDataOk returns a tuple with the Data field value
 // and a boolean to check if the value has been set.
-func (o *ChangeUsernameReq) GetDataOk() (*ChangeUsernameReqData, bool) {
+func (o *ChangeUsername) GetDataOk() (*ChangeUsernameData, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -64,11 +64,11 @@ func (o *ChangeUsernameReq) GetDataOk() (*ChangeUsernameReqData, bool) {
 }
 
 // SetData sets field value
-func (o *ChangeUsernameReq) SetData(v ChangeUsernameReqData) {
+func (o *ChangeUsername) SetData(v ChangeUsernameData) {
 	o.Data = v
 }
 
-func (o ChangeUsernameReq) MarshalJSON() ([]byte, error) {
+func (o ChangeUsername) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
@@ -76,13 +76,13 @@ func (o ChangeUsernameReq) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-func (o ChangeUsernameReq) ToMap() (map[string]interface{}, error) {
+func (o ChangeUsername) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["data"] = o.Data
 	return toSerialize, nil
 }
 
-func (o *ChangeUsernameReq) UnmarshalJSON(data []byte) (err error) {
+func (o *ChangeUsername) UnmarshalJSON(data []byte) (err error) {
 	// This validates that all required properties are included in the JSON object
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
@@ -104,53 +104,53 @@ func (o *ChangeUsernameReq) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varChangeUsernameReq := _ChangeUsernameReq{}
+	varChangeUsername := _ChangeUsername{}
 
 	decoder := json.NewDecoder(bytes.NewReader(data))
 	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varChangeUsernameReq)
+	err = decoder.Decode(&varChangeUsername)
 
 	if err != nil {
 		return err
 	}
 
-	*o = ChangeUsernameReq(varChangeUsernameReq)
+	*o = ChangeUsername(varChangeUsername)
 
 	return err
 }
 
-type NullableChangeUsernameReq struct {
-	value *ChangeUsernameReq
+type NullableChangeUsername struct {
+	value *ChangeUsername
 	isSet bool
 }
 
-func (v NullableChangeUsernameReq) Get() *ChangeUsernameReq {
+func (v NullableChangeUsername) Get() *ChangeUsername {
 	return v.value
 }
 
-func (v *NullableChangeUsernameReq) Set(val *ChangeUsernameReq) {
+func (v *NullableChangeUsername) Set(val *ChangeUsername) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableChangeUsernameReq) IsSet() bool {
+func (v NullableChangeUsername) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableChangeUsernameReq) Unset() {
+func (v *NullableChangeUsername) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableChangeUsernameReq(val *ChangeUsernameReq) *NullableChangeUsernameReq {
-	return &NullableChangeUsernameReq{value: val, isSet: true}
+func NewNullableChangeUsername(val *ChangeUsername) *NullableChangeUsername {
+	return &NullableChangeUsername{value: val, isSet: true}
 }
 
-func (v NullableChangeUsernameReq) MarshalJSON() ([]byte, error) {
+func (v NullableChangeUsername) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableChangeUsernameReq) UnmarshalJSON(src []byte) error {
+func (v *NullableChangeUsername) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

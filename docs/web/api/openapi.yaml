@@ -6,16 +6,26 @@ info:
 servers:
 - url: /
 paths:
+  /aprove-operation: {}
   /registertion-initiate: {}
   /registration-complete: {}
-  /aprove-operation: {}
-  /login: {}
-  /change-username: {}
+  /login-initiate: {}
+  /login-complete: {}
   /refresh: {}
   /reset-password-initiate: {}
   /reset-password-complete: {}
+  /user/change/username: {}
+  /user/change/sessions: {}
+  /user/change/logout: {}
 components:
   schemas:
+    ApproveOperationReq:
+      properties:
+        data:
+          $ref: '#/components/schemas/ApproveOperationReq_data'
+      required:
+      - data
+      type: object
     RegistrationInitiate:
       properties:
         data:
@@ -30,24 +40,24 @@ components:
       required:
       - data
       type: object
-    ApproveOperationReq:
+    LoginInitiate:
       properties:
         data:
-          $ref: '#/components/schemas/ApproveOperationReq_data'
+          $ref: '#/components/schemas/LoginInitiate_data'
       required:
       - data
       type: object
-    LoginReq:
+    LoginCompleteReq:
       properties:
         data:
-          $ref: '#/components/schemas/LoginReq_data'
+          $ref: '#/components/schemas/LoginCompleteReq_data'
       required:
       - data
       type: object
-    LoginResp:
+    LoginCompleteResp:
       properties:
         data:
-          $ref: '#/components/schemas/LoginResp_data'
+          $ref: '#/components/schemas/LoginCompleteResp_data'
       required:
       - data
       type: object
@@ -65,13 +75,6 @@ components:
       required:
       - data
       type: object
-    ChangeUsernameReq:
-      properties:
-        data:
-          $ref: '#/components/schemas/ChangeUsernameReq_data'
-      required:
-      - data
-      type: object
     RefreshReq:
       properties:
         data:
@@ -85,6 +88,56 @@ components:
           $ref: '#/components/schemas/RefreshResp_data'
       required:
       - data
+      type: object
+    ChangeUsername:
+      properties:
+        data:
+          $ref: '#/components/schemas/ChangeUsername_data'
+      required:
+      - data
+      type: object
+    UserSession:
+      properties:
+        data:
+          $ref: '#/components/schemas/UserSession_data'
+      required:
+      - data
+      type: object
+    UserSessions:
+      properties:
+        data:
+          $ref: '#/components/schemas/UserSession_data'
+      required:
+      - data
+      type: object
+    ApproveOperationReq_data_attributes:
+      properties:
+        email:
+          description: New email
+          type: string
+        code:
+          description: User code
+          type: string
+        operation:
+          description: Type of operation
+          example: reset_password
+          type: string
+      required:
+      - code
+      - email
+      - operation
+      type: object
+    ApproveOperationReq_data:
+      properties:
+        type:
+          enum:
+          - approve_operation
+          type: string
+        attributes:
+          $ref: '#/components/schemas/ApproveOperationReq_data_attributes'
+      required:
+      - attributes
+      - type
       type: object
     RegistrationInitiate_data_attributes:
       properties:
@@ -103,7 +156,7 @@ components:
       properties:
         type:
           enum:
-          - registration
+          - registration_initiate
           type: string
         attributes:
           $ref: '#/components/schemas/RegistrationInitiate_data_attributes'
@@ -144,46 +197,41 @@ components:
       - attributes
       - type
       type: object
-    ApproveOperationReq_data_attributes:
+    LoginInitiate_data_attributes:
       properties:
         email:
-          description: New email
+          description: User email
+          format: email
           type: string
-        code:
-          description: User code
+        username:
+          description: User username
           type: string
-        operation:
-          description: Type of operation
-          example: reset_password
+        password:
+          description: First password
           type: string
       required:
-      - code
-      - email
-      - operation
+      - password
       type: object
-    ApproveOperationReq_data:
+    LoginInitiate_data:
       properties:
         type:
           enum:
-          - approve_operation
+          - login_initiate
           type: string
         attributes:
-          $ref: '#/components/schemas/ApproveOperationReq_data_attributes'
+          $ref: '#/components/schemas/LoginInitiate_data_attributes'
       required:
       - attributes
       - type
       type: object
-    LoginReq_data_attributes:
+    LoginCompleteReq_data_attributes:
       properties:
         email:
-          description: User email (required if username is not provided).
+          description: User email
           format: email
           type: string
         username:
-          description: User username (required if email is not provided).
-          type: string
-        password:
-          description: User password.
+          description: User username
           type: string
         factory_id:
           description: Unique identifier for the user's device.
@@ -198,21 +246,20 @@ components:
       - device_name
       - factory_id
       - os_version
-      - password
       type: object
-    LoginReq_data:
+    LoginCompleteReq_data:
       properties:
         type:
           enum:
-          - login
+          - login_complete
           type: string
         attributes:
-          $ref: '#/components/schemas/LoginReq_data_attributes'
+          $ref: '#/components/schemas/LoginCompleteReq_data_attributes'
       required:
       - attributes
       - type
       type: object
-    LoginResp_data_attributes:
+    LoginCompleteResp_data_attributes:
       properties:
         access_token:
           description: Access Token для авторизации запросов.
@@ -228,14 +275,14 @@ components:
       - expires_in
       - refresh_token
       type: object
-    LoginResp_data:
+    LoginCompleteResp_data:
       properties:
         type:
           enum:
-          - tokens
+          - login_complete
           type: string
         attributes:
-          $ref: '#/components/schemas/LoginResp_data_attributes'
+          $ref: '#/components/schemas/LoginCompleteResp_data_attributes'
       required:
       - attributes
       - type
@@ -293,31 +340,6 @@ components:
       - attributes
       - type
       type: object
-    ChangeUsernameReq_data_attributes:
-      properties:
-        new_username:
-          description: New username
-          format: username
-          type: string
-        password:
-          description: User password
-          type: string
-      required:
-      - email
-      - password
-      type: object
-    ChangeUsernameReq_data:
-      properties:
-        type:
-          enum:
-          - change_username
-          type: string
-        attributes:
-          $ref: '#/components/schemas/ChangeUsernameReq_data_attributes'
-      required:
-      - attributes
-      - type
-      type: object
     RefreshReq_data_attributes:
       properties:
         refresh_token:
@@ -351,7 +373,6 @@ components:
         type:
           enum:
           - refresh
-          example: refresh
           type: string
         attributes:
           $ref: '#/components/schemas/RefreshReq_data_attributes'
@@ -383,10 +404,81 @@ components:
         type:
           enum:
           - refresh
-          example: refresh
           type: string
         attributes:
           $ref: '#/components/schemas/RefreshResp_data_attributes'
+      required:
+      - attributes
+      - type
+      type: object
+    ChangeUsername_data_attributes:
+      properties:
+        new_username:
+          description: New username
+          format: username
+          type: string
+        password:
+          description: User password
+          type: string
+      required:
+      - email
+      - password
+      type: object
+    ChangeUsername_data:
+      properties:
+        type:
+          enum:
+          - change_username
+          type: string
+        attributes:
+          $ref: '#/components/schemas/ChangeUsername_data_attributes'
+      required:
+      - attributes
+      - type
+      type: object
+    UserSession_data_attributes_devices_inner:
+      properties:
+        id:
+          description: Уникальный идентификатор устройства
+          format: uuid
+          type: string
+        factory_id:
+          description: Серийный номер устройства
+          type: string
+        device_name:
+          description: "Имя устройства, заданное пользователем"
+          type: string
+        os_version:
+          description: Версия операционной системы устройства
+          type: string
+        last_used:
+          description: Дата и время последнего использования устройства
+          format: date-time
+          type: string
+      required:
+      - device_name
+      - factory_id
+      - id
+      - last_used
+      - os_version
+      type: object
+    UserSession_data_attributes:
+      properties:
+        devices:
+          items:
+            $ref: '#/components/schemas/UserSession_data_attributes_devices_inner'
+          type: array
+      required:
+      - devices
+      type: object
+    UserSession_data:
+      properties:
+        type:
+          enum:
+          - users_sessions
+          type: string
+        attributes:
+          $ref: '#/components/schemas/UserSession_data_attributes'
       required:
       - attributes
       - type

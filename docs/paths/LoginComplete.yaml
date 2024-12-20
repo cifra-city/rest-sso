@@ -5,27 +5,23 @@ info:
   version: 1.0.0
 
 paths:
-  /register-initiate:
+  /login-complete:
     post:
-      summary: Send a request to register a new user
-      description: Send code to email for user to initiate registration
+      summary: Confirm login
+      description: Endpoint to login a new user with email, username, and password
       requestBody:
         required: true
         content:
           application/vnd.api+json:
             schema:
-              $ref: '../spec/components/schemas/RegistrationInitiate.yaml'
+              $ref: '../spec/components/schemas/LoginCompleteReq.yaml'
       responses:
         '201':
-          description: Successfully initiated registration
+          description: User successfully login
           content:
-            application/json:
+            application/vnd.api+json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: number
-                    example: 201
+                $ref: '../spec/components/schemas/LoginCompleteResp.yaml'
         '400':
           $ref: '../spec/components/responses/invalidParameter.yaml'
         '409':

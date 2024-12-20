@@ -1,0 +1,46 @@
+type: object
+required:
+  - data
+properties:
+  data:
+    type: object
+    required:
+      - type
+      - attributes
+    properties:
+      type:
+        type: string
+        enum: [users_sessions]
+      attributes:
+        type: object
+        required:
+          - devices
+        properties:
+          devices:
+            type: array
+            items:
+              type: object
+              required:
+                - id
+                - factory_id
+                - device_name
+                - os_version
+                - last_used
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                  description: Уникальный идентификатор устройства
+                factory_id:
+                  type: string
+                  description: Серийный номер устройства
+                device_name:
+                  type: string
+                  description: Имя устройства, заданное пользователем
+                os_version:
+                  type: string
+                  description: Версия операционной системы устройства
+                last_used:
+                  type: string
+                  format: date-time
+                  description: Дата и время последнего использования устройства
