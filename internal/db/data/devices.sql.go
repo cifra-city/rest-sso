@@ -35,6 +35,21 @@ func (q *Queries) DeleteDevice(ctx context.Context, id uuid.UUID) error {
 	return err
 }
 
+const deleteDeviceByUserIdAndId = `-- name: DeleteDeviceByUserIdAndId :exec
+DELETE FROM devices
+WHERE user_id = $1 AND id = $2
+`
+
+type DeleteDeviceByUserIdAndIdParams struct {
+	UserID uuid.UUID
+	ID     uuid.UUID
+}
+
+func (q *Queries) DeleteDeviceByUserIdAndId(ctx context.Context, arg DeleteDeviceByUserIdAndIdParams) error {
+	_, err := q.db.ExecContext(ctx, deleteDeviceByUserIdAndId, arg.UserID, arg.ID)
+	return err
+}
+
 const deleteDevicesByUserID = `-- name: DeleteDevicesByUserID :exec
 DELETE FROM devices
 WHERE user_id = $1

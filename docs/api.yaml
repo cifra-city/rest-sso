@@ -55,3 +55,7 @@ components:
       $ref: './spec/components/schemas/ChangeUsername.yaml'
     UserSession:
       $ref: './spec/components/schemas/UserSessions.yaml'
+    DeleteSession:
+      $ref: './spec/components/schemas/DeleteSession.yaml'
+    TerminateSessions:
+      $ref: './spec/components/schemas/TerminateSessions.yaml'

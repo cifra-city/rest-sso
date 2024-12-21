@@ -29,6 +29,7 @@ func LoginInitiate(w http.ResponseWriter, r *http.Request) {
 
 	IP := httpkit.GetClientIP(r)
 	UserAgent := httpkit.GetUserAgent(r)
+	fingerprint := httpkit.GenerateFingerprint(r)
 
 	Server, err := cifractx.GetValue[*config.Service](r.Context(), config.SERVICE)
 	if err != nil {
@@ -65,9 +66,9 @@ func LoginInitiate(w http.ResponseWriter, r *http.Request) {
 	err = bcrypt.CompareHashAndPassword([]byte(user.PassHash), []byte(password))
 	if err != nil {
 		err = Server.Queries.InsertOperationHistory(r.Context(), data.InsertOperationHistoryParams{
-			ID:     uuid.New(),
-			UserID: user.ID,
-
+			ID:            uuid.New(),
+			UserID:        user.ID,
+			DeviceData:    fingerprint,
 			Operation:     data.OperationTypeLogin,
 			Success:       false,
 			FailureReason: data.FailureReasonInvalidPassword,

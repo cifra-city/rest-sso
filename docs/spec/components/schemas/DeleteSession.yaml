@@ -1,0 +1,20 @@
+type: object
+required:
+  - data
+properties:
+  data:
+    required:
+      - type
+      - attributes
+    properties:
+      type:
+        type: string
+        enum: [delete_session]
+      attributes:
+        type: object
+        required:
+          - device_id
+        properties:
+          device_id:
+            type: string
+            description: "Device ID."

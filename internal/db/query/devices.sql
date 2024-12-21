@@ -38,6 +38,10 @@ WHERE id = $1;
 DELETE FROM devices
 WHERE user_id = $1;
 
+-- name: DeleteDeviceByUserIdAndId :exec
+DELETE FROM devices
+WHERE user_id = $1 AND id = $2;
+
 -- name: CountDevicesByUserID :one
 SELECT COUNT(*) FROM devices
 WHERE user_id = $1;

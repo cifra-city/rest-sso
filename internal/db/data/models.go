@@ -66,12 +66,15 @@ func (ns NullFailureReason) Value() (driver.Value, error) {
 type OperationType string
 
 const (
-	OperationTypeLogin          OperationType = "login"
-	OperationTypeRefreshToken   OperationType = "refresh_token"
-	OperationTypeChangeUsername OperationType = "change_username"
-	OperationTypeChangePassword OperationType = "change_password"
-	OperationTypeResetPassword  OperationType = "reset_password"
-	OperationTypeChangeEmail    OperationType = "change_email"
+	OperationTypeLogin            OperationType = "login"
+	OperationTypeRefreshToken     OperationType = "refresh_token"
+	OperationTypeChangeUsername   OperationType = "change_username"
+	OperationTypeChangePassword   OperationType = "change_password"
+	OperationTypeResetPassword    OperationType = "reset_password"
+	OperationTypeChangeEmail      OperationType = "change_email"
+	OperationTypeDeleteAccount    OperationType = "delete_account"
+	OperationTypeDeleteSession    OperationType = "delete_session"
+	OperationTypeTerminateSession OperationType = "terminate_session"
 )
 
 func (e *OperationType) Scan(src interface{}) error {

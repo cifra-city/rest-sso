@@ -67,7 +67,10 @@ CREATE TYPE operation_type AS ENUM (
     'change_username',
     'change_password',
     'reset_password',
-    'change_email'
+    'change_email',
+    'delete_account',
+    'delete_session',
+    'terminate_session'
 );
 
 CREATE TABLE operation_history (

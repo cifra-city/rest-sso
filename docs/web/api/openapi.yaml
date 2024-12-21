@@ -103,6 +103,20 @@ components:
       required:
       - data
       type: object
+    DeleteSession:
+      properties:
+        data:
+          $ref: '#/components/schemas/DeleteSession_data'
+      required:
+      - data
+      type: object
+    TerminateSessions:
+      properties:
+        data:
+          $ref: '#/components/schemas/TerminateSessions_data'
+      required:
+      - data
+      type: object
     UserSessions:
       properties:
         data:
@@ -479,6 +493,56 @@ components:
           type: string
         attributes:
           $ref: '#/components/schemas/UserSession_data_attributes'
+      required:
+      - attributes
+      - type
+      type: object
+    DeleteSession_data_attributes:
+      properties:
+        device_id:
+          description: Device ID.
+          type: string
+      required:
+      - device_id
+      type: object
+    DeleteSession_data:
+      properties:
+        type:
+          enum:
+          - delete_session
+          type: string
+        attributes:
+          $ref: '#/components/schemas/DeleteSession_data_attributes'
+      required:
+      - attributes
+      - type
+      type: object
+    TerminateSessions_data_attributes_devices_inner:
+      properties:
+        id:
+          description: Unique device identifier
+          format: uuid
+          type: string
+      required:
+      - id
+      type: object
+    TerminateSessions_data_attributes:
+      properties:
+        devices:
+          items:
+            $ref: '#/components/schemas/TerminateSessions_data_attributes_devices_inner'
+          type: array
+      required:
+      - devices
+      type: object
+    TerminateSessions_data:
+      properties:
+        type:
+          enum:
+          - delete_session
+          type: string
+        attributes:
+          $ref: '#/components/schemas/TerminateSessions_data_attributes'
       required:
       - attributes
       - type

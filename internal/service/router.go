@@ -43,22 +43,14 @@ func Run(ctx context.Context) {
 
 				r.Route("/user", func(r chi.Router) {
 					r.Use(authMW)
-
-					r.Route("/change", func(r chi.Router) {
-						r.Post("/username", handlers.ChangeUsername)
-					})
-					//r.Route("/delete", func(r chi.Router) {
-					//	r.Delete("/user", handlers.DeleteUser)
-					//	r.Delete("/session", handlers.DeleteSession)
-					//	r.Post("/terminate-all", handlers.TerminateAllSessions)
-					//})
-
+					r.Post("/change_username", handlers.ChangeUsername)
 					r.Route("/sessions", func(r chi.Router) {
 						r.Get("/", handlers.GetUserSessions)
+						r.Delete("/delete", handlers.DeleteSession)
+						r.Delete("/terminate", handlers.TerminateSessions)
 					})
 					r.Post("/logout", handlers.Logout)
 				})
-
 				r.Post("/refresh", handlers.Refresh)
 			})
 		})

@@ -10,6 +10,9 @@ docs/ApproveOperationReqDataAttributes.md
 docs/ChangeUsername.md
 docs/ChangeUsernameData.md
 docs/ChangeUsernameDataAttributes.md
+docs/DeleteSession.md
+docs/DeleteSessionData.md
+docs/DeleteSessionDataAttributes.md
 docs/LoginCompleteReq.md
 docs/LoginCompleteReqData.md
 docs/LoginCompleteReqDataAttributes.md
@@ -37,6 +40,10 @@ docs/ResetPasswordCompleteDataAttributes.md
 docs/ResetPasswordInitiate.md
 docs/ResetPasswordInitiateData.md
 docs/ResetPasswordInitiateDataAttributes.md
+docs/TerminateSessions.md
+docs/TerminateSessionsData.md
+docs/TerminateSessionsDataAttributes.md
+docs/TerminateSessionsDataAttributesDevicesInner.md
 docs/UserSession.md
 docs/UserSessionData.md
 docs/UserSessionDataAttributes.md
@@ -51,6 +58,9 @@ model_approve_operation_req_data_attributes.go
 model_change_username.go
 model_change_username_data.go
 model_change_username_data_attributes.go
+model_delete_session.go
+model_delete_session_data.go
+model_delete_session_data_attributes.go
 model_login_complete_req.go
 model_login_complete_req_data.go
 model_login_complete_req_data_attributes.go
@@ -78,6 +88,10 @@ model_reset_password_complete_data_attributes.go
 model_reset_password_initiate.go
 model_reset_password_initiate_data.go
 model_reset_password_initiate_data_attributes.go
+model_terminate_sessions.go
+model_terminate_sessions_data.go
+model_terminate_sessions_data_attributes.go
+model_terminate_sessions_data_attributes_devices_inner.go
 model_user_session.go
 model_user_session_data.go
 model_user_session_data_attributes.go
