@@ -3,7 +3,6 @@ package data
 import (
 	"context"
 	"database/sql"
-	"errors"
 	"time"
 
 	"github.com/google/uuid"
@@ -14,7 +13,8 @@ import (
 // or updating refresh_token if device its first usage creating new record in device, always
 func (q *Queries) UpdateRefreshTokenTransaction(
 	ctx context.Context,
-	user *UsersSecret,
+	userID uuid.UUID,
+	deviceID uuid.UUID,
 	factoryID string,
 	deviceName string,
 	osVersion string,
@@ -34,76 +34,29 @@ func (q *Queries) UpdateRefreshTokenTransaction(
 		}
 	}()
 
-	device, err := queries.GetDeviceByUserIDAndFactoryId(ctx, GetDeviceByUserIDAndFactoryIdParams{
-		UserID:    user.ID,
-		FactoryID: factoryID,
+	err = queries.UpdateLastUsed(ctx, UpdateLastUsedParams{
+		ID:       deviceID,
+		LastUsed: time.Now().UTC(),
 	})
-	if err != nil && !errors.Is(err, sql.ErrNoRows) {
+	if err != nil {
 		return err
-	}
-
-	if errors.Is(err, sql.ErrNoRows) { // Device is nonexistent
-		err := queries.InsertDevice(ctx, InsertDeviceParams{
-			ID:         uuid.New(),
-			UserID:     user.ID,
-			FactoryID:  factoryID,
-			DeviceName: sql.NullString{String: deviceName, Valid: true},
-			OsVersion:  sql.NullString{String: osVersion, Valid: true},
-			CreatedAt:  time.Now().UTC(),
-			LastUsed:   time.Now().UTC(),
-		})
-		if err != nil {
-			return err
-		}
-
-		device, err = queries.GetDeviceByUserIDAndFactoryId(ctx, GetDeviceByUserIDAndFactoryIdParams{
-			UserID:    user.ID,
-			FactoryID: factoryID,
-		})
-		if err != nil {
-			return err
-		}
-	} else { // if device exists
-		err := queries.UpdateLastUsed(ctx, UpdateLastUsedParams{
-			ID:       device.ID,
-			LastUsed: time.Now().UTC(),
-		})
-		if err != nil {
-			return err
-		}
 	}
 
 	_, err = queries.GetTokenByUserIdAndDeviceId(ctx, GetTokenByUserIdAndDeviceIdParams{
-		UserID:   user.ID,
-		DeviceID: device.ID,
+		UserID:   userID,
+		DeviceID: deviceID,
 	})
-	if err != nil && !errors.Is(err, sql.ErrNoRows) {
+	if err != nil {
 		return err
 	}
-	if errors.Is(err, sql.ErrNoRows) { // Token for this user isn`t exists
-		err := queries.InsertRefreshToken(ctx, InsertRefreshTokenParams{
-			ID:        uuid.New(),
-			UserID:    user.ID,
-			Token:     newToken,
-			CreatedAt: time.Now().UTC(),
-			ExpiresAt: expiresAt,
-			DeviceID:  device.ID,
-			IpAddress: ipAddress,
-		})
-		if err != nil {
-			return err
-		}
-	} else if err == nil { // Token is exists
-		err = queries.UpdateRefreshTokenByDeviceAndUserID(ctx, UpdateRefreshTokenByDeviceAndUserIDParams{
-			UserID:    user.ID,
-			DeviceID:  device.ID,
-			Token:     newToken,
-			ExpiresAt: expiresAt,
-		})
-		if err != nil {
-			return err
-		}
-	} else {
+
+	err = queries.UpdateRefreshTokenByDeviceAndUserID(ctx, UpdateRefreshTokenByDeviceAndUserIDParams{
+		UserID:    userID,
+		DeviceID:  deviceID,
+		Token:     newToken,
+		ExpiresAt: expiresAt,
+	})
+	if err != nil {
 		return err
 	}
 

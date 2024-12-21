@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"database/sql"
+	"errors"
 	"net/http"
 
 	"github.com/cifra-city/cifractx"
@@ -42,8 +44,6 @@ func ChangeUsername(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Infof("userID: %v", userID)
-
 	user, err := Server.Queries.GetUserByID(r.Context(), userID)
 	if err != nil {
 		httpkit.RenderErr(w, problems.InternalError("Failed to retrieve user information"))
@@ -69,7 +69,11 @@ func ChangeUsername(w http.ResponseWriter, r *http.Request) {
 	}
 
 	_, err = Server.Queries.GetUserByUsername(r.Context(), *newUsername)
-	if err == nil {
+	if !errors.Is(err, sql.ErrNoRows) {
+		if err != nil {
+			httpkit.RenderErr(w, problems.InternalError("Failed to check username availability"))
+			return
+		}
 		httpkit.RenderErr(w, problems.Conflict("Username already exists"))
 		return
 	}

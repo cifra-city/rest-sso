@@ -10,6 +10,7 @@ import (
 	"github.com/cifra-city/httpkit/problems"
 	"github.com/cifra-city/rest-sso/internal/config"
 	"github.com/cifra-city/rest-sso/internal/service/requests"
+	"github.com/cifra-city/rest-sso/internal/service/utils"
 	"github.com/sirupsen/logrus"
 )
 
@@ -20,7 +21,7 @@ func RegistrationInitiate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	em := req.Data.Attributes.Email
+	email := req.Data.Attributes.Email
 	username := req.Data.Attributes.Username
 
 	IP := httpkit.GetClientIP(r)
@@ -35,34 +36,23 @@ func RegistrationInitiate(w http.ResponseWriter, r *http.Request) {
 
 	log := Server.Logger
 
-	_, err = Server.Queries.GetUserByEmail(r.Context(), em)
-	if err != nil && !errors.Is(err, sql.ErrNoRows) {
-		log.Errorf("error getting user by email: %v", err)
-		httpkit.RenderErr(w, problems.InternalError())
-		return
-	}
-	if err == nil {
-		httpkit.RenderErr(w, problems.Conflict("this email address already exists"))
-		return
-	}
-
-	_, err = Server.Queries.GetUserByUsername(r.Context(), username)
-	if err != nil && !errors.Is(err, sql.ErrNoRows) {
-		log.Errorf("error getting user by username: %v", err)
-		httpkit.RenderErr(w, problems.InternalError())
-		return
-	}
-	if err == nil {
-		httpkit.RenderErr(w, problems.Conflict("this username already exists"))
+	_, err = utils.GetUserExists(r.Context(), Server, &username, &email)
+	if !errors.Is(err, sql.ErrNoRows) {
+		if err != nil {
+			log.Errorf("error getting user: %v", err)
+			httpkit.RenderErr(w, problems.InternalError())
+			return
+		}
+		httpkit.RenderErr(w, problems.Conflict("user already exists"))
 		return
 	}
 
 	go func() {
-		err = Server.Mailman.SendList(em, string(REGISTRATION), "email_list.html", UserAgent, IP, 300)
+		err = Server.Mailman.SendList(email, string(REGISTRATION), "email_list.html", UserAgent, IP, 300)
 		if err != nil {
 			log.Errorf("error sending email: %v", err)
 		} else {
-			log.Infof("Email sent successfully to: %s", em)
+			log.Infof("Email sent successfully to: %s", email)
 		}
 	}()
 

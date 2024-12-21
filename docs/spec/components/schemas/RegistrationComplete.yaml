@@ -16,7 +16,7 @@ properties:
           - first_password
           - second_password
           - email
-          - password
+          - username
         properties:
           first_password:
             type: string

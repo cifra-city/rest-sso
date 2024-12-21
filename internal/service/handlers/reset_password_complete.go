@@ -11,6 +11,7 @@ import (
 	"github.com/cifra-city/rest-sso/internal/config"
 	"github.com/cifra-city/rest-sso/internal/db/data"
 	"github.com/cifra-city/rest-sso/internal/service/requests"
+	"github.com/cifra-city/rest-sso/internal/service/utils"
 	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
@@ -41,8 +42,6 @@ func ResetPasswordComplete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var user data.UsersSecret
-
 	Server, err := cifractx.GetValue[*config.Service](r.Context(), config.SERVICE)
 	if err != nil {
 		logrus.Errorf("error getting server from context: %v", err)
@@ -51,17 +50,19 @@ func ResetPasswordComplete(w http.ResponseWriter, r *http.Request) {
 	}
 	log := Server.Logger
 
-	if username != nil {
-		user, err = Server.Queries.GetUserByUsername(r.Context(), *username)
-	} else {
-		user, err = Server.Queries.GetUserByEmail(r.Context(), *email)
-	}
+	user, err := utils.GetUserExists(r.Context(), Server, username, email)
 	if err != nil {
-		log.Errorf("Failed to get user: %v", err)
-		if errors.Is(err, sql.ErrNoRows) {
-			httpkit.RenderErr(w, problems.Unauthorized())
+		if errors.Is(err, utils.ErrMultipleChoices) {
+			log.Errorf("multiple choices error: %v", err)
+			httpkit.RenderErr(w, problems.BadRequest(err)...)
 			return
 		}
+		if errors.Is(err, sql.ErrNoRows) {
+			log.Errorf("user not found: %v", err)
+			httpkit.RenderErr(w, problems.NotFound())
+			return
+		}
+		log.Errorf("error getting user: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}

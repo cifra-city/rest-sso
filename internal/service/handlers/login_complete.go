@@ -4,18 +4,17 @@ import (
 	"database/sql"
 	"errors"
 	"net/http"
-	"time"
 
 	"github.com/cifra-city/cifractx"
 	"github.com/cifra-city/httpkit"
 	"github.com/cifra-city/httpkit/problems"
 	"github.com/cifra-city/mailman"
 	"github.com/cifra-city/rest-sso/internal/config"
-	"github.com/cifra-city/rest-sso/internal/db/data"
 	"github.com/cifra-city/rest-sso/internal/sectools"
 	"github.com/cifra-city/rest-sso/internal/service/requests"
+	"github.com/cifra-city/rest-sso/internal/service/utils"
 	"github.com/cifra-city/rest-sso/resources"
-	"github.com/cifra-city/tokens"
+	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 )
 
@@ -44,26 +43,20 @@ func LoginComplete(w http.ResponseWriter, r *http.Request) {
 
 	log := Server.Logger
 
-	var user data.UsersSecret
-	var user2 data.UsersSecret
-
-	if username != nil {
-		user, err = Server.Queries.GetUserByUsername(r.Context(), *username)
-	}
-	if email != nil {
-		user2, err = Server.Queries.GetUserByEmail(r.Context(), *email)
-	}
+	user, err := utils.GetUserExists(r.Context(), Server, username, email)
 	if err != nil {
-		log.Errorf("Failed to get user: %v", err)
-		if errors.Is(err, sql.ErrNoRows) {
-			httpkit.RenderErr(w, problems.Unauthorized())
+		if errors.Is(err, utils.ErrMultipleChoices) {
+			log.Errorf("multiple choices error: %v", err)
+			httpkit.RenderErr(w, problems.BadRequest(err)...)
 			return
 		}
+		if errors.Is(err, sql.ErrNoRows) {
+			log.Errorf("user not found: %v", err)
+			httpkit.RenderErr(w, problems.NotFound())
+			return
+		}
+		log.Errorf("error getting user: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())
-		return
-	}
-	if user2.ID != user.ID {
-		httpkit.RenderErr(w, problems.BadRequest(errors.New("email and username do not match"))...)
 		return
 	}
 
@@ -84,30 +77,24 @@ func LoginComplete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tokenAccess, err := tokens.GenerateJWT(user.ID, string(user.Role), int(user.TokenVersion), Server.Config.JWT.AccessToken.TokenLifetime, Server.Config.JWT.AccessToken.SecretKey)
+	deviceID := uuid.New()
+
+	tokenAccess, tokenRefresh, expiresAt, err := utils.GenerateTokens(*Server, user, deviceID)
 	if err != nil {
-		log.Errorf("error generating token access jwt: %v", err)
+		log.Errorf("error generating tokens: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
 
-	tokenRefresh, err := tokens.GenerateJWT(user.ID, string(user.Role), int(user.TokenVersion), Server.Config.JWT.RefreshToken.TokenLifetime, Server.Config.JWT.RefreshToken.SecretKey)
+	encryptToken, err := sectools.EncryptToken(tokenRefresh, Server.Config.JWT.RefreshToken.SecretKey)
 	if err != nil {
-		log.Errorf("error generating token access jwt: %v", err)
+		log.Errorf("error encrypting token: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
 
-	expiresAt := time.Now().UTC().Add(Server.Config.JWT.RefreshToken.TokenLifetime)
-
-	encryptedToken, err := sectools.EncryptToken(tokenRefresh, Server.Config.JWT.RefreshToken.EncryptionKey)
-	if err != nil {
-		log.Errorf("Failed to encrypt refresh token: %v", err)
-		httpkit.RenderErr(w, problems.InternalError())
-		return
-	}
-
-	err = Server.Queries.UpdateRefreshTokenTransaction(r.Context(), &user, factoryId, deviceName, osVersion, encryptedToken, expiresAt, IP)
+	err = Server.Queries.LoginTransaction(r.Context(), user.ID, deviceID, encryptToken, expiresAt,
+		factoryId, deviceName, osVersion, IP, httpkit.GenerateFingerprint(r))
 	if err != nil {
 		log.Errorf("error updating last used and refresh token: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())

@@ -5,13 +5,13 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Type** | **string** |  | 
-**Attributes** | [**LoginRespDataAttributes**](LoginRespDataAttributes.md) |  | 
+**Attributes** | [**LoginCompleteRespDataAttributes**](LoginCompleteRespDataAttributes.md) |  | 
 
 ## Methods
 
 ### NewLoginRespData
 
-`func NewLoginRespData(type_ string, attributes LoginRespDataAttributes, ) *LoginRespData`
+`func NewLoginRespData(type_ string, attributes LoginCompleteRespDataAttributes, ) *LoginRespData`
 
 NewLoginRespData instantiates a new LoginRespData object
 This constructor will assign default values to properties that have it defined,
@@ -48,20 +48,20 @@ SetType sets Type field to given value.
 
 ### GetAttributes
 
-`func (o *LoginRespData) GetAttributes() LoginRespDataAttributes`
+`func (o *LoginRespData) GetAttributes() LoginCompleteRespDataAttributes`
 
 GetAttributes returns the Attributes field if non-nil, zero value otherwise.
 
 ### GetAttributesOk
 
-`func (o *LoginRespData) GetAttributesOk() (*LoginRespDataAttributes, bool)`
+`func (o *LoginRespData) GetAttributesOk() (*LoginCompleteRespDataAttributes, bool)`
 
 GetAttributesOk returns a tuple with the Attributes field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetAttributes
 
-`func (o *LoginRespData) SetAttributes(v LoginRespDataAttributes)`
+`func (o *LoginRespData) SetAttributes(v LoginCompleteRespDataAttributes)`
 
 SetAttributes sets Attributes field to given value.
 

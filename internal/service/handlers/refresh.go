@@ -37,7 +37,6 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 	log := Server.Logger
 
 	refreshToken := req.Data.Attributes.RefreshToken
-	deviceIdStr := req.Data.Attributes.DeviceId
 	factoryId := req.Data.Attributes.FactoryId
 	deviceName := req.Data.Attributes.DeviceName
 	osVersion := req.Data.Attributes.OsVersion
@@ -61,25 +60,12 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 
 	log.Debugf("Token received: %s", tokenString)
 
-	claims := &tokens.CustomClaims{}
-	_, err = jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
-		return []byte(Server.Config.JWT.AccessToken.SecretKey), nil
-	})
-
+	userID, deviceID, tokenVersion, _, err := tokens.VerifyJWTAndExtractClaims(r.Context(), tokenString, Server.Config.JWT.AccessToken.SecretKey, log)
 	if err != nil && !errors.Is(err, jwt.ErrTokenExpired) {
-		log.Warnf("Invalid token: %v", err)
-		httpkit.RenderErr(w, problems.Unauthorized("Invalid token"))
+		log.Warnf("Token validation failed: %v", err)
+		httpkit.RenderErr(w, problems.Unauthorized("Token validation failed"))
 		return
 	}
-
-	userID, err := uuid.Parse(claims.Subject)
-	if err != nil {
-		log.Errorf("Invalid user ID in token claims: %v", err)
-		httpkit.RenderErr(w, problems.Unauthorized("Invalid token"))
-		return
-	}
-
-	log.Infof("Claims Subject (UserID): %s", userID)
 
 	user, err := Server.Queries.GetUserByID(r.Context(), userID)
 	if err != nil {
@@ -92,14 +78,13 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	deviceId, err := uuid.Parse(deviceIdStr)
-	if err != nil {
-		log.Errorf("Invalid device ID format: %v", err)
-		httpkit.RenderErr(w, problems.BadRequest(err)...)
+	if int(user.TokenVersion) != tokenVersion {
+		log.Warn("Token version mismatch")
+		httpkit.RenderErr(w, problems.Unauthorized("Token version mismatch"))
 		return
 	}
-	log.Infof("Device ID: %s", deviceId)
-	device, err := Server.Queries.GetDeviceByID(r.Context(), deviceId)
+
+	device, err := Server.Queries.GetDeviceByID(r.Context(), deviceID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			httpkit.RenderErr(w, problems.Unauthorized("device not found"))
@@ -142,7 +127,7 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 
 	dbToken, err := Server.Queries.GetTokenByUserIdAndDeviceId(r.Context(), data.GetTokenByUserIdAndDeviceIdParams{
 		UserID:   userID,
-		DeviceID: deviceId,
+		DeviceID: deviceID,
 	})
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -176,14 +161,14 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tokenAccess, err := tokens.GenerateJWT(user.ID, string(user.Role), int(user.TokenVersion), Server.Config.JWT.AccessToken.TokenLifetime, Server.Config.JWT.AccessToken.SecretKey)
+	tokenAccess, err := tokens.GenerateJWT(user.ID, deviceID, string(user.Role), int(user.TokenVersion), Server.Config.JWT.AccessToken.TokenLifetime, Server.Config.JWT.AccessToken.SecretKey)
 	if err != nil {
 		Server.Logger.Errorf("Error generating access token: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
 
-	tokenRefresh, err := tokens.GenerateJWT(user.ID, string(user.Role), int(user.TokenVersion), Server.Config.JWT.RefreshToken.TokenLifetime, Server.Config.JWT.RefreshToken.SecretKey)
+	tokenRefresh, err := tokens.GenerateJWT(user.ID, deviceID, string(user.Role), int(user.TokenVersion), Server.Config.JWT.RefreshToken.TokenLifetime, Server.Config.JWT.RefreshToken.SecretKey)
 	if err != nil {
 		Server.Logger.Errorf("Error generating refresh token: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())
@@ -199,9 +184,13 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = Server.Queries.UpdateRefreshTokenTransaction(r.Context(), &user, device.FactoryID, deviceName, osVersion, encryptedToken, expiresAt, IP)
+	err = Server.Queries.UpdateRefreshTokenTransaction(r.Context(), userID, deviceID, device.FactoryID, deviceName, osVersion, encryptedToken, expiresAt, IP)
 	if err != nil {
 		log.Errorf("Error updating last used and refresh token: %v", err)
+		if errors.Is(err, sql.ErrNoRows) {
+			httpkit.RenderErr(w, problems.Unauthorized())
+			return
+		}
 		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}

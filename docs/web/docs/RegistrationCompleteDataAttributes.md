@@ -7,13 +7,13 @@ Name | Type | Description | Notes
 **FirstPassword** | **string** | First password | 
 **SecondPassword** | **string** | Second password | 
 **Email** | **string** | User email | 
-**Username** | Pointer to **string** | User username | [optional] 
+**Username** | **string** | User username | 
 
 ## Methods
 
 ### NewRegistrationCompleteDataAttributes
 
-`func NewRegistrationCompleteDataAttributes(firstPassword string, secondPassword string, email string, ) *RegistrationCompleteDataAttributes`
+`func NewRegistrationCompleteDataAttributes(firstPassword string, secondPassword string, email string, username string, ) *RegistrationCompleteDataAttributes`
 
 NewRegistrationCompleteDataAttributes instantiates a new RegistrationCompleteDataAttributes object
 This constructor will assign default values to properties that have it defined,
@@ -107,11 +107,6 @@ and a boolean to check if the value has been set.
 
 SetUsername sets Username field to given value.
 
-### HasUsername
-
-`func (o *RegistrationCompleteDataAttributes) HasUsername() bool`
-
-HasUsername returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
