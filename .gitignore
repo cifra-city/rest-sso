@@ -1,4 +1,6 @@
 .idea
-local_config.yaml
 vendor
+node_modules
+
 main
+local_config.yaml

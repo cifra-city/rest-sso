@@ -1,0 +1,27 @@
+{
+  "name": "rest-sso",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cifra-city/rest-sso.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cifra-city/rest-sso/issues"
+  },
+  "homepage": "https://github.com/cifra-city/rest-sso#readme",
+  "dependencies": {
+    "redoc-cli": "^0.13.21",
+    "swagger-ui-dist": "^5.18.2"
+  }
+}

@@ -1,11 +1,15 @@
-post:
+get:
   tags:
-    - Login
-  summary: Logout user
-  description: Endpoint to logout user
+    - Sessions
+  summary: Get user's session
+  description: Endpoint to get user's session
   responses:
     '201':
-      description: User successfully logout
+      description: Updated username successfully
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '../spec/components/schemas/UserSessions.yaml'
     '400':
       $ref: '../spec/components/responses/invalidParameter.yaml'
     '401':

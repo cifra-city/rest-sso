@@ -1,38 +1,32 @@
-openapi: 3.0.0
-info:
-  title: Example API
-  description: An example API with error responses and user registration
-  version: 1.0.0
-
-paths:
-  /refresh:
-    post:
-      summary: Refresh Access Token
-      description: Endpoint to refresh an expired access token using a valid refresh token.
-      requestBody:
-        required: true
-        content:
-          application/vnd.api+json:
-            schema:
-              $ref: '../spec/components/schemas/RefreshReq.yaml'
-      responses:
-        '200':
-          description: Access token successfully refreshed.
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '../spec/components/schemas/RefreshResp.yaml'
-        '400':
-          $ref: '../spec/components/responses/invalidParameter.yaml'
-        '401':
-          description: Unauthorized. Refresh token is invalid or expired.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "Invalid or expired refresh token"
-        '500':
-          $ref: '../spec/components/responses/internalError.yaml'
+post:
+  tags:
+    - Login
+  summary: Refresh Access Token
+  description: Endpoint to refresh an expired access token using a valid refresh token.
+  requestBody:
+    required: true
+    content:
+      application/vnd.api+json:
+        schema:
+          $ref: '../spec/components/schemas/RefreshReq.yaml'
+  responses:
+    '200':
+      description: Access token successfully refreshed.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '../spec/components/schemas/RefreshResp.yaml'
+    '400':
+      $ref: '../spec/components/responses/invalidParameter.yaml'
+    '401':
+      description: Unauthorized. Refresh token is invalid or expired.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: "Invalid or expired refresh token"
+    '500':
+      $ref: '../spec/components/responses/internalError.yaml'

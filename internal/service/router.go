@@ -43,6 +43,7 @@ func Run(ctx context.Context) {
 
 				r.Route("/user", func(r chi.Router) {
 					r.Use(authMW)
+					
 					r.Post("/change_username", handlers.ChangeUsername)
 					r.Route("/sessions", func(r chi.Router) {
 						r.Get("/", handlers.GetUserSessions)

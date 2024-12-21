@@ -1,38 +1,32 @@
-openapi: 3.0.0
-info:
-  title: Example API
-  description: An example API with error responses and user registration
-  version: 1.0.0
-
-paths:
-  /login-initiate:
-    post:
-      summary: Send a request to login
-      description: Send code to email for user to initiate login
-      requestBody:
-        required: true
-        content:
-          application/vnd.api+json:
-            schema:
-              $ref: '../spec/components/schemas/LoginInitiate.yaml'
-      responses:
-        '201':
-          description: User successfully initiated login
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: number
-                    example: 201
-        '400':
-          $ref: '../spec/components/responses/invalidParameter.yaml'
-        '409':
-          $ref: '../spec/components/responses/conflict.yaml'
-        '415':
-          $ref: '../spec/components/responses/unsupportedMediaType.yaml'
-        '429':
-          $ref: '../spec/components/responses/tooManyRequests.yaml'
-        '500':
-          $ref: '../spec/components/responses/internalError.yaml'
+post:
+  tags:
+    - Login
+  summary: Send a request to login
+  description: Send code to email for user to initiate login
+  requestBody:
+    required: true
+    content:
+      application/vnd.api+json:
+        schema:
+          $ref: '../spec/components/schemas/LoginInitiate.yaml'
+  responses:
+    '201':
+      description: User successfully initiated login
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+                example: 201
+    '400':
+      $ref: '../spec/components/responses/invalidParameter.yaml'
+    '409':
+      $ref: '../spec/components/responses/conflict.yaml'
+    '415':
+      $ref: '../spec/components/responses/unsupportedMediaType.yaml'
+    '429':
+      $ref: '../spec/components/responses/tooManyRequests.yaml'
+    '500':
+      $ref: '../spec/components/responses/internalError.yaml'

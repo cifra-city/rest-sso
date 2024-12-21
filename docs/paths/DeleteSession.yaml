@@ -1,20 +1,32 @@
-type: object
-required:
-  - data
-properties:
-  data:
-    required:
-      - type
-      - attributes
-    properties:
-      type:
-        type: string
-        enum: [delete_session]
-      attributes:
-        type: object
-        required:
-          - device_id
-        properties:
-          device_id:
-            type: string
-            description: "Device ID."
+delete:
+  tags:
+    - Sessions
+  summary: Delete the sessions
+  description: Delete the sessions for a user
+  requestBody:
+    required: true
+    content:
+      application/vnd.api+json:
+        schema:
+          $ref: '../spec/components/schemas/DeleteSession.yaml'
+  responses:
+    '200':
+      description: User successfully delete the session
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+                example: 200
+    '400':
+      $ref: '../spec/components/responses/invalidParameter.yaml'
+    '401':
+      $ref: '../spec/components/responses/invalidAuth.yaml'
+    '415':
+      $ref: '../spec/components/responses/unsupportedMediaType.yaml'
+    '429':
+      $ref: '../spec/components/responses/tooManyRequests.yaml'
+    '500':
+      $ref: '../spec/components/responses/internalError.yaml'

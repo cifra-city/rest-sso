@@ -1,17 +1,17 @@
-post:
+delete:
   tags:
-    - User
-  summary: Send a request to change user password
-  description: Send code to email with code to change password
+    - Sessions
+  summary: Terminate all sessions
+  description: Terminate all sessions for a user
   requestBody:
     required: true
     content:
       application/vnd.api+json:
         schema:
-          $ref: '../spec/components/schemas/ResetPasswordInitiate.yaml'
+          $ref: '../spec/components/schemas/TerminateSessions.yaml'
   responses:
     '200':
-      description: User successfully reset password
+      description: User successfully terminated all sessions
       content:
         application/json:
           schema:

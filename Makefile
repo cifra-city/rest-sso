@@ -24,5 +24,8 @@ generate-sqlc:
 build-server:
 	go build -o main main.go
 
+start-docs:
+	 http-server .
+
 run-server: build-server
 	go run main.go
