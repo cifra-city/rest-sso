@@ -28,6 +28,7 @@ func Run(ctx context.Context) {
 		r.Route("/v1", func(r chi.Router) {
 			r.Use(rateLimiter.Middleware)
 			r.Route("/public", func(r chi.Router) {
+				//TODO: add public routes
 				r.Post("/approve-operation", handlers.ApproveOperation) // approval operation with use email for 15 minutes
 
 				r.Post("/registration-initiate", handlers.RegistrationInitiate) // check if email exists, send code to email
@@ -43,7 +44,7 @@ func Run(ctx context.Context) {
 
 				r.Route("/user", func(r chi.Router) {
 					r.Use(authMW)
-					
+
 					r.Post("/change_username", handlers.ChangeUsername)
 					r.Route("/sessions", func(r chi.Router) {
 						r.Get("/", handlers.GetUserSessions)
