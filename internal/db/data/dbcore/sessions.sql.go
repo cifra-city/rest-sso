@@ -12,9 +12,10 @@ import (
 	"github.com/google/uuid"
 )
 
-const createSession = `-- name: CreateSession :exec
+const createSession = `-- name: CreateSession :one
 INSERT INTO sessions (user_id, token, device_data)
 VALUES ($1, $2, $3)
+RETURNING id, user_id, token, device_data, created_at, last_used
 `
 
 type CreateSessionParams struct {
@@ -23,9 +24,18 @@ type CreateSessionParams struct {
 	DeviceData json.RawMessage
 }
 
-func (q *Queries) CreateSession(ctx context.Context, arg CreateSessionParams) error {
-	_, err := q.db.ExecContext(ctx, createSession, arg.UserID, arg.Token, arg.DeviceData)
-	return err
+func (q *Queries) CreateSession(ctx context.Context, arg CreateSessionParams) (Session, error) {
+	row := q.db.QueryRowContext(ctx, createSession, arg.UserID, arg.Token, arg.DeviceData)
+	var i Session
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.Token,
+		&i.DeviceData,
+		&i.CreatedAt,
+		&i.LastUsed,
+	)
+	return i, err
 }
 
 const deleteSession = `-- name: DeleteSession :exec

@@ -1,18 +1,7 @@
--- name: DeleteSession :exec
-DELETE FROM sessions
-WHERE id = $1;
-
--- name: DeleteUserSessions :exec
-DELETE FROM sessions
-WHERE user_id = $1;
-
--- name: DeleteUserSession :exec
-DELETE FROM sessions
-WHERE id = $1 AND user_id = $2;
-
--- name: CreateSession :exec
+-- name: CreateSession :one
 INSERT INTO sessions (user_id, token, device_data)
-VALUES ($1, $2, $3);
+VALUES ($1, $2, $3)
+RETURNING *;
 
 -- name: GetSession :one
 SELECT * FROM sessions
@@ -35,4 +24,16 @@ UPDATE sessions
 SET
     token = $3,
     last_used = now()
+WHERE id = $1 AND user_id = $2;
+
+-- name: DeleteSession :exec
+DELETE FROM sessions
+WHERE id = $1;
+
+-- name: DeleteUserSessions :exec
+DELETE FROM sessions
+WHERE user_id = $1;
+
+-- name: DeleteUserSession :exec
+DELETE FROM sessions
 WHERE id = $1 AND user_id = $2;

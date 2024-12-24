@@ -13,21 +13,17 @@ import (
 )
 
 func Run(args []string) bool {
-	// Загружаем конфигурацию
 	cfg, err := config.LoadConfig(".")
 	if err != nil {
 		log.Fatalf("failed to load config: %v", err)
 	}
 
-	// Настраиваем логгер
 	logger := config.SetupLogger(cfg.Logging.Level, cfg.Logging.Format)
 	logger.Info("Starting gRPC and HTTP servers...")
 
-	// Создаем контекст с уведомлением о прерывании
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
 
-	// Создаем объект server
 	service, err := config.NewServer(cfg)
 	if err != nil {
 		logger.Fatalf("failed to create server: %v", err)

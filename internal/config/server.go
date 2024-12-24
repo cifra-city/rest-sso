@@ -18,13 +18,10 @@ type Service struct {
 }
 
 func NewServer(cfg *Config) (*Service, error) {
-	// Настройка логгера
 	logger := SetupLogger(cfg.Logging.Level, cfg.Logging.Format)
 	mail := mailman.NewMailman(cfg.Email.SmtpPort, cfg.Email.SmtpHost, cfg.Email.Address, cfg.Email.Password)
-	// Подключение к базе данных
 	queries, err := data.NewDatabaser(cfg.Database.URL)
 	if err != nil {
-		logger.Fatalf("failed to connect to the database: %v", err)
 		return nil, err
 	}
 
