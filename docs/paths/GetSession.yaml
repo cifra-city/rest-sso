@@ -9,7 +9,7 @@ get:
       content:
         application/vnd.api+json:
           schema:
-            $ref: '../spec/components/schemas/UserSessions.yaml'
+            $ref: '../spec/components/schemas/Sessions.yaml'
     '400':
       $ref: '../spec/components/responses/invalidParameter.yaml'
     '401':

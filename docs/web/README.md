@@ -79,74 +79,32 @@ All URIs are relative to *http://localhost*
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *EmailAPI* | [**AproveOperationPatch**](docs/EmailAPI.md#aproveoperationpatch) | **Patch** /aprove-operation | Approve operation
-*LoginAPI* | [**LoginCompletePost**](docs/LoginAPI.md#logincompletepost) | **Post** /login-complete | Confirm login
-*LoginAPI* | [**LoginInitiatePost**](docs/LoginAPI.md#logininitiatepost) | **Post** /login-initiate | Send a request to login
-*LoginAPI* | [**RefreshPost**](docs/LoginAPI.md#refreshpost) | **Post** /refresh | Refresh Access Token
-*LoginAPI* | [**UserChangeLogoutPost**](docs/LoginAPI.md#userchangelogoutpost) | **Post** /user/change/logout | Logout user
-*RegistrationAPI* | [**RegistertionInitiatePost**](docs/RegistrationAPI.md#registertioninitiatepost) | **Post** /registertion-initiate | Send a request to register a new user
-*RegistrationAPI* | [**RegistrationCompletePost**](docs/RegistrationAPI.md#registrationcompletepost) | **Post** /registration-complete | Confirm register a new user
-*SessionsAPI* | [**UserChangeDeleteSessionDelete**](docs/SessionsAPI.md#userchangedeletesessiondelete) | **Delete** /user/change/delete-session | Delete the sessions
-*SessionsAPI* | [**UserChangeSessionsGet**](docs/SessionsAPI.md#userchangesessionsget) | **Get** /user/change/sessions | Get user&#39;s session
-*SessionsAPI* | [**UserChangeTerminateSessionsDelete**](docs/SessionsAPI.md#userchangeterminatesessionsdelete) | **Delete** /user/change/terminate-sessions | Terminate all sessions
-*UserAPI* | [**ResetPasswordCompletePost**](docs/UserAPI.md#resetpasswordcompletepost) | **Post** /reset-password-complete | Reset password
-*UserAPI* | [**ResetPasswordInitiatePost**](docs/UserAPI.md#resetpasswordinitiatepost) | **Post** /reset-password-initiate | Send a request to change user password
-*UserAPI* | [**UserChangeUsernamePatch**](docs/UserAPI.md#userchangeusernamepatch) | **Patch** /user/change/username | Change username
 
 
 ## Documentation For Models
 
- - [ApproveOperationReq](docs/ApproveOperationReq.md)
- - [ApproveOperationReqData](docs/ApproveOperationReqData.md)
- - [ApproveOperationReqDataAttributes](docs/ApproveOperationReqDataAttributes.md)
  - [AproveOperationPatch200Response](docs/AproveOperationPatch200Response.md)
- - [ChangeUsername](docs/ChangeUsername.md)
- - [ChangeUsernameData](docs/ChangeUsernameData.md)
- - [ChangeUsernameDataAttributes](docs/ChangeUsernameDataAttributes.md)
- - [DeleteSession](docs/DeleteSession.md)
- - [DeleteSessionData](docs/DeleteSessionData.md)
- - [DeleteSessionDataAttributes](docs/DeleteSessionDataAttributes.md)
  - [Errors](docs/Errors.md)
  - [ErrorsErrorsInner](docs/ErrorsErrorsInner.md)
- - [LoginCompleteReq](docs/LoginCompleteReq.md)
- - [LoginCompleteReqData](docs/LoginCompleteReqData.md)
- - [LoginCompleteReqDataAttributes](docs/LoginCompleteReqDataAttributes.md)
- - [LoginCompleteResp](docs/LoginCompleteResp.md)
- - [LoginCompleteRespData](docs/LoginCompleteRespData.md)
- - [LoginCompleteRespDataAttributes](docs/LoginCompleteRespDataAttributes.md)
- - [LoginInitiate](docs/LoginInitiate.md)
- - [LoginInitiateData](docs/LoginInitiateData.md)
- - [LoginInitiateDataAttributes](docs/LoginInitiateDataAttributes.md)
- - [LoginResp](docs/LoginResp.md)
- - [LoginRespData](docs/LoginRespData.md)
- - [RefreshPost401Response](docs/RefreshPost401Response.md)
- - [RefreshReq](docs/RefreshReq.md)
- - [RefreshReqData](docs/RefreshReqData.md)
- - [RefreshReqDataAttributes](docs/RefreshReqDataAttributes.md)
- - [RefreshResp](docs/RefreshResp.md)
- - [RefreshRespData](docs/RefreshRespData.md)
- - [RefreshRespDataAttributes](docs/RefreshRespDataAttributes.md)
- - [RegistertionInitiatePost201Response](docs/RegistertionInitiatePost201Response.md)
- - [RegistrationComplete](docs/RegistrationComplete.md)
- - [RegistrationCompleteData](docs/RegistrationCompleteData.md)
- - [RegistrationCompleteDataAttributes](docs/RegistrationCompleteDataAttributes.md)
- - [RegistrationInitiate](docs/RegistrationInitiate.md)
- - [RegistrationInitiateData](docs/RegistrationInitiateData.md)
- - [RegistrationInitiateDataAttributes](docs/RegistrationInitiateDataAttributes.md)
- - [ResetPasswordComplete](docs/ResetPasswordComplete.md)
- - [ResetPasswordCompleteData](docs/ResetPasswordCompleteData.md)
- - [ResetPasswordCompleteDataAttributes](docs/ResetPasswordCompleteDataAttributes.md)
- - [ResetPasswordInitiate](docs/ResetPasswordInitiate.md)
- - [ResetPasswordInitiateData](docs/ResetPasswordInitiateData.md)
- - [ResetPasswordInitiateDataAttributes](docs/ResetPasswordInitiateDataAttributes.md)
- - [TerminateSessions](docs/TerminateSessions.md)
- - [TerminateSessionsData](docs/TerminateSessionsData.md)
- - [TerminateSessionsDataAttributes](docs/TerminateSessionsDataAttributes.md)
- - [TerminateSessionsDataAttributesDevicesInner](docs/TerminateSessionsDataAttributesDevicesInner.md)
- - [UserSession](docs/UserSession.md)
- - [UserSessionData](docs/UserSessionData.md)
- - [UserSessionDataAttributes](docs/UserSessionDataAttributes.md)
- - [UserSessionDataAttributesDevicesInner](docs/UserSessionDataAttributesDevicesInner.md)
- - [UserSessions](docs/UserSessions.md)
+ - [Login](docs/Login.md)
+ - [LoginData](docs/LoginData.md)
+ - [LoginDataAttributes](docs/LoginDataAttributes.md)
+ - [OperationData](docs/OperationData.md)
+ - [OperationDataData](docs/OperationDataData.md)
+ - [OperationDataDataAttributes](docs/OperationDataDataAttributes.md)
+ - [SessionData](docs/SessionData.md)
+ - [SessionDataData](docs/SessionDataData.md)
+ - [SessionDataDataAttributes](docs/SessionDataDataAttributes.md)
+ - [Sessions](docs/Sessions.md)
+ - [SessionsData](docs/SessionsData.md)
+ - [SessionsDataAttributes](docs/SessionsDataAttributes.md)
+ - [SessionsDataAttributesDevicesInner](docs/SessionsDataAttributesDevicesInner.md)
+ - [TokenPair](docs/TokenPair.md)
+ - [TokenPairData](docs/TokenPairData.md)
+ - [TokenPairDataAttributes](docs/TokenPairDataAttributes.md)
+ - [UserData](docs/UserData.md)
+ - [UserDataData](docs/UserDataData.md)
+ - [UserDataDataAttributes](docs/UserDataDataAttributes.md)
 
 
 ## Documentation For Authorization

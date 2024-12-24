@@ -4,15 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Email** | Pointer to **string** | User email | [optional] 
-**Username** | Pointer to **string** | User username | [optional] 
-**Password** | **string** | User password | 
+**Email** | Pointer to **string** | User email (required if username is not provided). | [optional] 
+**Username** | Pointer to **string** | User username (required if email is not provided). | [optional] 
 
 ## Methods
 
 ### NewLoginDataAttributes
 
-`func NewLoginDataAttributes(password string, ) *LoginDataAttributes`
+`func NewLoginDataAttributes() *LoginDataAttributes`
 
 NewLoginDataAttributes instantiates a new LoginDataAttributes object
 This constructor will assign default values to properties that have it defined,
@@ -76,26 +75,6 @@ SetUsername sets Username field to given value.
 `func (o *LoginDataAttributes) HasUsername() bool`
 
 HasUsername returns a boolean if a field has been set.
-
-### GetPassword
-
-`func (o *LoginDataAttributes) GetPassword() string`
-
-GetPassword returns the Password field if non-nil, zero value otherwise.
-
-### GetPasswordOk
-
-`func (o *LoginDataAttributes) GetPasswordOk() (*string, bool)`
-
-GetPasswordOk returns a tuple with the Password field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetPassword
-
-`func (o *LoginDataAttributes) SetPassword(v string)`
-
-SetPassword sets Password field to given value.
-
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

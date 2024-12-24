@@ -13,7 +13,7 @@ paths:
         content:
           application/vnd.api+json:
             schema:
-              $ref: '#/components/schemas/ApproveOperationReq'
+              $ref: '#/components/schemas/OperationData'
         required: true
       responses:
         "200":
@@ -68,615 +68,6 @@ paths:
       summary: Approve operation
       tags:
       - Email
-  /registertion-initiate:
-    post:
-      description: Send code to email for user to initiate registration
-      requestBody:
-        content:
-          application/vnd.api+json:
-            schema:
-              $ref: '#/components/schemas/RegistrationInitiate'
-        required: true
-      responses:
-        "201":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_registertion_initiate_post_201_response'
-          description: Successfully initiated registration
-        "400":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: One of the parameters is invalid. Refer to the response body
-            for details.
-        "409":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Conflict
-        "415":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Unsupported Media Type
-        "429":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Too many requests
-        "500":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Internal server error
-      summary: Send a request to register a new user
-      tags:
-      - Registration
-  /registration-complete:
-    post:
-      description: "Endpoint to register a new user with email, username, and password"
-      requestBody:
-        content:
-          application/vnd.api+json:
-            schema:
-              $ref: '#/components/schemas/RegistrationComplete'
-        required: true
-      responses:
-        "201":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_registertion_initiate_post_201_response'
-          description: User successfully registered
-        "400":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: One of the parameters is invalid. Refer to the response body
-            for details.
-        "409":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Conflict
-        "415":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Unsupported Media Type
-        "429":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Too many requests
-        "500":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Internal server error
-      summary: Confirm register a new user
-      tags:
-      - Registration
-  /login-initiate:
-    post:
-      description: Send code to email for user to initiate login
-      requestBody:
-        content:
-          application/vnd.api+json:
-            schema:
-              $ref: '#/components/schemas/LoginInitiate'
-        required: true
-      responses:
-        "201":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_registertion_initiate_post_201_response'
-          description: User successfully initiated login
-        "400":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: One of the parameters is invalid. Refer to the response body
-            for details.
-        "409":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Conflict
-        "415":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Unsupported Media Type
-        "429":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Too many requests
-        "500":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Internal server error
-      summary: Send a request to login
-      tags:
-      - Login
-  /login-complete:
-    post:
-      description: "Endpoint to login a new user with email, username, and password"
-      requestBody:
-        content:
-          application/vnd.api+json:
-            schema:
-              $ref: '#/components/schemas/LoginCompleteReq'
-        required: true
-      responses:
-        "201":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/LoginCompleteResp'
-          description: User successfully login
-        "400":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: One of the parameters is invalid. Refer to the response body
-            for details.
-        "409":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Conflict
-        "415":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Unsupported Media Type
-        "429":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Too many requests
-        "500":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Internal server error
-      summary: Confirm login
-      tags:
-      - Login
-  /refresh:
-    post:
-      description: Endpoint to refresh an expired access token using a valid refresh
-        token.
-      requestBody:
-        content:
-          application/vnd.api+json:
-            schema:
-              $ref: '#/components/schemas/RefreshReq'
-        required: true
-      responses:
-        "200":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/RefreshResp'
-          description: Access token successfully refreshed.
-        "400":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: One of the parameters is invalid. Refer to the response body
-            for details.
-        "401":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_refresh_post_401_response'
-          description: Unauthorized. Refresh token is invalid or expired.
-        "500":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Internal server error
-      summary: Refresh Access Token
-      tags:
-      - Login
-  /reset-password-initiate:
-    post:
-      description: Send code to email with code to change password
-      requestBody:
-        content:
-          application/vnd.api+json:
-            schema:
-              $ref: '#/components/schemas/ResetPasswordInitiate'
-        required: true
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_aprove_operation_patch_200_response'
-          description: User successfully reset password
-        "400":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: One of the parameters is invalid. Refer to the response body
-            for details.
-        "401":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: You must provide a valid authorization params.
-        "415":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Unsupported Media Type
-        "429":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Too many requests
-        "500":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Internal server error
-      summary: Send a request to change user password
-      tags:
-      - User
-  /reset-password-complete:
-    post:
-      description: Reset password for a user
-      requestBody:
-        content:
-          application/vnd.api+json:
-            schema:
-              $ref: '#/components/schemas/ResetPasswordComplete'
-        required: true
-      responses:
-        "201":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_registertion_initiate_post_201_response'
-          description: User successfully reset password
-        "400":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: One of the parameters is invalid. Refer to the response body
-            for details.
-        "401":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: You must provide a valid authorization params.
-        "415":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Unsupported Media Type
-        "429":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Too many requests
-        "500":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Internal server error
-      summary: Reset password
-      tags:
-      - User
-  /user/change/username:
-    patch:
-      description: Endpoint to change username
-      requestBody:
-        content:
-          application/vnd.api+json:
-            schema:
-              $ref: '#/components/schemas/ChangeUsername'
-        required: true
-      responses:
-        "201":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/LoginResp'
-          description: Updated username successfully
-        "400":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: One of the parameters is invalid. Refer to the response body
-            for details.
-        "401":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: You must provide a valid authorization params.
-        "403":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Forbidden
-        "409":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Conflict
-        "415":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Unsupported Media Type
-        "429":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Too many requests
-        "500":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Internal server error
-      summary: Change username
-      tags:
-      - User
-  /user/change/sessions:
-    get:
-      description: Endpoint to get user's session
-      responses:
-        "201":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/UserSessions'
-          description: Updated username successfully
-        "400":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: One of the parameters is invalid. Refer to the response body
-            for details.
-        "401":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: You must provide a valid authorization params.
-        "403":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Forbidden
-        "409":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Conflict
-        "415":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Unsupported Media Type
-        "429":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Too many requests
-        "500":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Internal server error
-      summary: Get user's session
-      tags:
-      - Sessions
-  /user/change/logout:
-    post:
-      description: Endpoint to logout user
-      responses:
-        "201":
-          description: User successfully logout
-        "400":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: One of the parameters is invalid. Refer to the response body
-            for details.
-        "401":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: You must provide a valid authorization params.
-        "403":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Forbidden
-        "409":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Conflict
-        "415":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Unsupported Media Type
-        "429":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Too many requests
-        "500":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Internal server error
-      summary: Logout user
-      tags:
-      - Login
-  /user/change/delete-session:
-    delete:
-      description: Delete the sessions for a user
-      requestBody:
-        content:
-          application/vnd.api+json:
-            schema:
-              $ref: '#/components/schemas/DeleteSession'
-        required: true
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_aprove_operation_patch_200_response'
-          description: User successfully delete the session
-        "400":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: One of the parameters is invalid. Refer to the response body
-            for details.
-        "401":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: You must provide a valid authorization params.
-        "415":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Unsupported Media Type
-        "429":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Too many requests
-        "500":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Internal server error
-      summary: Delete the sessions
-      tags:
-      - Sessions
-  /user/change/terminate-sessions:
-    delete:
-      description: Terminate all sessions for a user
-      requestBody:
-        content:
-          application/vnd.api+json:
-            schema:
-              $ref: '#/components/schemas/TerminateSessions'
-        required: true
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_aprove_operation_patch_200_response'
-          description: User successfully terminated all sessions
-        "400":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: One of the parameters is invalid. Refer to the response body
-            for details.
-        "401":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: You must provide a valid authorization params.
-        "415":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Unsupported Media Type
-        "429":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Too many requests
-        "500":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Internal server error
-      summary: Terminate all sessions
-      tags:
-      - Sessions
 components:
   responses:
     invalidParameter:
@@ -723,101 +114,45 @@ components:
             $ref: '#/components/schemas/Errors'
       description: Internal server error
   schemas:
-    ApproveOperationReq:
+    Login:
       properties:
         data:
-          $ref: '#/components/schemas/ApproveOperationReq_data'
+          $ref: '#/components/schemas/Login_data'
       required:
       - data
       type: object
-    RegistrationInitiate:
+    OperationData:
       properties:
         data:
-          $ref: '#/components/schemas/RegistrationInitiate_data'
+          $ref: '#/components/schemas/OperationData_data'
       required:
       - data
       type: object
-    RegistrationComplete:
+    SessionData:
       properties:
         data:
-          $ref: '#/components/schemas/RegistrationComplete_data'
+          $ref: '#/components/schemas/SessionData_data'
       required:
       - data
       type: object
-    LoginInitiate:
+    Sessions:
       properties:
         data:
-          $ref: '#/components/schemas/LoginInitiate_data'
+          $ref: '#/components/schemas/Sessions_data'
       required:
       - data
       type: object
-    LoginCompleteReq:
+    TokenPair:
       properties:
         data:
-          $ref: '#/components/schemas/LoginCompleteReq_data'
+          $ref: '#/components/schemas/TokenPair_data'
       required:
       - data
       type: object
-    LoginCompleteResp:
+    UserData:
       properties:
         data:
-          $ref: '#/components/schemas/LoginCompleteResp_data'
-      required:
-      - data
-      type: object
-    ResetPasswordInitiate:
-      properties:
-        data:
-          $ref: '#/components/schemas/ResetPasswordInitiate_data'
-      required:
-      - data
-      type: object
-    ResetPasswordComplete:
-      properties:
-        data:
-          $ref: '#/components/schemas/ResetPasswordComplete_data'
-      required:
-      - data
-      type: object
-    RefreshReq:
-      properties:
-        data:
-          $ref: '#/components/schemas/RefreshReq_data'
-      required:
-      - data
-      type: object
-    RefreshResp:
-      properties:
-        data:
-          $ref: '#/components/schemas/RefreshResp_data'
-      required:
-      - data
-      type: object
-    ChangeUsername:
-      properties:
-        data:
-          $ref: '#/components/schemas/ChangeUsername_data'
-      required:
-      - data
-      type: object
-    UserSession:
-      properties:
-        data:
-          $ref: '#/components/schemas/UserSession_data'
-      required:
-      - data
-      type: object
-    DeleteSession:
-      properties:
-        data:
-          $ref: '#/components/schemas/DeleteSession_data'
-      required:
-      - data
-      type: object
-    TerminateSessions:
-      properties:
-        data:
-          $ref: '#/components/schemas/TerminateSessions_data'
+          $ref: '#/components/schemas/UserData_data'
       required:
       - data
       type: object
@@ -832,20 +167,6 @@ components:
       required:
       - errors
       type: object
-    LoginResp:
-      properties:
-        data:
-          $ref: '#/components/schemas/LoginResp_data'
-      required:
-      - data
-      type: object
-    UserSessions:
-      properties:
-        data:
-          $ref: '#/components/schemas/UserSession_data'
-      required:
-      - data
-      type: object
     _aprove_operation_patch_200_response:
       example:
         status: 200
@@ -854,23 +175,29 @@ components:
           example: 200
           type: number
       type: object
-    _registertion_initiate_post_201_response:
-      example:
-        status: 201
+    Login_data_attributes:
       properties:
-        status:
-          example: 201
-          type: number
-      type: object
-    _refresh_post_401_response:
-      example:
-        error: Invalid or expired refresh token
-      properties:
-        error:
-          example: Invalid or expired refresh token
+        email:
+          description: User email (required if username is not provided).
+          format: email
+          type: string
+        username:
+          description: User username (required if email is not provided).
           type: string
       type: object
-    ApproveOperationReq_data_attributes:
+    Login_data:
+      properties:
+        type:
+          enum:
+          - reset_password
+          type: string
+        attributes:
+          $ref: '#/components/schemas/Login_data_attributes'
+      required:
+      - attributes
+      - type
+      type: object
+    OperationData_data_attributes:
       properties:
         email:
           description: New email
@@ -887,104 +214,19 @@ components:
       - email
       - operation
       type: object
-    ApproveOperationReq_data:
+    OperationData_data:
       properties:
         type:
           enum:
           - approve_operation
           type: string
         attributes:
-          $ref: '#/components/schemas/ApproveOperationReq_data_attributes'
+          $ref: '#/components/schemas/OperationData_data_attributes'
       required:
       - attributes
       - type
       type: object
-    RegistrationInitiate_data_attributes:
-      properties:
-        email:
-          description: User email
-          format: email
-          type: string
-        username:
-          description: User username
-          type: string
-      required:
-      - email
-      - username
-      type: object
-    RegistrationInitiate_data:
-      properties:
-        type:
-          enum:
-          - registration_initiate
-          type: string
-        attributes:
-          $ref: '#/components/schemas/RegistrationInitiate_data_attributes'
-      required:
-      - attributes
-      - type
-      type: object
-    RegistrationComplete_data_attributes:
-      properties:
-        first_password:
-          description: First password
-          type: string
-        second_password:
-          description: Second password
-          type: string
-        email:
-          description: User email
-          format: email
-          type: string
-        username:
-          description: User username
-          type: string
-      required:
-      - email
-      - first_password
-      - second_password
-      - username
-      type: object
-    RegistrationComplete_data:
-      properties:
-        type:
-          enum:
-          - registration_complete
-          type: string
-        attributes:
-          $ref: '#/components/schemas/RegistrationComplete_data_attributes'
-      required:
-      - attributes
-      - type
-      type: object
-    LoginInitiate_data_attributes:
-      properties:
-        email:
-          description: User email
-          format: email
-          type: string
-        username:
-          description: User username
-          type: string
-        password:
-          description: First password
-          type: string
-      required:
-      - password
-      type: object
-    LoginInitiate_data:
-      properties:
-        type:
-          enum:
-          - login_initiate
-          type: string
-        attributes:
-          $ref: '#/components/schemas/LoginInitiate_data_attributes'
-      required:
-      - attributes
-      - type
-      type: object
-    LoginCompleteReq_data_attributes:
+    SessionData_data_attributes:
       properties:
         email:
           description: User email
@@ -1007,196 +249,19 @@ components:
       - factory_id
       - os_version
       type: object
-    LoginCompleteReq_data:
+    SessionData_data:
       properties:
         type:
           enum:
           - login_complete
           type: string
         attributes:
-          $ref: '#/components/schemas/LoginCompleteReq_data_attributes'
+          $ref: '#/components/schemas/SessionData_data_attributes'
       required:
       - attributes
       - type
       type: object
-    LoginCompleteResp_data_attributes:
-      properties:
-        access_token:
-          description: Access Token для авторизации запросов.
-          type: string
-        refresh_token:
-          description: Refresh Token для обновления Access Token.
-          type: string
-        expires_in:
-          description: Время жизни Access Token в секундах.
-          type: integer
-      required:
-      - access_token
-      - expires_in
-      - refresh_token
-      type: object
-    LoginCompleteResp_data:
-      properties:
-        type:
-          enum:
-          - login_complete
-          type: string
-        attributes:
-          $ref: '#/components/schemas/LoginCompleteResp_data_attributes'
-      required:
-      - attributes
-      - type
-      type: object
-    ResetPasswordInitiate_data_attributes:
-      properties:
-        email:
-          description: User email (required if username is not provided).
-          format: email
-          type: string
-        username:
-          description: User username (required if email is not provided).
-          type: string
-      type: object
-    ResetPasswordInitiate_data:
-      properties:
-        type:
-          enum:
-          - reset_password
-          type: string
-        attributes:
-          $ref: '#/components/schemas/ResetPasswordInitiate_data_attributes'
-      required:
-      - attributes
-      - type
-      type: object
-    ResetPasswordComplete_data_attributes:
-      properties:
-        first_password:
-          description: User password.
-          type: string
-        second_password:
-          description: User password.
-          type: string
-        email:
-          description: User email (required if username is not provided).
-          format: email
-          type: string
-        username:
-          description: User username (required if email is not provided).
-          type: string
-      required:
-      - first_password
-      - second_password
-      type: object
-    ResetPasswordComplete_data:
-      properties:
-        type:
-          enum:
-          - reset_password
-          type: string
-        attributes:
-          $ref: '#/components/schemas/ResetPasswordComplete_data_attributes'
-      required:
-      - attributes
-      - type
-      type: object
-    RefreshReq_data_attributes:
-      properties:
-        refresh_token:
-          description: The refresh token to generate a new access token.
-          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-          type: string
-        device_id:
-          description: The device ID of the device that the refresh token was issued
-            to. (Not factory ID)
-          example: 123e4567-e89b-12d3-a456-426614174000
-          format: uuid.UUID
-          type: string
-        factory_id:
-          description: Unique identifier for the user's device.
-          type: string
-        device_name:
-          description: "Human-readable name for the user's device (e.g., 'iPhone 14')."
-          type: string
-        os_version:
-          description: Operating system version of the user's device.
-          type: string
-      required:
-      - device_id
-      - device_name
-      - factory_id
-      - os_version
-      - refresh_token
-      type: object
-    RefreshReq_data:
-      properties:
-        type:
-          enum:
-          - refresh
-          type: string
-        attributes:
-          $ref: '#/components/schemas/RefreshReq_data_attributes'
-      required:
-      - attributes
-      - type
-      type: object
-    RefreshResp_data_attributes:
-      properties:
-        access_token:
-          description: The new access token.
-          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-          type: string
-        refresh_token:
-          description: The new refresh token.
-          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-          type: string
-        expires_in:
-          description: Time in seconds until the access token expires.
-          example: 3600
-          type: integer
-      required:
-      - access_token
-      - expires_in
-      - refresh_token
-      type: object
-    RefreshResp_data:
-      properties:
-        type:
-          enum:
-          - refresh
-          type: string
-        attributes:
-          $ref: '#/components/schemas/RefreshResp_data_attributes'
-      required:
-      - attributes
-      - type
-      type: object
-    ChangeUsername_data_attributes:
-      properties:
-        new_username:
-          description: New username
-          format: username
-          type: string
-        password:
-          description: User password
-          type: string
-      required:
-      - email
-      - password
-      type: object
-    ChangeUsername_data:
-      properties:
-        type:
-          enum:
-          - change_username
-          type: string
-        attributes:
-          $ref: '#/components/schemas/ChangeUsername_data_attributes'
-      required:
-      - attributes
-      - type
-      type: object
-    UserSession_data_attributes_devices_inner:
+    Sessions_data_attributes_devices_inner:
       properties:
         id:
           description: Уникальный идентификатор устройства
@@ -1222,73 +287,78 @@ components:
       - last_used
       - os_version
       type: object
-    UserSession_data_attributes:
+    Sessions_data_attributes:
       properties:
         devices:
           items:
-            $ref: '#/components/schemas/UserSession_data_attributes_devices_inner'
+            $ref: '#/components/schemas/Sessions_data_attributes_devices_inner'
           type: array
       required:
       - devices
       type: object
-    UserSession_data:
+    Sessions_data:
       properties:
         type:
           enum:
           - users_sessions
           type: string
         attributes:
-          $ref: '#/components/schemas/UserSession_data_attributes'
+          $ref: '#/components/schemas/Sessions_data_attributes'
       required:
       - attributes
       - type
       type: object
-    DeleteSession_data_attributes:
+    TokenPair_data_attributes:
       properties:
-        device_id:
-          description: Device ID.
+        access_token:
+          description: Access Token для авторизации запросов.
           type: string
+        refresh_token:
+          description: Refresh Token для обновления Access Token.
+          type: string
+        expires_in:
+          description: Время жизни Access Token в секундах.
+          type: integer
       required:
-      - device_id
+      - access_token
+      - expires_in
+      - refresh_token
       type: object
-    DeleteSession_data:
+    TokenPair_data:
       properties:
         type:
           enum:
-          - delete_session
+          - tokens
           type: string
         attributes:
-          $ref: '#/components/schemas/DeleteSession_data_attributes'
+          $ref: '#/components/schemas/TokenPair_data_attributes'
       required:
       - attributes
       - type
       type: object
-    TerminateSessions_data_attributes_devices_inner:
+    UserData_data_attributes:
       properties:
-        id:
-          description: Unique device identifier
-          format: uuid
+        email:
+          description: User email
+          format: email
+          type: string
+        username:
+          description: User username
+          type: string
+        password:
+          description: First password
           type: string
       required:
-      - id
+      - password
       type: object
-    TerminateSessions_data_attributes:
-      properties:
-        devices:
-          items:
-            $ref: '#/components/schemas/TerminateSessions_data_attributes_devices_inner'
-          type: array
-      required:
-      - devices
-      type: object
-    TerminateSessions_data:
+    UserData_data:
       properties:
         type:
           enum:
-          - delete_session
+          - login_initiate
           type: string
         attributes:
-          $ref: '#/components/schemas/TerminateSessions_data_attributes'
+          $ref: '#/components/schemas/UserData_data_attributes'
       required:
       - attributes
       - type
@@ -1318,16 +388,4 @@ components:
       required:
       - status
       - title
-      type: object
-    LoginResp_data:
-      properties:
-        type:
-          enum:
-          - tokens
-          type: string
-        attributes:
-          $ref: '#/components/schemas/LoginCompleteResp_data_attributes'
-      required:
-      - attributes
-      - type
       type: object

@@ -8,7 +8,7 @@ post:
     content:
       application/vnd.api+json:
         schema:
-          $ref: '../spec/components/schemas/RefreshReq.yaml'
+          $ref: '../spec/components/schemas/TokenData.yaml'
   responses:
     '200':
       description: Access token successfully refreshed.

@@ -15,7 +15,7 @@ patch:
       content:
         application/vnd.api+json:
           schema:
-            $ref: '../spec/components/schemas/LoginResp.yaml'
+            $ref: '../spec/components/schemas/TokenPair.yaml'
     '400':
       $ref: '../spec/components/responses/invalidParameter.yaml'
     '401':

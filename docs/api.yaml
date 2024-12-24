@@ -7,59 +7,43 @@ info:
 paths:
   /aprove-operation:
     $ref: './paths/ApproveOperation.yaml'
-  /registertion-initiate:
-    $ref: './paths/RegistrationInitiate.yaml'
-  /registration-complete:
-    $ref: './paths/RegistrationComplete.yaml'
-  /login-initiate:
-    $ref: './paths/LoginInitiate.yaml'
-  /login-complete:
-    $ref: './paths/LoginComplete.yaml'
-  /refresh:
-    $ref: './paths/Refresh.yaml'
-  /reset-password-initiate:
-    $ref: './paths/ResetPasswordInitiate.yaml'
-  /reset-password-complete:
-    $ref: './paths/ResetPasswordComplete.yaml'
-  /user/change/username:
-    $ref: './paths/ChangeUsername.yaml'
-  /user/change/sessions:
-    $ref: './paths/GetSession.yaml'
-  /user/change/logout:
-    $ref: './paths/Logout.yaml'
-  /user/change/delete-session:
-    $ref: './paths/DeleteSession.yaml'
-  /user/change/terminate-sessions:
-    $ref: './paths/TerminateSessions.yaml'
+#  /registertion-initiate:
+#    $ref: './paths/RegistrationInitiate.yaml'
+#  /registration-complete:
+#    $ref: './paths/RegistrationComplete.yaml'
+#  /login-initiate:
+#    $ref: './paths/LoginInitiate.yaml'
+#  /login-complete:
+#    $ref: './paths/LoginComplete.yaml'
+#  /refresh:
+#    $ref: './paths/Refresh.yaml'
+#  /reset-password-initiate:
+#    $ref: './paths/ResetPasswordInitiate.yaml'
+#  /reset-password-complete:
+#    $ref: './paths/ResetPasswordComplete.yaml'
+#  /user/change/username:
+#    $ref: './paths/ChangeUsername.yaml'
+#  /user/change/sessions:
+#    $ref: './paths/GetSession.yaml'
+#  /user/change/logout:
+#    $ref: './paths/Logout.yaml'
+#  /user/change/delete-session:
+#    $ref: './paths/DeleteSession.yaml'
+#  /user/change/terminate-sessions:
+#    $ref: './paths/TerminateSessions.yaml'
 
 
 components:
   schemas:
-    ApproveOperationReq:
-      $ref: './spec/components/schemas/ApproveOperationReq.yaml'
-    RegistrationInitiate:
-      $ref: './spec/components/schemas/RegistrationInitiate.yaml'
-    RegistrationComplete:
-      $ref: './spec/components/schemas/RegistrationComplete.yaml'
-    LoginInitiate:
-      $ref: './spec/components/schemas/LoginInitiate.yaml'
-    LoginCompleteReq:
-      $ref: './spec/components/schemas/LoginCompleteReq.yaml'
-    LoginCompleteResp:
-      $ref: './spec/components/schemas/LoginCompleteResp.yaml'
-    ResetPasswordInitiate:
-      $ref: './spec/components/schemas/ResetPasswordInitiate.yaml'
-    ResetPasswordComplete:
-      $ref: './spec/components/schemas/ResetPasswordComplete.yaml'
-    RefreshReq:
-      $ref: './spec/components/schemas/RefreshReq.yaml'
-    RefreshResp:
-      $ref: './spec/components/schemas/RefreshResp.yaml'
-    ChangeUsername:
-      $ref: './spec/components/schemas/ChangeUsername.yaml'
-    UserSession:
-      $ref: './spec/components/schemas/UserSessions.yaml'
-    DeleteSession:
-      $ref: './spec/components/schemas/DeleteSession.yaml'
-    TerminateSessions:
-      $ref: './spec/components/schemas/TerminateSessions.yaml'
+    Login:
+      $ref: './spec/components/schemas/Login.yaml'
+    OperationData:
+      $ref: './spec/components/schemas/OperationData.yaml'
+    SessionData:
+      $ref: './spec/components/schemas/SessionData.yaml'
+    Sessions:
+      $ref: './spec/components/schemas/Sessions.yaml'
+    TokenPair:
+      $ref: './spec/components/schemas/TokenPair.yaml'
+    UserData:
+      $ref: './spec/components/schemas/UserData.yaml'
