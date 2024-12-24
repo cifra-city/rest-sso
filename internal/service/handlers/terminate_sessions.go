@@ -41,15 +41,15 @@ func TerminateSessions(w http.ResponseWriter, r *http.Request) {
 
 	log.Infof("userID: %v", userID)
 
-	_, err = Server.Queries.GetUserByID(r.Context(), userID)
+	_, err = Server.Databaser.GetUserByID(r.Context(), userID)
 	if err != nil {
 		httpkit.RenderErr(w, problems.InternalError("Failed to retrieve user information"))
 		return
 	}
 
-	var userSessions []data.Device
+	var userSessions []dbcore.Device
 	for _, id := range devices {
-		device, err := Server.Queries.GetDeviceByID(r.Context(), uuid.MustParse(id.Id))
+		device, err := Server.Databaser.GetDeviceByID(r.Context(), uuid.MustParse(id.Id))
 		if err != nil {
 			if errors.Is(err, sql.ErrNoRows) {
 				httpkit.RenderErr(w, problems.NotFound("Device not found"))
@@ -58,7 +58,7 @@ func TerminateSessions(w http.ResponseWriter, r *http.Request) {
 			httpkit.RenderErr(w, problems.InternalError("Failed to retrieve device information"))
 			return
 		}
-		userSessions = append(userSessions, data.Device{
+		userSessions = append(userSessions, dbcore.Device{
 			ID:         device.ID,
 			UserID:     userID,
 			FactoryID:  device.FactoryID,
@@ -69,9 +69,9 @@ func TerminateSessions(w http.ResponseWriter, r *http.Request) {
 		})
 	}
 
-	err = Server.Queries.TerminateSessionsTransaction(r.Context(), userSessions, userID, httpkit.GenerateFingerprint(r), httpkit.GetClientIP(r))
+	err = Server.Databaser.TerminateSessionsTransaction(r.Context(), userSessions, userID, httpkit.GenerateFingerprint(r), httpkit.GetClientIP(r))
 	if err != nil {
-		if errors.Is(err, data.ErrorDeviceDoesNotBelongToUser) {
+		if errors.Is(err, dbcore.ErrorDeviceDoesNotBelongToUser) {
 			httpkit.RenderErr(w, problems.Forbidden("Device does not belong to user"))
 			return
 		}

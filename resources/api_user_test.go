@@ -11,10 +11,10 @@ package resources
 
 import (
 	"context"
+	openapiclient "github.com/cifra-city/rest-sso"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"testing"
-	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func Test_resources_UserAPIService(t *testing.T) {
@@ -24,7 +24,7 @@ func Test_resources_UserAPIService(t *testing.T) {
 
 	t.Run("Test UserAPIService ResetPasswordCompletePost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.UserAPI.ResetPasswordCompletePost(context.Background()).Execute()
 
@@ -36,7 +36,7 @@ func Test_resources_UserAPIService(t *testing.T) {
 
 	t.Run("Test UserAPIService ResetPasswordInitiatePost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.UserAPI.ResetPasswordInitiatePost(context.Background()).Execute()
 
@@ -48,7 +48,7 @@ func Test_resources_UserAPIService(t *testing.T) {
 
 	t.Run("Test UserAPIService UserChangeUsernamePatch", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.UserAPI.UserChangeUsernamePatch(context.Background()).Execute()
 

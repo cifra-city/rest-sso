@@ -10,7 +10,6 @@ import (
 
 	"github.com/cifra-city/cifractx"
 	"github.com/cifra-city/rest-sso/internal/config"
-	"github.com/cifra-city/rest-sso/internal/db/data"
 )
 
 func Run(args []string) bool {
@@ -27,17 +26,6 @@ func Run(args []string) bool {
 	// Создаем контекст с уведомлением о прерывании
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
-
-	// Подключаемся к базе данных
-	dbCon, err := data.NewDBConnection(cfg.Database.URL)
-	if err != nil {
-		logger.Fatalf("failed to connect to the database: %v", err)
-	}
-	defer func() {
-		if err := dbCon.Close(); err != nil {
-			logger.Fatalf("failed to close the database connection: %v", err)
-		}
-	}()
 
 	// Создаем объект server
 	service, err := config.NewServer(cfg)

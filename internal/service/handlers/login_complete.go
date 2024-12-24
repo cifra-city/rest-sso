@@ -93,7 +93,7 @@ func LoginComplete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = Server.Queries.LoginTransaction(r.Context(), user.ID, deviceID, encryptToken, expiresAt,
+	err = Server.Databaser.LoginTransaction(r.Context(), user.ID, deviceID, encryptToken, expiresAt,
 		factoryId, deviceName, osVersion, IP, httpkit.GenerateFingerprint(r))
 	if err != nil {
 		log.Errorf("error updating last used and refresh token: %v", err)

@@ -11,10 +11,10 @@ package resources
 
 import (
 	"context"
+	openapiclient "github.com/cifra-city/rest-sso"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"testing"
-	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func Test_resources_LoginAPIService(t *testing.T) {
@@ -24,7 +24,7 @@ func Test_resources_LoginAPIService(t *testing.T) {
 
 	t.Run("Test LoginAPIService LoginCompletePost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.LoginAPI.LoginCompletePost(context.Background()).Execute()
 
@@ -36,7 +36,7 @@ func Test_resources_LoginAPIService(t *testing.T) {
 
 	t.Run("Test LoginAPIService LoginInitiatePost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.LoginAPI.LoginInitiatePost(context.Background()).Execute()
 
@@ -48,7 +48,7 @@ func Test_resources_LoginAPIService(t *testing.T) {
 
 	t.Run("Test LoginAPIService RefreshPost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.LoginAPI.RefreshPost(context.Background()).Execute()
 
@@ -60,7 +60,7 @@ func Test_resources_LoginAPIService(t *testing.T) {
 
 	t.Run("Test LoginAPIService UserChangeLogoutPost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		httpRes, err := apiClient.LoginAPI.UserChangeLogoutPost(context.Background()).Execute()
 

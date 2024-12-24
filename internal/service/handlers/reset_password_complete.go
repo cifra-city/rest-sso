@@ -70,13 +70,13 @@ func ResetPasswordComplete(w http.ResponseWriter, r *http.Request) {
 	err = Server.Mailman.CheckAccess(user.Email, string(RESET_PASSWORD), UserAgent, IP)
 	if err != nil {
 		log.Debugf("User %s has no access to reset password", user.Email)
-		err = Server.Queries.InsertOperationHistory(r.Context(), data.InsertOperationHistoryParams{
+		err = Server.Databaser.InsertOperationHistory(r.Context(), dbcore.InsertOperationHistoryParams{
 			ID:            uuid.New(),
 			UserID:        user.ID,
 			DeviceData:    httpkit.GenerateFingerprint(r),
-			Operation:     data.OperationTypeResetPassword,
+			Operation:     dbcore.OperationTypeResetPassword,
 			Success:       false,
-			FailureReason: data.FailureReasonNoAccess,
+			FailureReason: dbcore.FailureReasonNoAccess,
 			IpAddress:     IP,
 		})
 		httpkit.RenderErr(w, problems.Forbidden())
@@ -90,7 +90,7 @@ func ResetPasswordComplete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = Server.Queries.ResetPasswordTransaction(r.Context(), &user, string(hashedPassword), httpkit.GenerateFingerprint(r), IP)
+	err = Server.Databaser.ResetPasswordTransaction(r.Context(), &user, string(hashedPassword), httpkit.GenerateFingerprint(r), IP)
 	if err != nil {
 		log.Errorf("error make transaction reset pasword: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())

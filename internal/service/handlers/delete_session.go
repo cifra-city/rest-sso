@@ -45,13 +45,13 @@ func DeleteSession(w http.ResponseWriter, r *http.Request) {
 
 	log.Infof("userID: %v", userID)
 
-	_, err = Server.Queries.GetUserByID(r.Context(), userID)
+	_, err = Server.Databaser.GetUserByID(r.Context(), userID)
 	if err != nil {
 		httpkit.RenderErr(w, problems.InternalError("Failed to retrieve user information"))
 		return
 	}
 
-	err = Server.Queries.DeleteDeviceByUserIdAndId(r.Context(), data.DeleteDeviceByUserIdAndIdParams{
+	err = Server.Databaser.DeleteDeviceByUserIdAndId(r.Context(), dbcore.DeleteDeviceByUserIdAndIdParams{
 		UserID: userID,
 		ID:     uuid.MustParse(sessionID),
 	})
@@ -64,17 +64,17 @@ func DeleteSession(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = Server.Queries.InsertOperationHistory(r.Context(), data.InsertOperationHistoryParams{
+	err = Server.Databaser.InsertOperationHistory(r.Context(), dbcore.InsertOperationHistoryParams{
 		ID:            uuid.New(),
 		UserID:        userID,
 		DeviceData:    fingerprint,
-		Operation:     data.OperationTypeDeleteSession,
+		Operation:     dbcore.OperationTypeDeleteSession,
 		Success:       false,
-		FailureReason: data.FailureReasonSuccess,
+		FailureReason: dbcore.FailureReasonSuccess,
 		IpAddress:     IP,
 	})
 
-	devices, err := Server.Queries.GetDevicesByUserID(r.Context(), userID)
+	devices, err := Server.Databaser.GetDevicesByUserID(r.Context(), userID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			httpkit.RenderErr(w, problems.NotFound("Devices not found"))

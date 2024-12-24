@@ -12,6 +12,7 @@ import (
 	"github.com/cifra-city/httpkit/problems"
 	"github.com/cifra-city/rest-sso/internal/config"
 	"github.com/cifra-city/rest-sso/internal/db/data"
+	"github.com/cifra-city/rest-sso/internal/db/data/dbcore"
 	"github.com/cifra-city/rest-sso/internal/sectools"
 	"github.com/cifra-city/rest-sso/internal/service/requests"
 	"github.com/cifra-city/rest-sso/resources"
@@ -67,7 +68,7 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := Server.Queries.GetUserByID(r.Context(), userID)
+	user, err := Server.Databaser.GetUserByID(r.Context(), userID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			httpkit.RenderErr(w, problems.Unauthorized("User not found"))
@@ -84,7 +85,7 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	device, err := Server.Queries.GetDeviceByID(r.Context(), deviceID)
+	device, err := Server.Databaser.GetDeviceByID(r.Context(), deviceID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			httpkit.RenderErr(w, problems.Unauthorized("device not found"))
@@ -97,13 +98,13 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 
 	if device.UserID != userID {
 		log.Warn("Device does not belong to user")
-		_ = Server.Queries.InsertOperationHistory(r.Context(), data.InsertOperationHistoryParams{
+		_ = Server.Databaser.InsertOperationHistory(r.Context(), dbcore.InsertOperationHistoryParams{
 			ID:            uuid.New(),
 			UserID:        userID,
 			DeviceData:    httpkit.GenerateFingerprint(r),
-			Operation:     data.OperationTypeRefreshToken,
+			Operation:     dbcore.OperationTypeRefreshToken,
 			Success:       false,
-			FailureReason: data.FailureReasonInvalidDeviceID,
+			FailureReason: dbcore.FailureReasonInvalidDeviceID,
 			IpAddress:     IP,
 		})
 		httpkit.RenderErr(w, problems.Unauthorized("Device does not belong to user"))
@@ -112,32 +113,32 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 
 	if device.FactoryID != factoryId {
 		log.Warn("Factory ID does not match")
-		_ = Server.Queries.InsertOperationHistory(r.Context(), data.InsertOperationHistoryParams{
+		_ = Server.Queries.InsertOperationHistory(r.Context(), dbcore.InsertOperationHistoryParams{
 			ID:            uuid.New(),
 			UserID:        userID,
 			DeviceData:    httpkit.GenerateFingerprint(r),
-			Operation:     data.OperationTypeRefreshToken,
+			Operation:     dbcore.OperationTypeRefreshToken,
 			Success:       false,
-			FailureReason: data.FailureReasonInvalidDeviceFactoryID,
+			FailureReason: dbcore.FailureReasonInvalidDeviceFactoryID,
 			IpAddress:     IP,
 		})
 		httpkit.RenderErr(w, problems.Unauthorized("Factory ID does not match"))
 		return
 	}
 
-	dbToken, err := Server.Queries.GetTokenByUserIdAndDeviceId(r.Context(), data.GetTokenByUserIdAndDeviceIdParams{
+	dbToken, err := Server.Databaser.GetTokenByUserIdAndDeviceId(r.Context(), dbcore.GetTokenByUserIdAndDeviceIdParams{
 		UserID:   userID,
 		DeviceID: deviceID,
 	})
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			_ = Server.Queries.InsertOperationHistory(r.Context(), data.InsertOperationHistoryParams{
+			_ = Server.Databaser.InsertOperationHistory(r.Context(), dbcore.InsertOperationHistoryParams{
 				ID:            uuid.New(),
 				UserID:        userID,
 				DeviceData:    httpkit.GenerateFingerprint(r),
-				Operation:     data.OperationTypeRefreshToken,
+				Operation:     dbcore.OperationTypeRefreshToken,
 				Success:       false,
-				FailureReason: data.FailureReasonInvalidRefreshToken,
+				FailureReason: dbcore.FailureReasonInvalidRefreshToken,
 				IpAddress:     IP,
 			})
 			httpkit.RenderErr(w, problems.Unauthorized("Token not found"))
@@ -184,7 +185,7 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = Server.Queries.UpdateRefreshTokenTransaction(r.Context(), userID, deviceID, device.FactoryID, deviceName, osVersion, encryptedToken, expiresAt, IP)
+	err = Server.Databaser.UpdateRefreshTokenTransaction(r.Context(), userID, deviceID, device.FactoryID, deviceName, osVersion, encryptedToken, expiresAt, IP)
 	if err != nil {
 		log.Errorf("Error updating last used and refresh token: %v", err)
 		if errors.Is(err, sql.ErrNoRows) {

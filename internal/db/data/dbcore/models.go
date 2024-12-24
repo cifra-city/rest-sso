@@ -2,11 +2,11 @@
 // versions:
 //   sqlc v1.27.0
 
-package data
+package dbcore
 
 import (
-	"database/sql"
 	"database/sql/driver"
+	"encoding/json"
 	"fmt"
 	"time"
 
@@ -155,44 +155,32 @@ func (ns NullRoleType) Value() (driver.Value, error) {
 	return string(ns.RoleType), nil
 }
 
-type Device struct {
-	ID         uuid.UUID
-	UserID     uuid.UUID
-	FactoryID  string
-	DeviceName sql.NullString
-	OsVersion  sql.NullString
-	CreatedAt  time.Time
-	LastUsed   time.Time
-}
-
-type OperationHistory struct {
-	ID            uuid.UUID
-	UserID        uuid.UUID
-	DeviceData    string
-	IpAddress     string
-	Operation     OperationType
-	Success       bool
-	FailureReason FailureReason
-	OperationTime time.Time
-}
-
-type RefreshToken struct {
-	ID        uuid.UUID
-	UserID    uuid.UUID
-	Token     string
-	ExpiresAt time.Time
-	DeviceID  uuid.UUID
-	IpAddress string
-	CreatedAt time.Time
-}
-
-type UsersSecret struct {
+type Account struct {
 	ID           uuid.UUID
 	Username     string
 	Email        string
-	Role         RoleType
 	PassHash     string
+	Role         RoleType
 	TokenVersion int32
 	CreatedAt    time.Time
 	UpdatedAt    time.Time
+}
+
+type Operation struct {
+	ID            uuid.UUID
+	UserID        uuid.UUID
+	Operation     OperationType
+	DeviceData    json.RawMessage
+	Success       bool
+	FailureReason NullFailureReason
+	CreatedAt     time.Time
+}
+
+type Session struct {
+	ID         uuid.UUID
+	UserID     uuid.UUID
+	Token      string
+	DeviceData json.RawMessage
+	CreatedAt  time.Time
+	LastUsed   time.Time
 }

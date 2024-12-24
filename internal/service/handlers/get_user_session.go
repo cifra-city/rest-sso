@@ -32,7 +32,7 @@ func GetUserSessions(w http.ResponseWriter, r *http.Request) {
 
 	log.Infof("userID: %v", userID)
 
-	devices, err := Server.Queries.GetDevicesByUserID(r.Context(), userID)
+	devices, err := Server.Databaser.GetDevicesByUserID(r.Context(), userID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			httpkit.RenderErr(w, problems.NotFound("No devices found"))

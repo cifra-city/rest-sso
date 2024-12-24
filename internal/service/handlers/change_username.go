@@ -44,7 +44,7 @@ func ChangeUsername(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := Server.Queries.GetUserByID(r.Context(), userID)
+	user, err := Server.Databaser.GetUserByID(r.Context(), userID)
 	if err != nil {
 		httpkit.RenderErr(w, problems.InternalError("Failed to retrieve user information"))
 		return
@@ -52,14 +52,14 @@ func ChangeUsername(w http.ResponseWriter, r *http.Request) {
 
 	err = bcrypt.CompareHashAndPassword([]byte(user.PassHash), []byte(oldPassword))
 	if err != nil {
-		err = Server.Queries.InsertOperationHistory(r.Context(), data.InsertOperationHistoryParams{
+		err = Server.Databaser.InsertOperationHistory(r.Context(), dbcore.InsertOperationHistoryParams{
 			ID:            uuid.New(),
 			UserID:        userID,
 			DeviceData:    fingerprint,
-			Operation:     data.OperationTypeChangeUsername,
+			Operation:     dbcore.OperationTypeChangeUsername,
 			Success:       false,
 			IpAddress:     IP,
-			FailureReason: data.FailureReasonInvalidPassword,
+			FailureReason: dbcore.FailureReasonInvalidPassword,
 		})
 		if err != nil {
 			log.Errorf("Failed to insert operation history: %v", err)
@@ -68,7 +68,7 @@ func ChangeUsername(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = Server.Queries.GetUserByUsername(r.Context(), *newUsername)
+	_, err = Server.Databaser.GetUserByUsername(r.Context(), *newUsername)
 	if !errors.Is(err, sql.ErrNoRows) {
 		if err != nil {
 			httpkit.RenderErr(w, problems.InternalError("Failed to check username availability"))
@@ -78,7 +78,7 @@ func ChangeUsername(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = Server.Queries.UpdateUsernameByID(r.Context(), data.UpdateUsernameByIDParams{
+	_, err = Server.Databaser.UpdateUsernameByID(r.Context(), dbcore.UpdateUsernameByIDParams{
 		ID:       userID,
 		Username: *newUsername,
 	})
@@ -87,14 +87,14 @@ func ChangeUsername(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = Server.Queries.InsertOperationHistory(r.Context(), data.InsertOperationHistoryParams{
+	err = Server.Databaser.InsertOperationHistory(r.Context(), dbcore.InsertOperationHistoryParams{
 		ID:            uuid.New(),
 		UserID:        userID,
 		DeviceData:    fingerprint,
-		Operation:     data.OperationTypeChangeUsername,
+		Operation:     dbcore.OperationTypeChangeUsername,
 		Success:       true,
 		IpAddress:     IP,
-		FailureReason: data.FailureReasonSuccess,
+		FailureReason: dbcore.FailureReasonSuccess,
 	})
 	if err != nil {
 		log.Errorf("Failed to insert operation history: %v", err)

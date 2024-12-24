@@ -60,13 +60,13 @@ func LoginInitiate(w http.ResponseWriter, r *http.Request) {
 
 	err = bcrypt.CompareHashAndPassword([]byte(user.PassHash), []byte(password))
 	if err != nil {
-		err = Server.Queries.InsertOperationHistory(r.Context(), data.InsertOperationHistoryParams{
+		err = Server.Databaser.InsertOperationHistory(r.Context(), dbcore.InsertOperationHistoryParams{
 			ID:            uuid.New(),
 			UserID:        user.ID,
 			DeviceData:    fingerprint,
-			Operation:     data.OperationTypeLogin,
+			Operation:     dbcore.OperationTypeLogin,
 			Success:       false,
-			FailureReason: data.FailureReasonInvalidPassword,
+			FailureReason: dbcore.FailureReasonInvalidPassword,
 			IpAddress:     IP,
 		})
 

@@ -88,14 +88,14 @@ func RegistrationComplete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	params := data.InsertUserParams{
+	params := dbcore.InsertUserParams{
 		ID:       newUuid,
 		Username: username,
 		Email:    email,
 		PassHash: string(hashedPassword),
 	}
 
-	user, err = Server.Queries.InsertUser(r.Context(), params)
+	user, err = Server.Databaser.InsertUser(r.Context(), params)
 	if err != nil {
 		logrus.Errorf("error inserting user: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())
