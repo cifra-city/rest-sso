@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 ## AproveOperationPatch
 
-> AproveOperationPatch200Response AproveOperationPatch(ctx).ApproveOperationReq(approveOperationReq).Execute()
+> AproveOperationPatch200Response AproveOperationPatch(ctx).ApproveOperation(approveOperation).Execute()
 
 Approve operation
 
@@ -29,11 +29,11 @@ import (
 )
 
 func main() {
-	approveOperationReq := *openapiclient.NewApproveOperationReq(*openapiclient.NewApproveOperationReqData("Type_example", *openapiclient.NewApproveOperationReqDataAttributes("Email_example", "Code_example", "reset_password"))) // ApproveOperationReq | 
+	approveOperation := *openapiclient.NewApproveOperation(*openapiclient.NewApproveOperationReqData("Type_example", *openapiclient.NewApproveOperationReqDataAttributes("Email_example", "Code_example", "reset_password"))) // ApproveOperation | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.EmailAPI.AproveOperationPatch(context.Background()).ApproveOperationReq(approveOperationReq).Execute()
+	resp, r, err := apiClient.EmailAPI.AproveOperationPatch(context.Background()).ApproveOperation(approveOperation).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `EmailAPI.AproveOperationPatch``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -54,7 +54,7 @@ Other parameters are passed through a pointer to a apiAproveOperationPatchReques
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **approveOperationReq** | [**ApproveOperationReq**](ApproveOperationReq.md) |  | 
+ **approveOperation** | [**ApproveOperation**](ApproveOperation.md) |  | 
 
 ### Return type
 

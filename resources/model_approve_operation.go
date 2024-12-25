@@ -16,38 +16,38 @@ import (
 	"fmt"
 )
 
-// checks if the TerminateSessions type satisfies the MappedNullable interface at compile time
-var _ MappedNullable = &TerminateSessions{}
+// checks if the ApproveOperation type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ApproveOperation{}
 
-// TerminateSessions struct for TerminateSessions
-type TerminateSessions struct {
-	Data TerminateSessionsData `json:"data"`
+// ApproveOperation struct for ApproveOperation
+type ApproveOperation struct {
+	Data ApproveOperationReqData `json:"data"`
 }
 
-type _TerminateSessions TerminateSessions
+type _ApproveOperation ApproveOperation
 
-// NewTerminateSessions instantiates a new TerminateSessions object
+// NewApproveOperation instantiates a new ApproveOperation object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewTerminateSessions(data TerminateSessionsData) *TerminateSessions {
-	this := TerminateSessions{}
+func NewApproveOperation(data ApproveOperationReqData) *ApproveOperation {
+	this := ApproveOperation{}
 	this.Data = data
 	return &this
 }
 
-// NewTerminateSessionsWithDefaults instantiates a new TerminateSessions object
+// NewApproveOperationWithDefaults instantiates a new ApproveOperation object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewTerminateSessionsWithDefaults() *TerminateSessions {
-	this := TerminateSessions{}
+func NewApproveOperationWithDefaults() *ApproveOperation {
+	this := ApproveOperation{}
 	return &this
 }
 
 // GetData returns the Data field value
-func (o *TerminateSessions) GetData() TerminateSessionsData {
+func (o *ApproveOperation) GetData() ApproveOperationReqData {
 	if o == nil {
-		var ret TerminateSessionsData
+		var ret ApproveOperationReqData
 		return ret
 	}
 
@@ -56,7 +56,7 @@ func (o *TerminateSessions) GetData() TerminateSessionsData {
 
 // GetDataOk returns a tuple with the Data field value
 // and a boolean to check if the value has been set.
-func (o *TerminateSessions) GetDataOk() (*TerminateSessionsData, bool) {
+func (o *ApproveOperation) GetDataOk() (*ApproveOperationReqData, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -64,11 +64,11 @@ func (o *TerminateSessions) GetDataOk() (*TerminateSessionsData, bool) {
 }
 
 // SetData sets field value
-func (o *TerminateSessions) SetData(v TerminateSessionsData) {
+func (o *ApproveOperation) SetData(v ApproveOperationReqData) {
 	o.Data = v
 }
 
-func (o TerminateSessions) MarshalJSON() ([]byte, error) {
+func (o ApproveOperation) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
@@ -76,13 +76,13 @@ func (o TerminateSessions) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-func (o TerminateSessions) ToMap() (map[string]interface{}, error) {
+func (o ApproveOperation) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["data"] = o.Data
 	return toSerialize, nil
 }
 
-func (o *TerminateSessions) UnmarshalJSON(data []byte) (err error) {
+func (o *ApproveOperation) UnmarshalJSON(data []byte) (err error) {
 	// This validates that all required properties are included in the JSON object
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
@@ -104,53 +104,53 @@ func (o *TerminateSessions) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varTerminateSessions := _TerminateSessions{}
+	varApproveOperation := _ApproveOperation{}
 
 	decoder := json.NewDecoder(bytes.NewReader(data))
 	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTerminateSessions)
+	err = decoder.Decode(&varApproveOperation)
 
 	if err != nil {
 		return err
 	}
 
-	*o = TerminateSessions(varTerminateSessions)
+	*o = ApproveOperation(varApproveOperation)
 
 	return err
 }
 
-type NullableTerminateSessions struct {
-	value *TerminateSessions
+type NullableApproveOperation struct {
+	value *ApproveOperation
 	isSet bool
 }
 
-func (v NullableTerminateSessions) Get() *TerminateSessions {
+func (v NullableApproveOperation) Get() *ApproveOperation {
 	return v.value
 }
 
-func (v *NullableTerminateSessions) Set(val *TerminateSessions) {
+func (v *NullableApproveOperation) Set(val *ApproveOperation) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableTerminateSessions) IsSet() bool {
+func (v NullableApproveOperation) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableTerminateSessions) Unset() {
+func (v *NullableApproveOperation) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableTerminateSessions(val *TerminateSessions) *NullableTerminateSessions {
-	return &NullableTerminateSessions{value: val, isSet: true}
+func NewNullableApproveOperation(val *ApproveOperation) *NullableApproveOperation {
+	return &NullableApproveOperation{value: val, isSet: true}
 }
 
-func (v NullableTerminateSessions) MarshalJSON() ([]byte, error) {
+func (v NullableApproveOperation) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableTerminateSessions) UnmarshalJSON(src []byte) error {
+func (v *NullableApproveOperation) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

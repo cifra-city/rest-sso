@@ -4,15 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**AccessToken** | **string** | Access Token для авторизации запросов. | 
-**RefreshToken** | **string** | Refresh Token для обновления Access Token. | 
-**ExpiresIn** | **int32** | Время жизни Access Token в секундах. | 
+**AccessToken** | **string** | Access Token | 
+**RefreshToken** | **string** | Refresh Token | 
 
 ## Methods
 
 ### NewLoginCompleteRespDataAttributes
 
-`func NewLoginCompleteRespDataAttributes(accessToken string, refreshToken string, expiresIn int32, ) *LoginCompleteRespDataAttributes`
+`func NewLoginCompleteRespDataAttributes(accessToken string, refreshToken string, ) *LoginCompleteRespDataAttributes`
 
 NewLoginCompleteRespDataAttributes instantiates a new LoginCompleteRespDataAttributes object
 This constructor will assign default values to properties that have it defined,
@@ -65,26 +64,6 @@ and a boolean to check if the value has been set.
 `func (o *LoginCompleteRespDataAttributes) SetRefreshToken(v string)`
 
 SetRefreshToken sets RefreshToken field to given value.
-
-
-### GetExpiresIn
-
-`func (o *LoginCompleteRespDataAttributes) GetExpiresIn() int32`
-
-GetExpiresIn returns the ExpiresIn field if non-nil, zero value otherwise.
-
-### GetExpiresInOk
-
-`func (o *LoginCompleteRespDataAttributes) GetExpiresInOk() (*int32, bool)`
-
-GetExpiresInOk returns a tuple with the ExpiresIn field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetExpiresIn
-
-`func (o *LoginCompleteRespDataAttributes) SetExpiresIn(v int32)`
-
-SetExpiresIn sets ExpiresIn field to given value.
 
 
 

@@ -1,8 +1,6 @@
 package handlers
 
 import (
-	"database/sql"
-	"errors"
 	"net/http"
 
 	"github.com/cifra-city/cifractx"
@@ -32,24 +30,20 @@ func GetUserSessions(w http.ResponseWriter, r *http.Request) {
 
 	log.Infof("userID: %v", userID)
 
-	devices, err := Server.Databaser.GetDevicesByUserID(r.Context(), userID)
+	sessions, err := Server.Databaser.Sessions.GetSessions(r, userID)
 	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			httpkit.RenderErr(w, problems.NotFound("No devices found"))
-			return
-		}
-		log.Errorf("Failed to retrieve devices: %v", err)
-		httpkit.RenderErr(w, problems.InternalError("Failed to retrieve devices"))
+		log.Errorf("Failed to retrieve user sessions: %v", err)
+		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
 
 	var userSessions []resources.UserSessionDataAttributesDevicesInner
-	for _, device := range devices {
+	for _, device := range sessions {
 		userSessions = append(userSessions, resources.UserSessionDataAttributesDevicesInner{
 			Id:         device.ID.String(),
-			FactoryId:  device.FactoryID,
-			DeviceName: device.DeviceName.String,
-			OsVersion:  device.OsVersion.String,
+			Location:   "TODO",
+			DeviceName: "TODO",
+			Client:     "TODO",
 			LastUsed:   device.LastUsed,
 		})
 	}

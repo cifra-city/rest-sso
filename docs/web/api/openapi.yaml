@@ -13,7 +13,7 @@ paths:
         content:
           application/vnd.api+json:
             schema:
-              $ref: '#/components/schemas/ApproveOperationReq'
+              $ref: '#/components/schemas/ApproveOperation'
         required: true
       responses:
         "200":
@@ -418,10 +418,6 @@ paths:
         required: true
       responses:
         "201":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/LoginResp'
           description: Updated username successfully
         "400":
           content:
@@ -630,12 +626,6 @@ paths:
   /user/change/terminate-sessions:
     delete:
       description: Terminate all sessions for a user
-      requestBody:
-        content:
-          application/vnd.api+json:
-            schema:
-              $ref: '#/components/schemas/TerminateSessions'
-        required: true
       responses:
         "200":
           content:
@@ -814,10 +804,10 @@ components:
       required:
       - data
       type: object
-    TerminateSessions:
+    ApproveOperation:
       properties:
         data:
-          $ref: '#/components/schemas/TerminateSessions_data'
+          $ref: '#/components/schemas/ApproveOperationReq_data'
       required:
       - data
       type: object
@@ -831,13 +821,6 @@ components:
           type: array
       required:
       - errors
-      type: object
-    LoginResp:
-      properties:
-        data:
-          $ref: '#/components/schemas/LoginResp_data'
-      required:
-      - data
       type: object
     UserSessions:
       properties:
@@ -926,11 +909,8 @@ components:
       type: object
     RegistrationComplete_data_attributes:
       properties:
-        first_password:
-          description: First password
-          type: string
-        second_password:
-          description: Second password
+        password:
+          description: User password
           type: string
         email:
           description: User email
@@ -941,8 +921,7 @@ components:
           type: string
       required:
       - email
-      - first_password
-      - second_password
+      - password
       - username
       type: object
     RegistrationComplete_data:
@@ -993,19 +972,11 @@ components:
         username:
           description: User username
           type: string
-        factory_id:
-          description: Unique identifier for the user's device.
-          type: string
         device_name:
-          description: "Human-readable name for the user's device (e.g., 'iPhone 14')."
-          type: string
-        os_version:
-          description: Operating system version of the user's device.
+          description: Device name
           type: string
       required:
       - device_name
-      - factory_id
-      - os_version
       type: object
     LoginCompleteReq_data:
       properties:
@@ -1022,24 +993,20 @@ components:
     LoginCompleteResp_data_attributes:
       properties:
         access_token:
-          description: Access Token для авторизации запросов.
+          description: Access Token
           type: string
         refresh_token:
-          description: Refresh Token для обновления Access Token.
+          description: Refresh Token
           type: string
-        expires_in:
-          description: Время жизни Access Token в секундах.
-          type: integer
       required:
       - access_token
-      - expires_in
       - refresh_token
       type: object
     LoginCompleteResp_data:
       properties:
         type:
           enum:
-          - login_complete
+          - login
           type: string
         attributes:
           $ref: '#/components/schemas/LoginCompleteResp_data_attributes'
@@ -1071,22 +1038,18 @@ components:
       type: object
     ResetPasswordComplete_data_attributes:
       properties:
-        first_password:
-          description: User password.
-          type: string
-        second_password:
-          description: User password.
+        password:
+          description: New user password
           type: string
         email:
-          description: User email (required if username is not provided).
+          description: User email (required if username is not provided)
           format: email
           type: string
         username:
-          description: User username (required if email is not provided).
+          description: User username (required if email is not provided)
           type: string
       required:
-      - first_password
-      - second_password
+      - password
       type: object
     ResetPasswordComplete_data:
       properties:
@@ -1106,26 +1069,7 @@ components:
           description: The refresh token to generate a new access token.
           example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
           type: string
-        device_id:
-          description: The device ID of the device that the refresh token was issued
-            to. (Not factory ID)
-          example: 123e4567-e89b-12d3-a456-426614174000
-          format: uuid.UUID
-          type: string
-        factory_id:
-          description: Unique identifier for the user's device.
-          type: string
-        device_name:
-          description: "Human-readable name for the user's device (e.g., 'iPhone 14')."
-          type: string
-        os_version:
-          description: Operating system version of the user's device.
-          type: string
       required:
-      - device_id
-      - device_name
-      - factory_id
-      - os_version
       - refresh_token
       type: object
     RefreshReq_data:
@@ -1150,13 +1094,8 @@ components:
           description: The new refresh token.
           example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
           type: string
-        expires_in:
-          description: Time in seconds until the access token expires.
-          example: 3600
-          type: integer
       required:
       - access_token
-      - expires_in
       - refresh_token
       type: object
     RefreshResp_data:
@@ -1199,28 +1138,28 @@ components:
     UserSession_data_attributes_devices_inner:
       properties:
         id:
-          description: Уникальный идентификатор устройства
+          description: session id
           format: uuid
           type: string
-        factory_id:
-          description: Серийный номер устройства
-          type: string
         device_name:
-          description: "Имя устройства, заданное пользователем"
+          description: device name
           type: string
-        os_version:
-          description: Версия операционной системы устройства
+        client:
+          description: client name and version
+          type: string
+        location:
+          description: location
           type: string
         last_used:
-          description: Дата и время последнего использования устройства
+          description: last used date
           format: date-time
           type: string
       required:
+      - client
       - device_name
-      - factory_id
       - id
       - last_used
-      - os_version
+      - location
       type: object
     UserSession_data_attributes:
       properties:
@@ -1245,11 +1184,11 @@ components:
       type: object
     DeleteSession_data_attributes:
       properties:
-        device_id:
+        session_id:
           description: Device ID.
           type: string
       required:
-      - device_id
+      - session_id
       type: object
     DeleteSession_data:
       properties:
@@ -1259,36 +1198,6 @@ components:
           type: string
         attributes:
           $ref: '#/components/schemas/DeleteSession_data_attributes'
-      required:
-      - attributes
-      - type
-      type: object
-    TerminateSessions_data_attributes_devices_inner:
-      properties:
-        id:
-          description: Unique device identifier
-          format: uuid
-          type: string
-      required:
-      - id
-      type: object
-    TerminateSessions_data_attributes:
-      properties:
-        devices:
-          items:
-            $ref: '#/components/schemas/TerminateSessions_data_attributes_devices_inner'
-          type: array
-      required:
-      - devices
-      type: object
-    TerminateSessions_data:
-      properties:
-        type:
-          enum:
-          - delete_session
-          type: string
-        attributes:
-          $ref: '#/components/schemas/TerminateSessions_data_attributes'
       required:
       - attributes
       - type
@@ -1318,16 +1227,4 @@ components:
       required:
       - status
       - title
-      type: object
-    LoginResp_data:
-      properties:
-        type:
-          enum:
-          - tokens
-          type: string
-        attributes:
-          $ref: '#/components/schemas/LoginCompleteResp_data_attributes'
-      required:
-      - attributes
-      - type
       type: object

@@ -31,7 +31,7 @@ import (
 )
 
 func main() {
-	resetPasswordComplete := *openapiclient.NewResetPasswordComplete(*openapiclient.NewResetPasswordCompleteData("Type_example", *openapiclient.NewResetPasswordCompleteDataAttributes("FirstPassword_example", "SecondPassword_example"))) // ResetPasswordComplete | 
+	resetPasswordComplete := *openapiclient.NewResetPasswordComplete(*openapiclient.NewResetPasswordCompleteData("Type_example", *openapiclient.NewResetPasswordCompleteDataAttributes("Password_example"))) // ResetPasswordComplete | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -144,7 +144,7 @@ No authorization required
 
 ## UserChangeUsernamePatch
 
-> LoginResp UserChangeUsernamePatch(ctx).ChangeUsername(changeUsername).Execute()
+> UserChangeUsernamePatch(ctx).ChangeUsername(changeUsername).Execute()
 
 Change username
 
@@ -167,13 +167,11 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.UserAPI.UserChangeUsernamePatch(context.Background()).ChangeUsername(changeUsername).Execute()
+	r, err := apiClient.UserAPI.UserChangeUsernamePatch(context.Background()).ChangeUsername(changeUsername).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `UserAPI.UserChangeUsernamePatch``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `UserChangeUsernamePatch`: LoginResp
-	fmt.Fprintf(os.Stdout, "Response from `UserAPI.UserChangeUsernamePatch`: %v\n", resp)
 }
 ```
 
@@ -192,7 +190,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**LoginResp**](LoginResp.md)
+ (empty response body)
 
 ### Authorization
 

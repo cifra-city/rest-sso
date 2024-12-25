@@ -22,15 +22,15 @@ var _ MappedNullable = &UserSessionDataAttributesDevicesInner{}
 
 // UserSessionDataAttributesDevicesInner struct for UserSessionDataAttributesDevicesInner
 type UserSessionDataAttributesDevicesInner struct {
-	// Уникальный идентификатор устройства
+	// session id
 	Id string `json:"id"`
-	// Серийный номер устройства
-	FactoryId string `json:"factory_id"`
-	// Имя устройства, заданное пользователем
+	// device name
 	DeviceName string `json:"device_name"`
-	// Версия операционной системы устройства
-	OsVersion string `json:"os_version"`
-	// Дата и время последнего использования устройства
+	// client name and version
+	Client string `json:"client"`
+	// location
+	Location string `json:"location"`
+	// last used date
 	LastUsed time.Time `json:"last_used"`
 }
 
@@ -40,12 +40,12 @@ type _UserSessionDataAttributesDevicesInner UserSessionDataAttributesDevicesInne
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewUserSessionDataAttributesDevicesInner(id string, factoryId string, deviceName string, osVersion string, lastUsed time.Time) *UserSessionDataAttributesDevicesInner {
+func NewUserSessionDataAttributesDevicesInner(id string, deviceName string, client string, location string, lastUsed time.Time) *UserSessionDataAttributesDevicesInner {
 	this := UserSessionDataAttributesDevicesInner{}
 	this.Id = id
-	this.FactoryId = factoryId
 	this.DeviceName = deviceName
-	this.OsVersion = osVersion
+	this.Client = client
+	this.Location = location
 	this.LastUsed = lastUsed
 	return &this
 }
@@ -82,30 +82,6 @@ func (o *UserSessionDataAttributesDevicesInner) SetId(v string) {
 	o.Id = v
 }
 
-// GetFactoryId returns the FactoryId field value
-func (o *UserSessionDataAttributesDevicesInner) GetFactoryId() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.FactoryId
-}
-
-// GetFactoryIdOk returns a tuple with the FactoryId field value
-// and a boolean to check if the value has been set.
-func (o *UserSessionDataAttributesDevicesInner) GetFactoryIdOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.FactoryId, true
-}
-
-// SetFactoryId sets field value
-func (o *UserSessionDataAttributesDevicesInner) SetFactoryId(v string) {
-	o.FactoryId = v
-}
-
 // GetDeviceName returns the DeviceName field value
 func (o *UserSessionDataAttributesDevicesInner) GetDeviceName() string {
 	if o == nil {
@@ -130,28 +106,52 @@ func (o *UserSessionDataAttributesDevicesInner) SetDeviceName(v string) {
 	o.DeviceName = v
 }
 
-// GetOsVersion returns the OsVersion field value
-func (o *UserSessionDataAttributesDevicesInner) GetOsVersion() string {
+// GetClient returns the Client field value
+func (o *UserSessionDataAttributesDevicesInner) GetClient() string {
 	if o == nil {
 		var ret string
 		return ret
 	}
 
-	return o.OsVersion
+	return o.Client
 }
 
-// GetOsVersionOk returns a tuple with the OsVersion field value
+// GetClientOk returns a tuple with the Client field value
 // and a boolean to check if the value has been set.
-func (o *UserSessionDataAttributesDevicesInner) GetOsVersionOk() (*string, bool) {
+func (o *UserSessionDataAttributesDevicesInner) GetClientOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.OsVersion, true
+	return &o.Client, true
 }
 
-// SetOsVersion sets field value
-func (o *UserSessionDataAttributesDevicesInner) SetOsVersion(v string) {
-	o.OsVersion = v
+// SetClient sets field value
+func (o *UserSessionDataAttributesDevicesInner) SetClient(v string) {
+	o.Client = v
+}
+
+// GetLocation returns the Location field value
+func (o *UserSessionDataAttributesDevicesInner) GetLocation() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.Location
+}
+
+// GetLocationOk returns a tuple with the Location field value
+// and a boolean to check if the value has been set.
+func (o *UserSessionDataAttributesDevicesInner) GetLocationOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.Location, true
+}
+
+// SetLocation sets field value
+func (o *UserSessionDataAttributesDevicesInner) SetLocation(v string) {
+	o.Location = v
 }
 
 // GetLastUsed returns the LastUsed field value
@@ -189,9 +189,9 @@ func (o UserSessionDataAttributesDevicesInner) MarshalJSON() ([]byte, error) {
 func (o UserSessionDataAttributesDevicesInner) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["id"] = o.Id
-	toSerialize["factory_id"] = o.FactoryId
 	toSerialize["device_name"] = o.DeviceName
-	toSerialize["os_version"] = o.OsVersion
+	toSerialize["client"] = o.Client
+	toSerialize["location"] = o.Location
 	toSerialize["last_used"] = o.LastUsed
 	return toSerialize, nil
 }
@@ -202,9 +202,9 @@ func (o *UserSessionDataAttributesDevicesInner) UnmarshalJSON(data []byte) (err 
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
 		"id",
-		"factory_id",
 		"device_name",
-		"os_version",
+		"client",
+		"location",
 		"last_used",
 	}
 

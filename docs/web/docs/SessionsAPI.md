@@ -31,7 +31,7 @@ import (
 )
 
 func main() {
-	deleteSession := *openapiclient.NewDeleteSession(*openapiclient.NewDeleteSessionData("Type_example", *openapiclient.NewDeleteSessionDataAttributes("DeviceId_example"))) // DeleteSession | 
+	deleteSession := *openapiclient.NewDeleteSession(*openapiclient.NewDeleteSessionData("Type_example", *openapiclient.NewDeleteSessionDataAttributes("SessionId_example"))) // DeleteSession | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -139,7 +139,7 @@ No authorization required
 
 ## UserChangeTerminateSessionsDelete
 
-> AproveOperationPatch200Response UserChangeTerminateSessionsDelete(ctx).TerminateSessions(terminateSessions).Execute()
+> AproveOperationPatch200Response UserChangeTerminateSessionsDelete(ctx).Execute()
 
 Terminate all sessions
 
@@ -158,11 +158,10 @@ import (
 )
 
 func main() {
-	terminateSessions := *openapiclient.NewTerminateSessions(*openapiclient.NewTerminateSessionsData("Type_example", *openapiclient.NewTerminateSessionsDataAttributes([]openapiclient.TerminateSessionsDataAttributesDevicesInner{*openapiclient.NewTerminateSessionsDataAttributesDevicesInner("Id_example")}))) // TerminateSessions | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.SessionsAPI.UserChangeTerminateSessionsDelete(context.Background()).TerminateSessions(terminateSessions).Execute()
+	resp, r, err := apiClient.SessionsAPI.UserChangeTerminateSessionsDelete(context.Background()).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `SessionsAPI.UserChangeTerminateSessionsDelete``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -174,16 +173,12 @@ func main() {
 
 ### Path Parameters
 
-
+This endpoint does not need any parameter.
 
 ### Other Parameters
 
 Other parameters are passed through a pointer to a apiUserChangeTerminateSessionsDeleteRequest struct via the builder pattern
 
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **terminateSessions** | [**TerminateSessions**](TerminateSessions.md) |  | 
 
 ### Return type
 
@@ -195,7 +190,7 @@ No authorization required
 
 ### HTTP request headers
 
-- **Content-Type**: application/vnd.api+json
+- **Content-Type**: Not defined
 - **Accept**: application/json, application/vnd.api+json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)

@@ -21,10 +21,8 @@ var _ MappedNullable = &RegistrationCompleteDataAttributes{}
 
 // RegistrationCompleteDataAttributes struct for RegistrationCompleteDataAttributes
 type RegistrationCompleteDataAttributes struct {
-	// First password
-	FirstPassword string `json:"first_password"`
-	// Second password
-	SecondPassword string `json:"second_password"`
+	// User password
+	Password string `json:"password"`
 	// User email
 	Email string `json:"email"`
 	// User username
@@ -37,10 +35,9 @@ type _RegistrationCompleteDataAttributes RegistrationCompleteDataAttributes
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewRegistrationCompleteDataAttributes(firstPassword string, secondPassword string, email string, username string) *RegistrationCompleteDataAttributes {
+func NewRegistrationCompleteDataAttributes(password string, email string, username string) *RegistrationCompleteDataAttributes {
 	this := RegistrationCompleteDataAttributes{}
-	this.FirstPassword = firstPassword
-	this.SecondPassword = secondPassword
+	this.Password = password
 	this.Email = email
 	this.Username = username
 	return &this
@@ -54,52 +51,28 @@ func NewRegistrationCompleteDataAttributesWithDefaults() *RegistrationCompleteDa
 	return &this
 }
 
-// GetFirstPassword returns the FirstPassword field value
-func (o *RegistrationCompleteDataAttributes) GetFirstPassword() string {
+// GetPassword returns the Password field value
+func (o *RegistrationCompleteDataAttributes) GetPassword() string {
 	if o == nil {
 		var ret string
 		return ret
 	}
 
-	return o.FirstPassword
+	return o.Password
 }
 
-// GetFirstPasswordOk returns a tuple with the FirstPassword field value
+// GetPasswordOk returns a tuple with the Password field value
 // and a boolean to check if the value has been set.
-func (o *RegistrationCompleteDataAttributes) GetFirstPasswordOk() (*string, bool) {
+func (o *RegistrationCompleteDataAttributes) GetPasswordOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.FirstPassword, true
+	return &o.Password, true
 }
 
-// SetFirstPassword sets field value
-func (o *RegistrationCompleteDataAttributes) SetFirstPassword(v string) {
-	o.FirstPassword = v
-}
-
-// GetSecondPassword returns the SecondPassword field value
-func (o *RegistrationCompleteDataAttributes) GetSecondPassword() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.SecondPassword
-}
-
-// GetSecondPasswordOk returns a tuple with the SecondPassword field value
-// and a boolean to check if the value has been set.
-func (o *RegistrationCompleteDataAttributes) GetSecondPasswordOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.SecondPassword, true
-}
-
-// SetSecondPassword sets field value
-func (o *RegistrationCompleteDataAttributes) SetSecondPassword(v string) {
-	o.SecondPassword = v
+// SetPassword sets field value
+func (o *RegistrationCompleteDataAttributes) SetPassword(v string) {
+	o.Password = v
 }
 
 // GetEmail returns the Email field value
@@ -160,8 +133,7 @@ func (o RegistrationCompleteDataAttributes) MarshalJSON() ([]byte, error) {
 
 func (o RegistrationCompleteDataAttributes) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["first_password"] = o.FirstPassword
-	toSerialize["second_password"] = o.SecondPassword
+	toSerialize["password"] = o.Password
 	toSerialize["email"] = o.Email
 	toSerialize["username"] = o.Username
 	return toSerialize, nil
@@ -172,8 +144,7 @@ func (o *RegistrationCompleteDataAttributes) UnmarshalJSON(data []byte) (err err
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"first_password",
-		"second_password",
+		"password",
 		"email",
 		"username",
 	}

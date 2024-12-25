@@ -25,8 +25,6 @@ type RefreshRespDataAttributes struct {
 	AccessToken string `json:"access_token"`
 	// The new refresh token.
 	RefreshToken string `json:"refresh_token"`
-	// Time in seconds until the access token expires.
-	ExpiresIn int32 `json:"expires_in"`
 }
 
 type _RefreshRespDataAttributes RefreshRespDataAttributes
@@ -35,11 +33,10 @@ type _RefreshRespDataAttributes RefreshRespDataAttributes
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewRefreshRespDataAttributes(accessToken string, refreshToken string, expiresIn int32) *RefreshRespDataAttributes {
+func NewRefreshRespDataAttributes(accessToken string, refreshToken string) *RefreshRespDataAttributes {
 	this := RefreshRespDataAttributes{}
 	this.AccessToken = accessToken
 	this.RefreshToken = refreshToken
-	this.ExpiresIn = expiresIn
 	return &this
 }
 
@@ -99,30 +96,6 @@ func (o *RefreshRespDataAttributes) SetRefreshToken(v string) {
 	o.RefreshToken = v
 }
 
-// GetExpiresIn returns the ExpiresIn field value
-func (o *RefreshRespDataAttributes) GetExpiresIn() int32 {
-	if o == nil {
-		var ret int32
-		return ret
-	}
-
-	return o.ExpiresIn
-}
-
-// GetExpiresInOk returns a tuple with the ExpiresIn field value
-// and a boolean to check if the value has been set.
-func (o *RefreshRespDataAttributes) GetExpiresInOk() (*int32, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.ExpiresIn, true
-}
-
-// SetExpiresIn sets field value
-func (o *RefreshRespDataAttributes) SetExpiresIn(v int32) {
-	o.ExpiresIn = v
-}
-
 func (o RefreshRespDataAttributes) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -135,7 +108,6 @@ func (o RefreshRespDataAttributes) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["access_token"] = o.AccessToken
 	toSerialize["refresh_token"] = o.RefreshToken
-	toSerialize["expires_in"] = o.ExpiresIn
 	return toSerialize, nil
 }
 
@@ -146,7 +118,6 @@ func (o *RefreshRespDataAttributes) UnmarshalJSON(data []byte) (err error) {
 	requiredProperties := []string{
 		"access_token",
 		"refresh_token",
-		"expires_in",
 	}
 
 	allProperties := make(map[string]interface{})

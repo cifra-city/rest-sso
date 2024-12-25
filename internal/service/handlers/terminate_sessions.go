@@ -9,20 +9,11 @@ import (
 	"github.com/cifra-city/httpkit"
 	"github.com/cifra-city/httpkit/problems"
 	"github.com/cifra-city/rest-sso/internal/config"
-	"github.com/cifra-city/rest-sso/internal/db/data"
-	"github.com/cifra-city/rest-sso/internal/service/requests"
 	"github.com/cifra-city/tokens"
 	"github.com/google/uuid"
 )
 
 func TerminateSessions(w http.ResponseWriter, r *http.Request) {
-	req, err := requests.NewTerminateSessions(r)
-	if err != nil {
-		httpkit.RenderErr(w, problems.BadRequest(err)...)
-		return
-	}
-
-	devices := req.Data.Attributes.Devices
 
 	Server, err := cifractx.GetValue[*config.Service](r.Context(), config.SERVICE)
 	if err != nil {
@@ -39,40 +30,19 @@ func TerminateSessions(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Infof("userID: %v", userID)
-
-	_, err = Server.Databaser.GetUserByID(r.Context(), userID)
-	if err != nil {
-		httpkit.RenderErr(w, problems.InternalError("Failed to retrieve user information"))
+	sessionID, ok := r.Context().Value(tokens.DeviceIDKey).(uuid.UUID)
+	if !ok {
+		log.Warn("DeviceID not found in context")
+		httpkit.RenderErr(w, problems.Unauthorized("Device not authenticated"))
 		return
 	}
 
-	var userSessions []dbcore.Device
-	for _, id := range devices {
-		device, err := Server.Databaser.GetDeviceByID(r.Context(), uuid.MustParse(id.Id))
-		if err != nil {
-			if errors.Is(err, sql.ErrNoRows) {
-				httpkit.RenderErr(w, problems.NotFound("Device not found"))
-				return
-			}
-			httpkit.RenderErr(w, problems.InternalError("Failed to retrieve device information"))
-			return
-		}
-		userSessions = append(userSessions, dbcore.Device{
-			ID:         device.ID,
-			UserID:     userID,
-			FactoryID:  device.FactoryID,
-			DeviceName: device.DeviceName,
-			OsVersion:  device.OsVersion,
-			CreatedAt:  device.CreatedAt,
-			LastUsed:   device.LastUsed,
-		})
-	}
+	log.Infof("userID: %v", userID)
 
-	err = Server.Databaser.TerminateSessionsTransaction(r.Context(), userSessions, userID, httpkit.GenerateFingerprint(r), httpkit.GetClientIP(r))
+	err = Server.Databaser.TerminateSessionsTxn(r, userID, sessionID)
 	if err != nil {
-		if errors.Is(err, dbcore.ErrorDeviceDoesNotBelongToUser) {
-			httpkit.RenderErr(w, problems.Forbidden("Device does not belong to user"))
+		if errors.Is(err, sql.ErrNoRows) {
+			httpkit.RenderErr(w, problems.NotFound("Device not found"))
 			return
 		}
 		httpkit.RenderErr(w, problems.InternalError("Failed to terminate sessions"))

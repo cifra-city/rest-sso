@@ -21,12 +21,10 @@ var _ MappedNullable = &LoginCompleteRespDataAttributes{}
 
 // LoginCompleteRespDataAttributes struct for LoginCompleteRespDataAttributes
 type LoginCompleteRespDataAttributes struct {
-	// Access Token для авторизации запросов.
+	// Access Token
 	AccessToken string `json:"access_token"`
-	// Refresh Token для обновления Access Token.
+	// Refresh Token
 	RefreshToken string `json:"refresh_token"`
-	// Время жизни Access Token в секундах.
-	ExpiresIn int32 `json:"expires_in"`
 }
 
 type _LoginCompleteRespDataAttributes LoginCompleteRespDataAttributes
@@ -35,11 +33,10 @@ type _LoginCompleteRespDataAttributes LoginCompleteRespDataAttributes
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewLoginCompleteRespDataAttributes(accessToken string, refreshToken string, expiresIn int32) *LoginCompleteRespDataAttributes {
+func NewLoginCompleteRespDataAttributes(accessToken string, refreshToken string) *LoginCompleteRespDataAttributes {
 	this := LoginCompleteRespDataAttributes{}
 	this.AccessToken = accessToken
 	this.RefreshToken = refreshToken
-	this.ExpiresIn = expiresIn
 	return &this
 }
 
@@ -99,30 +96,6 @@ func (o *LoginCompleteRespDataAttributes) SetRefreshToken(v string) {
 	o.RefreshToken = v
 }
 
-// GetExpiresIn returns the ExpiresIn field value
-func (o *LoginCompleteRespDataAttributes) GetExpiresIn() int32 {
-	if o == nil {
-		var ret int32
-		return ret
-	}
-
-	return o.ExpiresIn
-}
-
-// GetExpiresInOk returns a tuple with the ExpiresIn field value
-// and a boolean to check if the value has been set.
-func (o *LoginCompleteRespDataAttributes) GetExpiresInOk() (*int32, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.ExpiresIn, true
-}
-
-// SetExpiresIn sets field value
-func (o *LoginCompleteRespDataAttributes) SetExpiresIn(v int32) {
-	o.ExpiresIn = v
-}
-
 func (o LoginCompleteRespDataAttributes) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -135,7 +108,6 @@ func (o LoginCompleteRespDataAttributes) ToMap() (map[string]interface{}, error)
 	toSerialize := map[string]interface{}{}
 	toSerialize["access_token"] = o.AccessToken
 	toSerialize["refresh_token"] = o.RefreshToken
-	toSerialize["expires_in"] = o.ExpiresIn
 	return toSerialize, nil
 }
 
@@ -146,7 +118,6 @@ func (o *LoginCompleteRespDataAttributes) UnmarshalJSON(data []byte) (err error)
 	requiredProperties := []string{
 		"access_token",
 		"refresh_token",
-		"expires_in",
 	}
 
 	allProperties := make(map[string]interface{})

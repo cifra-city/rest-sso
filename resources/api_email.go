@@ -25,11 +25,11 @@ type EmailAPIService service
 type ApiAproveOperationPatchRequest struct {
 	ctx context.Context
 	ApiService *EmailAPIService
-	approveOperationReq *ApproveOperationReq
+	approveOperation *ApproveOperation
 }
 
-func (r ApiAproveOperationPatchRequest) ApproveOperationReq(approveOperationReq ApproveOperationReq) ApiAproveOperationPatchRequest {
-	r.approveOperationReq = &approveOperationReq
+func (r ApiAproveOperationPatchRequest) ApproveOperation(approveOperation ApproveOperation) ApiAproveOperationPatchRequest {
+	r.approveOperation = &approveOperation
 	return r
 }
 
@@ -72,8 +72,8 @@ func (a *EmailAPIService) AproveOperationPatchExecute(r ApiAproveOperationPatchR
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.approveOperationReq == nil {
-		return localVarReturnValue, nil, reportError("approveOperationReq is required and must be specified")
+	if r.approveOperation == nil {
+		return localVarReturnValue, nil, reportError("approveOperation is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -94,7 +94,7 @@ func (a *EmailAPIService) AproveOperationPatchExecute(r ApiAproveOperationPatchR
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.approveOperationReq
+	localVarPostBody = r.approveOperation
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err

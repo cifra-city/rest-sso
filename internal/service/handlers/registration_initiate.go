@@ -1,8 +1,6 @@
 package handlers
 
 import (
-	"database/sql"
-	"errors"
 	"net/http"
 
 	"github.com/cifra-city/cifractx"
@@ -10,7 +8,6 @@ import (
 	"github.com/cifra-city/httpkit/problems"
 	"github.com/cifra-city/rest-sso/internal/config"
 	"github.com/cifra-city/rest-sso/internal/service/requests"
-	"github.com/cifra-city/rest-sso/internal/service/utils"
 	"github.com/sirupsen/logrus"
 )
 
@@ -36,14 +33,15 @@ func RegistrationInitiate(w http.ResponseWriter, r *http.Request) {
 
 	log := Server.Logger
 
-	_, err = utils.GetUserExists(r.Context(), Server, &username, &email)
-	if !errors.Is(err, sql.ErrNoRows) {
-		if err != nil {
-			log.Errorf("error getting user: %v", err)
-			httpkit.RenderErr(w, problems.InternalError())
-			return
-		}
-		httpkit.RenderErr(w, problems.Conflict("user already exists"))
+	acc, err := Server.Databaser.Accounts.Exists(r, &username, &email)
+	if err != nil {
+		log.Errorf("error getting user: %v", err)
+		httpkit.RenderErr(w, problems.InternalError())
+		return
+	}
+	if acc == nil {
+		log.Debugf("user not found: %v", err)
+		httpkit.RenderErr(w, problems.NotFound())
 		return
 	}
 

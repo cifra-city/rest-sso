@@ -13,24 +13,31 @@ import (
 )
 
 const createSession = `-- name: CreateSession :one
-INSERT INTO sessions (user_id, token, device_data)
-VALUES ($1, $2, $3)
-RETURNING id, user_id, token, device_data, created_at, last_used
+INSERT INTO sessions (user_id, token, device_name, device_data)
+VALUES ($1, $2, $3, $4)
+RETURNING id, user_id, token, device_name, device_data, created_at, last_used
 `
 
 type CreateSessionParams struct {
 	UserID     uuid.UUID
 	Token      string
+	DeviceName string
 	DeviceData json.RawMessage
 }
 
 func (q *Queries) CreateSession(ctx context.Context, arg CreateSessionParams) (Session, error) {
-	row := q.db.QueryRowContext(ctx, createSession, arg.UserID, arg.Token, arg.DeviceData)
+	row := q.db.QueryRowContext(ctx, createSession,
+		arg.UserID,
+		arg.Token,
+		arg.DeviceName,
+		arg.DeviceData,
+	)
 	var i Session
 	err := row.Scan(
 		&i.ID,
 		&i.UserID,
 		&i.Token,
+		&i.DeviceName,
 		&i.DeviceData,
 		&i.CreatedAt,
 		&i.LastUsed,
@@ -74,7 +81,7 @@ func (q *Queries) DeleteUserSessions(ctx context.Context, userID uuid.UUID) erro
 }
 
 const getSession = `-- name: GetSession :one
-SELECT id, user_id, token, device_data, created_at, last_used FROM sessions
+SELECT id, user_id, token, device_name, device_data, created_at, last_used FROM sessions
 WHERE id = $1
 `
 
@@ -85,6 +92,7 @@ func (q *Queries) GetSession(ctx context.Context, id uuid.UUID) (Session, error)
 		&i.ID,
 		&i.UserID,
 		&i.Token,
+		&i.DeviceName,
 		&i.DeviceData,
 		&i.CreatedAt,
 		&i.LastUsed,
@@ -110,7 +118,7 @@ func (q *Queries) GetSessionToken(ctx context.Context, arg GetSessionTokenParams
 }
 
 const getSessionsByUserID = `-- name: GetSessionsByUserID :many
-SELECT id, user_id, token, device_data, created_at, last_used FROM sessions
+SELECT id, user_id, token, device_name, device_data, created_at, last_used FROM sessions
 WHERE user_id = $1
 `
 
@@ -127,6 +135,7 @@ func (q *Queries) GetSessionsByUserID(ctx context.Context, userID uuid.UUID) ([]
 			&i.ID,
 			&i.UserID,
 			&i.Token,
+			&i.DeviceName,
 			&i.DeviceData,
 			&i.CreatedAt,
 			&i.LastUsed,
@@ -145,7 +154,7 @@ func (q *Queries) GetSessionsByUserID(ctx context.Context, userID uuid.UUID) ([]
 }
 
 const getUserSession = `-- name: GetUserSession :one
-SELECT id, user_id, token, device_data, created_at, last_used FROM sessions
+SELECT id, user_id, token, device_name, device_data, created_at, last_used FROM sessions
 WHERE id = $1 AND user_id = $2
 `
 
@@ -161,6 +170,7 @@ func (q *Queries) GetUserSession(ctx context.Context, arg GetUserSessionParams) 
 		&i.ID,
 		&i.UserID,
 		&i.Token,
+		&i.DeviceName,
 		&i.DeviceData,
 		&i.CreatedAt,
 		&i.LastUsed,

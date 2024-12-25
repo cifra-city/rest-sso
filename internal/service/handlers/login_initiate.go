@@ -1,18 +1,14 @@
 package handlers
 
 import (
-	"database/sql"
-	"errors"
 	"net/http"
 
 	"github.com/cifra-city/cifractx"
 	"github.com/cifra-city/httpkit"
 	"github.com/cifra-city/httpkit/problems"
 	"github.com/cifra-city/rest-sso/internal/config"
-	"github.com/cifra-city/rest-sso/internal/db/data"
+	"github.com/cifra-city/rest-sso/internal/db/data/dbcore"
 	"github.com/cifra-city/rest-sso/internal/service/requests"
-	"github.com/cifra-city/rest-sso/internal/service/utils"
-	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -30,7 +26,6 @@ func LoginInitiate(w http.ResponseWriter, r *http.Request) {
 
 	IP := httpkit.GetClientIP(r)
 	UserAgent := httpkit.GetUserAgent(r)
-	fingerprint := httpkit.GenerateFingerprint(r)
 
 	Server, err := cifractx.GetValue[*config.Service](r.Context(), config.SERVICE)
 	if err != nil {
@@ -41,42 +36,28 @@ func LoginInitiate(w http.ResponseWriter, r *http.Request) {
 
 	log := Server.Logger
 
-	user, err := utils.GetUserExists(r.Context(), Server, username, email)
+	acc, err := Server.Databaser.Accounts.Exists(r, username, email)
 	if err != nil {
-		if errors.Is(err, utils.ErrMultipleChoices) {
-			log.Errorf("multiple choices error: %v", err)
-			httpkit.RenderErr(w, problems.BadRequest(err)...)
-			return
-		}
-		if errors.Is(err, sql.ErrNoRows) {
-			log.Errorf("user not found: %v", err)
-			httpkit.RenderErr(w, problems.NotFound())
-			return
-		}
 		log.Errorf("error getting user: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
+	if acc == nil {
+		log.Debugf("user not found: %v", err)
+		httpkit.RenderErr(w, problems.NotFound())
+		return
+	}
 
-	err = bcrypt.CompareHashAndPassword([]byte(user.PassHash), []byte(password))
+	err = bcrypt.CompareHashAndPassword([]byte(acc.PassHash), []byte(password))
 	if err != nil {
-		err = Server.Databaser.InsertOperationHistory(r.Context(), dbcore.InsertOperationHistoryParams{
-			ID:            uuid.New(),
-			UserID:        user.ID,
-			DeviceData:    fingerprint,
-			Operation:     dbcore.OperationTypeLogin,
-			Success:       false,
-			FailureReason: dbcore.FailureReasonInvalidPassword,
-			IpAddress:     IP,
-		})
-
-		log.Debugf("Incorrect password for user: %s, error: %s", user.Username, err)
+		err = Server.Databaser.Operations.CreateFailure(r, acc.ID, dbcore.OperationTypeLogin, dbcore.FailureReasonInvalidPassword)
+		log.Debugf("Incorrect password for user: %s, error: %s", acc.Username, err)
 		httpkit.RenderErr(w, problems.Unauthorized())
 		return
 	}
 
 	go func() {
-		err = Server.Mailman.SendList(user.Email, string(LOGIN), "email_list.html", UserAgent, IP, 300)
+		err = Server.Mailman.SendList(acc.Email, string(LOGIN), "email_list.html", UserAgent, IP, 300)
 		if err != nil {
 			log.Errorf("error sending email: %v", err)
 		} else {

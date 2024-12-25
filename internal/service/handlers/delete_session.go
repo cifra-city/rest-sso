@@ -9,7 +9,6 @@ import (
 	"github.com/cifra-city/httpkit"
 	"github.com/cifra-city/httpkit/problems"
 	"github.com/cifra-city/rest-sso/internal/config"
-	"github.com/cifra-city/rest-sso/internal/db/data"
 	"github.com/cifra-city/rest-sso/internal/service/requests"
 	"github.com/cifra-city/rest-sso/resources"
 	"github.com/cifra-city/tokens"
@@ -23,10 +22,13 @@ func DeleteSession(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	sessionID := req.Data.Attributes.DeviceId
+	sessionIdStr := req.Data.Attributes.SessionId
 
-	IP := httpkit.GetClientIP(r)
-	fingerprint := httpkit.GenerateFingerprint(r)
+	sessionID, err := uuid.Parse(sessionIdStr)
+	if err != nil {
+		httpkit.RenderErr(w, problems.BadRequest(errors.New("invalid format session id"))...)
+		return
+	}
 
 	Server, err := cifractx.GetValue[*config.Service](r.Context(), config.SERVICE)
 	if err != nil {
@@ -45,16 +47,7 @@ func DeleteSession(w http.ResponseWriter, r *http.Request) {
 
 	log.Infof("userID: %v", userID)
 
-	_, err = Server.Databaser.GetUserByID(r.Context(), userID)
-	if err != nil {
-		httpkit.RenderErr(w, problems.InternalError("Failed to retrieve user information"))
-		return
-	}
-
-	err = Server.Databaser.DeleteDeviceByUserIdAndId(r.Context(), dbcore.DeleteDeviceByUserIdAndIdParams{
-		UserID: userID,
-		ID:     uuid.MustParse(sessionID),
-	})
+	err = Server.Databaser.Sessions.Delete(r, sessionID, userID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			httpkit.RenderErr(w, problems.NotFound("Device not found"))
@@ -64,35 +57,32 @@ func DeleteSession(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = Server.Databaser.InsertOperationHistory(r.Context(), dbcore.InsertOperationHistoryParams{
-		ID:            uuid.New(),
-		UserID:        userID,
-		DeviceData:    fingerprint,
-		Operation:     dbcore.OperationTypeDeleteSession,
-		Success:       false,
-		FailureReason: dbcore.FailureReasonSuccess,
-		IpAddress:     IP,
-	})
-
-	devices, err := Server.Databaser.GetDevicesByUserID(r.Context(), userID)
+	sessions, err := Server.Databaser.Sessions.GetSessions(r, userID)
 	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			httpkit.RenderErr(w, problems.NotFound("Devices not found"))
-			return
-		}
-		httpkit.RenderErr(w, problems.InternalError("Failed to retrieve devices"))
+		log.Errorf("Failed to retrieve user sessions: %v", err)
+		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
+
 	var userSessions []resources.UserSessionDataAttributesDevicesInner
-	for _, device := range devices {
+	for _, device := range sessions {
 		userSessions = append(userSessions, resources.UserSessionDataAttributesDevicesInner{
 			Id:         device.ID.String(),
-			FactoryId:  device.FactoryID,
-			DeviceName: device.DeviceName.String,
-			OsVersion:  device.OsVersion.String,
-			LastUsed:   device.LastUsed,
+			DeviceName: "TODO",
+			Client:     "TODO",
+
+			LastUsed: device.LastUsed,
 		})
 	}
+
+	httpkit.Render(w, resources.UserSessions{
+		Data: resources.UserSessionData{
+			Type: "user_sessions",
+			Attributes: resources.UserSessionDataAttributes{
+				Devices: userSessions,
+			},
+		},
+	})
 
 	httpkit.Render(w, resources.UserSessions{
 		Data: resources.UserSessionData{

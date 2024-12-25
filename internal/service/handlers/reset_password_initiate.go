@@ -1,8 +1,6 @@
 package handlers
 
 import (
-	"database/sql"
-	"errors"
 	"net/http"
 
 	"github.com/cifra-city/cifractx"
@@ -10,7 +8,6 @@ import (
 	"github.com/cifra-city/httpkit/problems"
 	"github.com/cifra-city/rest-sso/internal/config"
 	"github.com/cifra-city/rest-sso/internal/service/requests"
-	"github.com/cifra-city/rest-sso/internal/service/utils"
 	"github.com/sirupsen/logrus"
 )
 
@@ -35,29 +32,24 @@ func ResetPasswordInitiate(w http.ResponseWriter, r *http.Request) {
 	}
 	log := Server.Logger
 
-	user, err := utils.GetUserExists(r.Context(), Server, username, email)
+	acc, err := Server.Databaser.Accounts.Exists(r, username, email)
 	if err != nil {
-		if errors.Is(err, utils.ErrMultipleChoices) {
-			log.Errorf("multiple choices error: %v", err)
-			httpkit.RenderErr(w, problems.BadRequest(err)...)
-			return
-		}
-		if errors.Is(err, sql.ErrNoRows) {
-			log.Errorf("user not found: %v", err)
-			httpkit.RenderErr(w, problems.NotFound())
-			return
-		}
 		log.Errorf("error getting user: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
+	if acc == nil {
+		log.Debugf("user not found: %v", err)
+		httpkit.RenderErr(w, problems.NotFound())
+		return
+	}
 
 	go func() {
-		err = Server.Mailman.SendList(user.Email, string(RESET_PASSWORD), "email_list.html", UserAgent, IP, 300)
+		err = Server.Mailman.SendList(acc.Email, string(RESET_PASSWORD), "email_list.html", UserAgent, IP, 300)
 		if err != nil {
 			log.Errorf("error sending email: %v", err)
 		} else {
-			log.Infof("Email sent successfully to: %s", user.Email)
+			log.Infof("Email sent successfully to: %s", acc.Email)
 		}
 	}()
 

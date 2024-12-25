@@ -9,6 +9,7 @@ api_sessions.go
 api_user.go
 client.go
 configuration.go
+docs/ApproveOperation.md
 docs/ApproveOperationReq.md
 docs/ApproveOperationReqData.md
 docs/ApproveOperationReqDataAttributes.md
@@ -32,8 +33,6 @@ docs/LoginCompleteRespDataAttributes.md
 docs/LoginInitiate.md
 docs/LoginInitiateData.md
 docs/LoginInitiateDataAttributes.md
-docs/LoginResp.md
-docs/LoginRespData.md
 docs/RefreshPost401Response.md
 docs/RefreshReq.md
 docs/RefreshReqData.md
@@ -56,10 +55,6 @@ docs/ResetPasswordInitiate.md
 docs/ResetPasswordInitiateData.md
 docs/ResetPasswordInitiateDataAttributes.md
 docs/SessionsAPI.md
-docs/TerminateSessions.md
-docs/TerminateSessionsData.md
-docs/TerminateSessionsDataAttributes.md
-docs/TerminateSessionsDataAttributesDevicesInner.md
 docs/UserAPI.md
 docs/UserSession.md
 docs/UserSessionData.md
@@ -72,6 +67,7 @@ go.sum
 model__aprove_operation_patch_200_response.go
 model__refresh_post_401_response.go
 model__registertion_initiate_post_201_response.go
+model_approve_operation.go
 model_approve_operation_req.go
 model_approve_operation_req_data.go
 model_approve_operation_req_data_attributes.go
@@ -92,8 +88,6 @@ model_login_complete_resp_data_attributes.go
 model_login_initiate.go
 model_login_initiate_data.go
 model_login_initiate_data_attributes.go
-model_login_resp.go
-model_login_resp_data.go
 model_refresh_req.go
 model_refresh_req_data.go
 model_refresh_req_data_attributes.go
@@ -112,10 +106,6 @@ model_reset_password_complete_data_attributes.go
 model_reset_password_initiate.go
 model_reset_password_initiate_data.go
 model_reset_password_initiate_data_attributes.go
-model_terminate_sessions.go
-model_terminate_sessions_data.go
-model_terminate_sessions_data_attributes.go
-model_terminate_sessions_data_attributes_devices_inner.go
 model_user_session.go
 model_user_session_data.go
 model_user_session_data_attributes.go

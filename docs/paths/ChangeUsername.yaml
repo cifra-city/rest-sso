@@ -12,10 +12,6 @@ patch:
   responses:
     '201':
       description: Updated username successfully
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '../spec/components/schemas/LoginResp.yaml'
     '400':
       $ref: '../spec/components/responses/invalidParameter.yaml'
     '401':

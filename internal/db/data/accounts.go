@@ -10,7 +10,7 @@ import (
 type Accounts interface {
 	Create(r *http.Request, username string, email string, passHash string) (dbcore.Account, error)
 
-	Exists(r *http.Request, username string, email string) (bool, error)
+	Exists(r *http.Request, username *string, email *string) (*dbcore.Account, error)
 
 	GetById(r *http.Request, id uuid.UUID) (dbcore.Account, error)
 	GetByLogin(r *http.Request, email string, username string) (dbcore.Account, error)
@@ -38,11 +38,26 @@ func (a *accounts) Create(r *http.Request, username string, email string, passHa
 	})
 }
 
-func (a *accounts) Exists(r *http.Request, username string, email string) (bool, error) {
-	return a.queries.AccountExists(r.Context(), dbcore.AccountExistsParams{
-		Username: username,
-		Email:    email,
-	})
+func (a *accounts) Exists(r *http.Request, username *string, email *string) (*dbcore.Account, error) {
+	var acc1 dbcore.Account
+	var acc2 dbcore.Account
+	var err error
+
+	if username != nil {
+		acc1, err = a.queries.GetAccountByUsername(r.Context(), *username)
+	}
+	if email != nil {
+		acc2, err = a.queries.GetAccountByEmail(r.Context(), *email)
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	if acc1.ID != acc2.ID {
+		return nil, nil
+	}
+
+	return &acc1, nil
 }
 
 func (a *accounts) GetById(r *http.Request, id uuid.UUID) (dbcore.Account, error) {

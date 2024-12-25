@@ -9,12 +9,12 @@ properties:
     properties:
       type:
         type: string
-        enum: [delete_session]
+        enum: [ delete_session ]
       attributes:
         type: object
         required:
-          - device_id
+          - session_id
         properties:
-          device_id:
+          session_id:
             type: string
             description: "Device ID."

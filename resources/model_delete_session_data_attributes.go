@@ -22,7 +22,7 @@ var _ MappedNullable = &DeleteSessionDataAttributes{}
 // DeleteSessionDataAttributes struct for DeleteSessionDataAttributes
 type DeleteSessionDataAttributes struct {
 	// Device ID.
-	DeviceId string `json:"device_id"`
+	SessionId string `json:"session_id"`
 }
 
 type _DeleteSessionDataAttributes DeleteSessionDataAttributes
@@ -31,9 +31,9 @@ type _DeleteSessionDataAttributes DeleteSessionDataAttributes
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewDeleteSessionDataAttributes(deviceId string) *DeleteSessionDataAttributes {
+func NewDeleteSessionDataAttributes(sessionId string) *DeleteSessionDataAttributes {
 	this := DeleteSessionDataAttributes{}
-	this.DeviceId = deviceId
+	this.SessionId = sessionId
 	return &this
 }
 
@@ -45,28 +45,28 @@ func NewDeleteSessionDataAttributesWithDefaults() *DeleteSessionDataAttributes {
 	return &this
 }
 
-// GetDeviceId returns the DeviceId field value
-func (o *DeleteSessionDataAttributes) GetDeviceId() string {
+// GetSessionId returns the SessionId field value
+func (o *DeleteSessionDataAttributes) GetSessionId() string {
 	if o == nil {
 		var ret string
 		return ret
 	}
 
-	return o.DeviceId
+	return o.SessionId
 }
 
-// GetDeviceIdOk returns a tuple with the DeviceId field value
+// GetSessionIdOk returns a tuple with the SessionId field value
 // and a boolean to check if the value has been set.
-func (o *DeleteSessionDataAttributes) GetDeviceIdOk() (*string, bool) {
+func (o *DeleteSessionDataAttributes) GetSessionIdOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.DeviceId, true
+	return &o.SessionId, true
 }
 
-// SetDeviceId sets field value
-func (o *DeleteSessionDataAttributes) SetDeviceId(v string) {
-	o.DeviceId = v
+// SetSessionId sets field value
+func (o *DeleteSessionDataAttributes) SetSessionId(v string) {
+	o.SessionId = v
 }
 
 func (o DeleteSessionDataAttributes) MarshalJSON() ([]byte, error) {
@@ -79,7 +79,7 @@ func (o DeleteSessionDataAttributes) MarshalJSON() ([]byte, error) {
 
 func (o DeleteSessionDataAttributes) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["device_id"] = o.DeviceId
+	toSerialize["session_id"] = o.SessionId
 	return toSerialize, nil
 }
 
@@ -88,7 +88,7 @@ func (o *DeleteSessionDataAttributes) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"device_id",
+		"session_id",
 	}
 
 	allProperties := make(map[string]interface{})

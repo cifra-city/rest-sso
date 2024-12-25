@@ -4,16 +4,15 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**FirstPassword** | **string** | User password. | 
-**SecondPassword** | **string** | User password. | 
-**Email** | Pointer to **string** | User email (required if username is not provided). | [optional] 
-**Username** | Pointer to **string** | User username (required if email is not provided). | [optional] 
+**Password** | **string** | New user password | 
+**Email** | Pointer to **string** | User email (required if username is not provided) | [optional] 
+**Username** | Pointer to **string** | User username (required if email is not provided) | [optional] 
 
 ## Methods
 
 ### NewResetPasswordCompleteDataAttributes
 
-`func NewResetPasswordCompleteDataAttributes(firstPassword string, secondPassword string, ) *ResetPasswordCompleteDataAttributes`
+`func NewResetPasswordCompleteDataAttributes(password string, ) *ResetPasswordCompleteDataAttributes`
 
 NewResetPasswordCompleteDataAttributes instantiates a new ResetPasswordCompleteDataAttributes object
 This constructor will assign default values to properties that have it defined,
@@ -28,44 +27,24 @@ NewResetPasswordCompleteDataAttributesWithDefaults instantiates a new ResetPassw
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetFirstPassword
+### GetPassword
 
-`func (o *ResetPasswordCompleteDataAttributes) GetFirstPassword() string`
+`func (o *ResetPasswordCompleteDataAttributes) GetPassword() string`
 
-GetFirstPassword returns the FirstPassword field if non-nil, zero value otherwise.
+GetPassword returns the Password field if non-nil, zero value otherwise.
 
-### GetFirstPasswordOk
+### GetPasswordOk
 
-`func (o *ResetPasswordCompleteDataAttributes) GetFirstPasswordOk() (*string, bool)`
+`func (o *ResetPasswordCompleteDataAttributes) GetPasswordOk() (*string, bool)`
 
-GetFirstPasswordOk returns a tuple with the FirstPassword field if it's non-nil, zero value otherwise
+GetPasswordOk returns a tuple with the Password field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetFirstPassword
+### SetPassword
 
-`func (o *ResetPasswordCompleteDataAttributes) SetFirstPassword(v string)`
+`func (o *ResetPasswordCompleteDataAttributes) SetPassword(v string)`
 
-SetFirstPassword sets FirstPassword field to given value.
-
-
-### GetSecondPassword
-
-`func (o *ResetPasswordCompleteDataAttributes) GetSecondPassword() string`
-
-GetSecondPassword returns the SecondPassword field if non-nil, zero value otherwise.
-
-### GetSecondPasswordOk
-
-`func (o *ResetPasswordCompleteDataAttributes) GetSecondPasswordOk() (*string, bool)`
-
-GetSecondPasswordOk returns a tuple with the SecondPassword field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetSecondPassword
-
-`func (o *ResetPasswordCompleteDataAttributes) SetSecondPassword(v string)`
-
-SetSecondPassword sets SecondPassword field to given value.
+SetPassword sets Password field to given value.
 
 
 ### GetEmail

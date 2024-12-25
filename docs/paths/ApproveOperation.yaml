@@ -8,7 +8,7 @@ patch:
     content:
       application/vnd.api+json:
         schema:
-          $ref: '../spec/components/schemas/ApproveOperationReq.yaml'
+          $ref: '../spec/components/schemas/ApproveOperation.yaml'
   responses:
     '200':
       description: User successfully activated email

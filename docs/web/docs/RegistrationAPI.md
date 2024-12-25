@@ -96,7 +96,7 @@ import (
 )
 
 func main() {
-	registrationComplete := *openapiclient.NewRegistrationComplete(*openapiclient.NewRegistrationCompleteData("Type_example", *openapiclient.NewRegistrationCompleteDataAttributes("FirstPassword_example", "SecondPassword_example", "Email_example", "Username_example"))) // RegistrationComplete | 
+	registrationComplete := *openapiclient.NewRegistrationComplete(*openapiclient.NewRegistrationCompleteData("Type_example", *openapiclient.NewRegistrationCompleteDataAttributes("Password_example", "Email_example", "Username_example"))) // RegistrationComplete | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)

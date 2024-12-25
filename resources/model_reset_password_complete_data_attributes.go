@@ -21,13 +21,11 @@ var _ MappedNullable = &ResetPasswordCompleteDataAttributes{}
 
 // ResetPasswordCompleteDataAttributes struct for ResetPasswordCompleteDataAttributes
 type ResetPasswordCompleteDataAttributes struct {
-	// User password.
-	FirstPassword string `json:"first_password"`
-	// User password.
-	SecondPassword string `json:"second_password"`
-	// User email (required if username is not provided).
+	// New user password
+	Password string `json:"password"`
+	// User email (required if username is not provided)
 	Email *string `json:"email,omitempty"`
-	// User username (required if email is not provided).
+	// User username (required if email is not provided)
 	Username *string `json:"username,omitempty"`
 }
 
@@ -37,10 +35,9 @@ type _ResetPasswordCompleteDataAttributes ResetPasswordCompleteDataAttributes
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewResetPasswordCompleteDataAttributes(firstPassword string, secondPassword string) *ResetPasswordCompleteDataAttributes {
+func NewResetPasswordCompleteDataAttributes(password string) *ResetPasswordCompleteDataAttributes {
 	this := ResetPasswordCompleteDataAttributes{}
-	this.FirstPassword = firstPassword
-	this.SecondPassword = secondPassword
+	this.Password = password
 	return &this
 }
 
@@ -52,52 +49,28 @@ func NewResetPasswordCompleteDataAttributesWithDefaults() *ResetPasswordComplete
 	return &this
 }
 
-// GetFirstPassword returns the FirstPassword field value
-func (o *ResetPasswordCompleteDataAttributes) GetFirstPassword() string {
+// GetPassword returns the Password field value
+func (o *ResetPasswordCompleteDataAttributes) GetPassword() string {
 	if o == nil {
 		var ret string
 		return ret
 	}
 
-	return o.FirstPassword
+	return o.Password
 }
 
-// GetFirstPasswordOk returns a tuple with the FirstPassword field value
+// GetPasswordOk returns a tuple with the Password field value
 // and a boolean to check if the value has been set.
-func (o *ResetPasswordCompleteDataAttributes) GetFirstPasswordOk() (*string, bool) {
+func (o *ResetPasswordCompleteDataAttributes) GetPasswordOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.FirstPassword, true
+	return &o.Password, true
 }
 
-// SetFirstPassword sets field value
-func (o *ResetPasswordCompleteDataAttributes) SetFirstPassword(v string) {
-	o.FirstPassword = v
-}
-
-// GetSecondPassword returns the SecondPassword field value
-func (o *ResetPasswordCompleteDataAttributes) GetSecondPassword() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.SecondPassword
-}
-
-// GetSecondPasswordOk returns a tuple with the SecondPassword field value
-// and a boolean to check if the value has been set.
-func (o *ResetPasswordCompleteDataAttributes) GetSecondPasswordOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.SecondPassword, true
-}
-
-// SetSecondPassword sets field value
-func (o *ResetPasswordCompleteDataAttributes) SetSecondPassword(v string) {
-	o.SecondPassword = v
+// SetPassword sets field value
+func (o *ResetPasswordCompleteDataAttributes) SetPassword(v string) {
+	o.Password = v
 }
 
 // GetEmail returns the Email field value if set, zero value otherwise.
@@ -174,8 +147,7 @@ func (o ResetPasswordCompleteDataAttributes) MarshalJSON() ([]byte, error) {
 
 func (o ResetPasswordCompleteDataAttributes) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["first_password"] = o.FirstPassword
-	toSerialize["second_password"] = o.SecondPassword
+	toSerialize["password"] = o.Password
 	if !IsNil(o.Email) {
 		toSerialize["email"] = o.Email
 	}
@@ -190,8 +162,7 @@ func (o *ResetPasswordCompleteDataAttributes) UnmarshalJSON(data []byte) (err er
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"first_password",
-		"second_password",
+		"password",
 	}
 
 	allProperties := make(map[string]interface{})

@@ -10,20 +10,16 @@ properties:
     properties:
       type:
         type: string
-        enum: [login_complete]
+        enum: [ login ]
       attributes:
         type: object
         required:
           - access_token
           - refresh_token
-          - expires_in
         properties:
           access_token:
             type: string
-            description: "Access Token для авторизации запросов."
+            description: "Access Token"
           refresh_token:
             type: string
-            description: "Refresh Token для обновления Access Token."
-          expires_in:
-            type: integer
-            description: "Время жизни Access Token в секундах."
+            description: "Refresh Token"

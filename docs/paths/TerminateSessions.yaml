@@ -3,12 +3,6 @@ delete:
     - Sessions
   summary: Terminate all sessions
   description: Terminate all sessions for a user
-  requestBody:
-    required: true
-    content:
-      application/vnd.api+json:
-        schema:
-          $ref: '../spec/components/schemas/TerminateSessions.yaml'
   responses:
     '200':
       description: User successfully terminated all sessions

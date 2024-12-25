@@ -13,17 +13,13 @@ properties:
       attributes:
         type: object
         required:
-          - first_password
-          - second_password
+          - password
           - email
           - username
         properties:
-          first_password:
+          password:
             type: string
-            description: "First password"
-          second_password:
-            type: string
-            description: "Second password"
+            description: "User password"
           email:
             type: string
             format: email

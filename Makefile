@@ -8,6 +8,7 @@ generate-models:
 	$(OPENAPI_GENERATOR) generate -i docs/api.yaml -g go -o ./docs/web --additional-properties=packageName=resources
 	mkdir -p resources
 	find docs/web -name '*.go' -exec mv {} resources/ \;
+	find resources -type f -name "*_test.go" -delete
 
 create-db-image:
 	docker run --name cifra-sso -p 5555:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -d postgres:12-alpine

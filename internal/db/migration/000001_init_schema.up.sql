@@ -44,6 +44,7 @@ CREATE TABLE sessions (
     id UUID PRIMARY KEY NOT NULL,
     user_id UUID NOT NULL REFERENCES account(id) ON DELETE CASCADE,
     token TEXT NOT NULL,
+    device_name VARCHAR(255) NOT NULL,
     device_data JSONB NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT now(),
     last_used TIMESTAMP NOT NULL DEFAULT now()

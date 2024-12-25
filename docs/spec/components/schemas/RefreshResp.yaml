@@ -16,7 +16,6 @@ properties:
         required:
           - access_token
           - refresh_token
-          - expires_in
         properties:
           access_token:
             type: string
@@ -26,7 +25,3 @@ properties:
             type: string
             description: The new refresh token.
             example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-          expires_in:
-            type: integer
-            description: Time in seconds until the access token expires.
-            example: 3600

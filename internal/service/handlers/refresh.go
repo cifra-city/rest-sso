@@ -5,20 +5,17 @@ import (
 	"errors"
 	"net/http"
 	"strings"
-	"time"
 
 	"github.com/cifra-city/cifractx"
 	"github.com/cifra-city/httpkit"
 	"github.com/cifra-city/httpkit/problems"
 	"github.com/cifra-city/rest-sso/internal/config"
-	"github.com/cifra-city/rest-sso/internal/db/data"
 	"github.com/cifra-city/rest-sso/internal/db/data/dbcore"
 	"github.com/cifra-city/rest-sso/internal/sectools"
 	"github.com/cifra-city/rest-sso/internal/service/requests"
 	"github.com/cifra-city/rest-sso/resources"
 	"github.com/cifra-city/tokens"
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 )
 
@@ -38,11 +35,6 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 	log := Server.Logger
 
 	refreshToken := req.Data.Attributes.RefreshToken
-	factoryId := req.Data.Attributes.FactoryId
-	deviceName := req.Data.Attributes.DeviceName
-	osVersion := req.Data.Attributes.OsVersion
-
-	IP := httpkit.GetClientIP(r)
 
 	authHeader := r.Header.Get("Authorization")
 	if authHeader == "" {
@@ -61,14 +53,14 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 
 	log.Debugf("Token received: %s", tokenString)
 
-	userID, deviceID, tokenVersion, _, err := tokens.VerifyJWTAndExtractClaims(r.Context(), tokenString, Server.Config.JWT.AccessToken.SecretKey, log)
+	userID, sessionID, tokenVersion, _, err := tokens.VerifyJWTAndExtractClaims(r.Context(), tokenString, Server.Config.JWT.AccessToken.SecretKey, log)
 	if err != nil && !errors.Is(err, jwt.ErrTokenExpired) {
 		log.Warnf("Token validation failed: %v", err)
 		httpkit.RenderErr(w, problems.Unauthorized("Token validation failed"))
 		return
 	}
 
-	user, err := Server.Databaser.GetUserByID(r.Context(), userID)
+	user, err := Server.Databaser.Accounts.GetById(r, userID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			httpkit.RenderErr(w, problems.Unauthorized("User not found"))
@@ -85,71 +77,30 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	device, err := Server.Databaser.GetDeviceByID(r.Context(), deviceID)
+	session, err := Server.Databaser.Sessions.GetByID(r, sessionID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			httpkit.RenderErr(w, problems.Unauthorized("device not found"))
+			httpkit.RenderErr(w, problems.Unauthorized("session not found"))
 			return
 		}
-		log.Errorf("Failed to get device: %v", err)
+		log.Errorf("Failed to get session: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
 
-	if device.UserID != userID {
+	if session.UserID != userID {
 		log.Warn("Device does not belong to user")
-		_ = Server.Databaser.InsertOperationHistory(r.Context(), dbcore.InsertOperationHistoryParams{
-			ID:            uuid.New(),
-			UserID:        userID,
-			DeviceData:    httpkit.GenerateFingerprint(r),
-			Operation:     dbcore.OperationTypeRefreshToken,
-			Success:       false,
-			FailureReason: dbcore.FailureReasonInvalidDeviceID,
-			IpAddress:     IP,
-		})
+		err = Server.Databaser.Operations.CreateFailure(r, userID, dbcore.OperationTypeRefreshToken, dbcore.FailureReasonInvalidDeviceID)
+		if err != nil {
+			log.Errorf("Failed to create operation history: %v", err)
+			httpkit.RenderErr(w, problems.InternalError())
+			return
+		}
 		httpkit.RenderErr(w, problems.Unauthorized("Device does not belong to user"))
 		return
 	}
 
-	if device.FactoryID != factoryId {
-		log.Warn("Factory ID does not match")
-		_ = Server.Queries.InsertOperationHistory(r.Context(), dbcore.InsertOperationHistoryParams{
-			ID:            uuid.New(),
-			UserID:        userID,
-			DeviceData:    httpkit.GenerateFingerprint(r),
-			Operation:     dbcore.OperationTypeRefreshToken,
-			Success:       false,
-			FailureReason: dbcore.FailureReasonInvalidDeviceFactoryID,
-			IpAddress:     IP,
-		})
-		httpkit.RenderErr(w, problems.Unauthorized("Factory ID does not match"))
-		return
-	}
-
-	dbToken, err := Server.Databaser.GetTokenByUserIdAndDeviceId(r.Context(), dbcore.GetTokenByUserIdAndDeviceIdParams{
-		UserID:   userID,
-		DeviceID: deviceID,
-	})
-	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			_ = Server.Databaser.InsertOperationHistory(r.Context(), dbcore.InsertOperationHistoryParams{
-				ID:            uuid.New(),
-				UserID:        userID,
-				DeviceData:    httpkit.GenerateFingerprint(r),
-				Operation:     dbcore.OperationTypeRefreshToken,
-				Success:       false,
-				FailureReason: dbcore.FailureReasonInvalidRefreshToken,
-				IpAddress:     IP,
-			})
-			httpkit.RenderErr(w, problems.Unauthorized("Token not found"))
-			return
-		}
-		Server.Logger.Errorf("Failed to fetch token from database: %v", err)
-		httpkit.RenderErr(w, problems.InternalError())
-		return
-	}
-
-	decryptedToken, err := sectools.DecryptToken(dbToken.Token, Server.Config.JWT.RefreshToken.EncryptionKey)
+	decryptedToken, err := sectools.DecryptToken(session.Token, Server.Config.JWT.RefreshToken.EncryptionKey)
 	if err != nil {
 		log.Errorf("Failed to decrypt refresh token: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())
@@ -162,21 +113,19 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tokenAccess, err := tokens.GenerateJWT(user.ID, deviceID, string(user.Role), int(user.TokenVersion), Server.Config.JWT.AccessToken.TokenLifetime, Server.Config.JWT.AccessToken.SecretKey)
+	tokenAccess, err := tokens.GenerateJWT(user.ID, sessionID, string(user.Role), int(user.TokenVersion), Server.Config.JWT.AccessToken.TokenLifetime, Server.Config.JWT.AccessToken.SecretKey)
 	if err != nil {
 		Server.Logger.Errorf("Error generating access token: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
 
-	tokenRefresh, err := tokens.GenerateJWT(user.ID, deviceID, string(user.Role), int(user.TokenVersion), Server.Config.JWT.RefreshToken.TokenLifetime, Server.Config.JWT.RefreshToken.SecretKey)
+	tokenRefresh, err := tokens.GenerateJWT(user.ID, sessionID, string(user.Role), int(user.TokenVersion), Server.Config.JWT.RefreshToken.TokenLifetime, Server.Config.JWT.RefreshToken.SecretKey)
 	if err != nil {
 		Server.Logger.Errorf("Error generating refresh token: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
-
-	expiresAt := time.Now().UTC().Add(Server.Config.JWT.RefreshToken.TokenLifetime)
 
 	encryptedToken, err := sectools.EncryptToken(tokenRefresh, Server.Config.JWT.RefreshToken.EncryptionKey)
 	if err != nil {
@@ -185,7 +134,7 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = Server.Databaser.UpdateRefreshTokenTransaction(r.Context(), userID, deviceID, device.FactoryID, deviceName, osVersion, encryptedToken, expiresAt, IP)
+	err = Server.Databaser.UpdateRefreshTokenTrx(r, userID, sessionID, encryptedToken)
 	if err != nil {
 		log.Errorf("Error updating last used and refresh token: %v", err)
 		if errors.Is(err, sql.ErrNoRows) {
@@ -199,11 +148,10 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 
 	httpkit.Render(w, resources.RefreshResp{
 		Data: resources.RefreshRespData{
-			Type: "refresh",
+			Type: string(dbcore.OperationTypeRefreshToken),
 			Attributes: resources.RefreshRespDataAttributes{
 				AccessToken:  tokenAccess,
 				RefreshToken: tokenRefresh,
-				ExpiresIn:    int32(Server.Config.JWT.AccessToken.TokenLifetime.Seconds()),
 			},
 		},
 	})

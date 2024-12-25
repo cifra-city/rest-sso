@@ -9,7 +9,7 @@ import (
 	"github.com/cifra-city/httpkit"
 	"github.com/cifra-city/httpkit/problems"
 	"github.com/cifra-city/rest-sso/internal/config"
-	"github.com/cifra-city/rest-sso/internal/db/data"
+	"github.com/cifra-city/rest-sso/internal/db/data/dbcore"
 	"github.com/cifra-city/rest-sso/internal/service/requests"
 	"github.com/cifra-city/tokens"
 	"github.com/google/uuid"
@@ -26,9 +26,6 @@ func ChangeUsername(w http.ResponseWriter, r *http.Request) {
 	oldPassword := req.Data.Attributes.Password
 	newUsername := req.Data.Attributes.NewUsername
 
-	IP := httpkit.GetClientIP(r)
-	fingerprint := httpkit.GenerateFingerprint(r)
-
 	Server, err := cifractx.GetValue[*config.Service](r.Context(), config.SERVICE)
 	if err != nil {
 		httpkit.RenderErr(w, problems.InternalError("Failed to retrieve service configuration"))
@@ -44,7 +41,7 @@ func ChangeUsername(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := Server.Databaser.GetUserByID(r.Context(), userID)
+	user, err := Server.Databaser.Accounts.GetById(r, userID)
 	if err != nil {
 		httpkit.RenderErr(w, problems.InternalError("Failed to retrieve user information"))
 		return
@@ -52,23 +49,17 @@ func ChangeUsername(w http.ResponseWriter, r *http.Request) {
 
 	err = bcrypt.CompareHashAndPassword([]byte(user.PassHash), []byte(oldPassword))
 	if err != nil {
-		err = Server.Databaser.InsertOperationHistory(r.Context(), dbcore.InsertOperationHistoryParams{
-			ID:            uuid.New(),
-			UserID:        userID,
-			DeviceData:    fingerprint,
-			Operation:     dbcore.OperationTypeChangeUsername,
-			Success:       false,
-			IpAddress:     IP,
-			FailureReason: dbcore.FailureReasonInvalidPassword,
-		})
+		err = Server.Databaser.Operations.CreateFailure(r, userID, dbcore.OperationTypeChangeUsername, dbcore.FailureReasonInvalidPassword)
 		if err != nil {
 			log.Errorf("Failed to insert operation history: %v", err)
+			httpkit.RenderErr(w, problems.InternalError())
+			return
 		}
 		httpkit.RenderErr(w, problems.Unauthorized("Invalid password"))
 		return
 	}
 
-	_, err = Server.Databaser.GetUserByUsername(r.Context(), *newUsername)
+	_, err = Server.Databaser.Accounts.GetByUsername(r, *newUsername)
 	if !errors.Is(err, sql.ErrNoRows) {
 		if err != nil {
 			httpkit.RenderErr(w, problems.InternalError("Failed to check username availability"))
@@ -78,26 +69,10 @@ func ChangeUsername(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = Server.Databaser.UpdateUsernameByID(r.Context(), dbcore.UpdateUsernameByIDParams{
-		ID:       userID,
-		Username: *newUsername,
-	})
+	_, err = Server.Databaser.Accounts.GetByUsername(r, *newUsername)
 	if err != nil {
 		httpkit.RenderErr(w, problems.InternalError("Failed to update username"))
 		return
-	}
-
-	err = Server.Databaser.InsertOperationHistory(r.Context(), dbcore.InsertOperationHistoryParams{
-		ID:            uuid.New(),
-		UserID:        userID,
-		DeviceData:    fingerprint,
-		Operation:     dbcore.OperationTypeChangeUsername,
-		Success:       true,
-		IpAddress:     IP,
-		FailureReason: dbcore.FailureReasonSuccess,
-	})
-	if err != nil {
-		log.Errorf("Failed to insert operation history: %v", err)
 	}
 
 	httpkit.Render(w, map[string]string{"message": "Username updated successfully"})

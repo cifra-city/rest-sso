@@ -9,7 +9,7 @@ import (
 )
 
 type Sessions interface {
-	Create(r *http.Request, userID uuid.UUID, token string, deviceData json.RawMessage) (dbcore.Session, error)
+	Create(r *http.Request, userID uuid.UUID, token string, deviceName string, deviceData json.RawMessage) (dbcore.Session, error)
 
 	GetByID(r *http.Request, id uuid.UUID) (dbcore.Session, error)
 	GetSession(r *http.Request, id uuid.UUID, userID uuid.UUID) (dbcore.Session, error)
@@ -30,11 +30,12 @@ func NewSession(queries *dbcore.Queries) Sessions {
 	return &sessions{queries: queries}
 }
 
-func (s *sessions) Create(r *http.Request, userID uuid.UUID, token string, deviceData json.RawMessage) (dbcore.Session, error) {
+func (s *sessions) Create(r *http.Request, userID uuid.UUID, token string, deviceName string, deviceData json.RawMessage) (dbcore.Session, error) {
 	return s.queries.CreateSession(r.Context(), dbcore.CreateSessionParams{
 		UserID:     userID,
 		Token:      token,
 		DeviceData: deviceData,
+		DeviceName: deviceName,
 	})
 }
 

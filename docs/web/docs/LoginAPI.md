@@ -32,7 +32,7 @@ import (
 )
 
 func main() {
-	loginCompleteReq := *openapiclient.NewLoginCompleteReq(*openapiclient.NewLoginCompleteReqData("Type_example", *openapiclient.NewLoginCompleteReqDataAttributes("FactoryId_example", "DeviceName_example", "OsVersion_example"))) // LoginCompleteReq | 
+	loginCompleteReq := *openapiclient.NewLoginCompleteReq(*openapiclient.NewLoginCompleteReqData("Type_example", *openapiclient.NewLoginCompleteReqDataAttributes("DeviceName_example"))) // LoginCompleteReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -164,7 +164,7 @@ import (
 )
 
 func main() {
-	refreshReq := *openapiclient.NewRefreshReq(*openapiclient.NewRefreshReqData("Type_example", *openapiclient.NewRefreshReqDataAttributes("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...", "123e4567-e89b-12d3-a456-426614174000", "FactoryId_example", "DeviceName_example", "OsVersion_example"))) // RefreshReq | 
+	refreshReq := *openapiclient.NewRefreshReq(*openapiclient.NewRefreshReqData("Type_example", *openapiclient.NewRefreshReqDataAttributes("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."))) // RefreshReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)

@@ -95,6 +95,7 @@ Class | Method | HTTP request | Description
 
 ## Documentation For Models
 
+ - [ApproveOperation](docs/ApproveOperation.md)
  - [ApproveOperationReq](docs/ApproveOperationReq.md)
  - [ApproveOperationReqData](docs/ApproveOperationReqData.md)
  - [ApproveOperationReqDataAttributes](docs/ApproveOperationReqDataAttributes.md)
@@ -116,8 +117,6 @@ Class | Method | HTTP request | Description
  - [LoginInitiate](docs/LoginInitiate.md)
  - [LoginInitiateData](docs/LoginInitiateData.md)
  - [LoginInitiateDataAttributes](docs/LoginInitiateDataAttributes.md)
- - [LoginResp](docs/LoginResp.md)
- - [LoginRespData](docs/LoginRespData.md)
  - [RefreshPost401Response](docs/RefreshPost401Response.md)
  - [RefreshReq](docs/RefreshReq.md)
  - [RefreshReqData](docs/RefreshReqData.md)
@@ -138,10 +137,6 @@ Class | Method | HTTP request | Description
  - [ResetPasswordInitiate](docs/ResetPasswordInitiate.md)
  - [ResetPasswordInitiateData](docs/ResetPasswordInitiateData.md)
  - [ResetPasswordInitiateDataAttributes](docs/ResetPasswordInitiateDataAttributes.md)
- - [TerminateSessions](docs/TerminateSessions.md)
- - [TerminateSessionsData](docs/TerminateSessionsData.md)
- - [TerminateSessionsDataAttributes](docs/TerminateSessionsDataAttributes.md)
- - [TerminateSessionsDataAttributesDevicesInner](docs/TerminateSessionsDataAttributesDevicesInner.md)
  - [UserSession](docs/UserSession.md)
  - [UserSessionData](docs/UserSessionData.md)
  - [UserSessionDataAttributes](docs/UserSessionDataAttributes.md)

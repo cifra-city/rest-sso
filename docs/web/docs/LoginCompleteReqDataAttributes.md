@@ -6,15 +6,13 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Email** | Pointer to **string** | User email | [optional] 
 **Username** | Pointer to **string** | User username | [optional] 
-**FactoryId** | **string** | Unique identifier for the user&#39;s device. | 
-**DeviceName** | **string** | Human-readable name for the user&#39;s device (e.g., &#39;iPhone 14&#39;). | 
-**OsVersion** | **string** | Operating system version of the user&#39;s device. | 
+**DeviceName** | **string** | Device name | 
 
 ## Methods
 
 ### NewLoginCompleteReqDataAttributes
 
-`func NewLoginCompleteReqDataAttributes(factoryId string, deviceName string, osVersion string, ) *LoginCompleteReqDataAttributes`
+`func NewLoginCompleteReqDataAttributes(deviceName string, ) *LoginCompleteReqDataAttributes`
 
 NewLoginCompleteReqDataAttributes instantiates a new LoginCompleteReqDataAttributes object
 This constructor will assign default values to properties that have it defined,
@@ -79,26 +77,6 @@ SetUsername sets Username field to given value.
 
 HasUsername returns a boolean if a field has been set.
 
-### GetFactoryId
-
-`func (o *LoginCompleteReqDataAttributes) GetFactoryId() string`
-
-GetFactoryId returns the FactoryId field if non-nil, zero value otherwise.
-
-### GetFactoryIdOk
-
-`func (o *LoginCompleteReqDataAttributes) GetFactoryIdOk() (*string, bool)`
-
-GetFactoryIdOk returns a tuple with the FactoryId field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetFactoryId
-
-`func (o *LoginCompleteReqDataAttributes) SetFactoryId(v string)`
-
-SetFactoryId sets FactoryId field to given value.
-
-
 ### GetDeviceName
 
 `func (o *LoginCompleteReqDataAttributes) GetDeviceName() string`
@@ -117,26 +95,6 @@ and a boolean to check if the value has been set.
 `func (o *LoginCompleteReqDataAttributes) SetDeviceName(v string)`
 
 SetDeviceName sets DeviceName field to given value.
-
-
-### GetOsVersion
-
-`func (o *LoginCompleteReqDataAttributes) GetOsVersion() string`
-
-GetOsVersion returns the OsVersion field if non-nil, zero value otherwise.
-
-### GetOsVersionOk
-
-`func (o *LoginCompleteReqDataAttributes) GetOsVersionOk() (*string, bool)`
-
-GetOsVersionOk returns a tuple with the OsVersion field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetOsVersion
-
-`func (o *LoginCompleteReqDataAttributes) SetOsVersion(v string)`
-
-SetOsVersion sets OsVersion field to given value.
 
 
 

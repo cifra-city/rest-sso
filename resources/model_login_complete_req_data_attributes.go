@@ -25,12 +25,8 @@ type LoginCompleteReqDataAttributes struct {
 	Email *string `json:"email,omitempty"`
 	// User username
 	Username *string `json:"username,omitempty"`
-	// Unique identifier for the user's device.
-	FactoryId string `json:"factory_id"`
-	// Human-readable name for the user's device (e.g., 'iPhone 14').
+	// Device name
 	DeviceName string `json:"device_name"`
-	// Operating system version of the user's device.
-	OsVersion string `json:"os_version"`
 }
 
 type _LoginCompleteReqDataAttributes LoginCompleteReqDataAttributes
@@ -39,11 +35,9 @@ type _LoginCompleteReqDataAttributes LoginCompleteReqDataAttributes
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewLoginCompleteReqDataAttributes(factoryId string, deviceName string, osVersion string) *LoginCompleteReqDataAttributes {
+func NewLoginCompleteReqDataAttributes(deviceName string) *LoginCompleteReqDataAttributes {
 	this := LoginCompleteReqDataAttributes{}
-	this.FactoryId = factoryId
 	this.DeviceName = deviceName
-	this.OsVersion = osVersion
 	return &this
 }
 
@@ -119,30 +113,6 @@ func (o *LoginCompleteReqDataAttributes) SetUsername(v string) {
 	o.Username = &v
 }
 
-// GetFactoryId returns the FactoryId field value
-func (o *LoginCompleteReqDataAttributes) GetFactoryId() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.FactoryId
-}
-
-// GetFactoryIdOk returns a tuple with the FactoryId field value
-// and a boolean to check if the value has been set.
-func (o *LoginCompleteReqDataAttributes) GetFactoryIdOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.FactoryId, true
-}
-
-// SetFactoryId sets field value
-func (o *LoginCompleteReqDataAttributes) SetFactoryId(v string) {
-	o.FactoryId = v
-}
-
 // GetDeviceName returns the DeviceName field value
 func (o *LoginCompleteReqDataAttributes) GetDeviceName() string {
 	if o == nil {
@@ -167,30 +137,6 @@ func (o *LoginCompleteReqDataAttributes) SetDeviceName(v string) {
 	o.DeviceName = v
 }
 
-// GetOsVersion returns the OsVersion field value
-func (o *LoginCompleteReqDataAttributes) GetOsVersion() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.OsVersion
-}
-
-// GetOsVersionOk returns a tuple with the OsVersion field value
-// and a boolean to check if the value has been set.
-func (o *LoginCompleteReqDataAttributes) GetOsVersionOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.OsVersion, true
-}
-
-// SetOsVersion sets field value
-func (o *LoginCompleteReqDataAttributes) SetOsVersion(v string) {
-	o.OsVersion = v
-}
-
 func (o LoginCompleteReqDataAttributes) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -207,9 +153,7 @@ func (o LoginCompleteReqDataAttributes) ToMap() (map[string]interface{}, error) 
 	if !IsNil(o.Username) {
 		toSerialize["username"] = o.Username
 	}
-	toSerialize["factory_id"] = o.FactoryId
 	toSerialize["device_name"] = o.DeviceName
-	toSerialize["os_version"] = o.OsVersion
 	return toSerialize, nil
 }
 
@@ -218,9 +162,7 @@ func (o *LoginCompleteReqDataAttributes) UnmarshalJSON(data []byte) (err error) 
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"factory_id",
 		"device_name",
-		"os_version",
 	}
 
 	allProperties := make(map[string]interface{})

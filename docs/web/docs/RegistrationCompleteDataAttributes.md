@@ -4,8 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**FirstPassword** | **string** | First password | 
-**SecondPassword** | **string** | Second password | 
+**Password** | **string** | User password | 
 **Email** | **string** | User email | 
 **Username** | **string** | User username | 
 
@@ -13,7 +12,7 @@ Name | Type | Description | Notes
 
 ### NewRegistrationCompleteDataAttributes
 
-`func NewRegistrationCompleteDataAttributes(firstPassword string, secondPassword string, email string, username string, ) *RegistrationCompleteDataAttributes`
+`func NewRegistrationCompleteDataAttributes(password string, email string, username string, ) *RegistrationCompleteDataAttributes`
 
 NewRegistrationCompleteDataAttributes instantiates a new RegistrationCompleteDataAttributes object
 This constructor will assign default values to properties that have it defined,
@@ -28,44 +27,24 @@ NewRegistrationCompleteDataAttributesWithDefaults instantiates a new Registratio
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetFirstPassword
+### GetPassword
 
-`func (o *RegistrationCompleteDataAttributes) GetFirstPassword() string`
+`func (o *RegistrationCompleteDataAttributes) GetPassword() string`
 
-GetFirstPassword returns the FirstPassword field if non-nil, zero value otherwise.
+GetPassword returns the Password field if non-nil, zero value otherwise.
 
-### GetFirstPasswordOk
+### GetPasswordOk
 
-`func (o *RegistrationCompleteDataAttributes) GetFirstPasswordOk() (*string, bool)`
+`func (o *RegistrationCompleteDataAttributes) GetPasswordOk() (*string, bool)`
 
-GetFirstPasswordOk returns a tuple with the FirstPassword field if it's non-nil, zero value otherwise
+GetPasswordOk returns a tuple with the Password field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetFirstPassword
+### SetPassword
 
-`func (o *RegistrationCompleteDataAttributes) SetFirstPassword(v string)`
+`func (o *RegistrationCompleteDataAttributes) SetPassword(v string)`
 
-SetFirstPassword sets FirstPassword field to given value.
-
-
-### GetSecondPassword
-
-`func (o *RegistrationCompleteDataAttributes) GetSecondPassword() string`
-
-GetSecondPassword returns the SecondPassword field if non-nil, zero value otherwise.
-
-### GetSecondPasswordOk
-
-`func (o *RegistrationCompleteDataAttributes) GetSecondPasswordOk() (*string, bool)`
-
-GetSecondPasswordOk returns a tuple with the SecondPassword field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetSecondPassword
-
-`func (o *RegistrationCompleteDataAttributes) SetSecondPassword(v string)`
-
-SetSecondPassword sets SecondPassword field to given value.
+SetPassword sets Password field to given value.
 
 
 ### GetEmail

@@ -364,12 +364,6 @@ func (a *SessionsAPIService) UserChangeSessionsGetExecute(r ApiUserChangeSession
 type ApiUserChangeTerminateSessionsDeleteRequest struct {
 	ctx context.Context
 	ApiService *SessionsAPIService
-	terminateSessions *TerminateSessions
-}
-
-func (r ApiUserChangeTerminateSessionsDeleteRequest) TerminateSessions(terminateSessions TerminateSessions) ApiUserChangeTerminateSessionsDeleteRequest {
-	r.terminateSessions = &terminateSessions
-	return r
 }
 
 func (r ApiUserChangeTerminateSessionsDeleteRequest) Execute() (*AproveOperationPatch200Response, *http.Response, error) {
@@ -411,12 +405,9 @@ func (a *SessionsAPIService) UserChangeTerminateSessionsDeleteExecute(r ApiUserC
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.terminateSessions == nil {
-		return localVarReturnValue, nil, reportError("terminateSessions is required and must be specified")
-	}
 
 	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{"application/vnd.api+json"}
+	localVarHTTPContentTypes := []string{}
 
 	// set Content-Type header
 	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
@@ -432,8 +423,6 @@ func (a *SessionsAPIService) UserChangeTerminateSessionsDeleteExecute(r ApiUserC
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	// body params
-	localVarPostBody = r.terminateSessions
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err

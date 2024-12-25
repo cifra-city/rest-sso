@@ -1,10 +1,9 @@
 package data
 
 import (
-	"context"
 	"database/sql"
-	"encoding/json"
 	"fmt"
+	"net/http"
 
 	"github.com/cifra-city/rest-sso/internal/db/data/dbcore"
 	"github.com/google/uuid"
@@ -12,32 +11,30 @@ import (
 
 type Transaction interface {
 	ResetPasswordTxn(
-		ctx context.Context,
+		r *http.Request,
 		userID uuid.UUID,
 		hashedPassword string,
-		deviceData json.RawMessage,
 	) error
 
 	LoginTxn(
-		ctx context.Context,
+		r *http.Request,
 		userID uuid.UUID,
+		deviceName string,
 		Token string,
-		deviceData json.RawMessage,
 	) (*dbcore.Session, error)
 
 	TerminateSessionsTxn(
-		ctx context.Context,
+		r *http.Request,
 		userId uuid.UUID,
 		curDevId uuid.UUID,
-		deviceData json.RawMessage,
 	) error
 
 	UpdateRefreshTokenTrx( //TODO for future use right no sense
-		ctx context.Context,
+		r *http.Request,
 		userID uuid.UUID,
 		sessionID uuid.UUID,
 		newToken string,
-		deviceData json.RawMessage) error
+	) error
 }
 
 type transaction struct {
@@ -59,11 +56,11 @@ func HandleTransactionRollback(tx *sql.Tx, originalErr error) error {
 }
 
 func (t *transaction) ResetPasswordTxn(
-	ctx context.Context,
+	r *http.Request,
 	userID uuid.UUID,
 	hashedPassword string,
-	deviceData json.RawMessage,
 ) error {
+	ctx := r.Context()
 	queries, tx, err := t.queries.BeginTx(ctx)
 	if err != nil {
 		return err
@@ -72,6 +69,11 @@ func (t *transaction) ResetPasswordTxn(
 	defer func() {
 		err = HandleTransactionRollback(tx, err)
 	}()
+
+	deviceData, err := dbcore.NewDeviceData(r)
+	if err != nil {
+		return err
+	}
 
 	_, err = queries.UpdatePassword(ctx, dbcore.UpdatePasswordParams{
 		ID:       userID,
@@ -105,11 +107,12 @@ func (t *transaction) ResetPasswordTxn(
 }
 
 func (t *transaction) LoginTxn(
-	ctx context.Context,
+	r *http.Request,
 	userID uuid.UUID,
+	deviceName string,
 	Token string,
-	deviceData json.RawMessage,
 ) (*dbcore.Session, error) {
+	ctx := r.Context()
 	queries, tx, err := t.queries.BeginTx(ctx)
 	if err != nil {
 		return nil, err
@@ -119,10 +122,16 @@ func (t *transaction) LoginTxn(
 		err = HandleTransactionRollback(tx, err)
 	}()
 
+	deviceData, err := dbcore.NewDeviceData(r)
+	if err != nil {
+		return nil, err
+	}
+
 	session, err := queries.CreateSession(ctx, dbcore.CreateSessionParams{
 		UserID:     userID,
 		Token:      Token,
 		DeviceData: deviceData,
+		DeviceName: deviceName,
 	})
 	if err != nil {
 		return nil, err
@@ -142,12 +151,21 @@ func (t *transaction) LoginTxn(
 }
 
 func (t *transaction) TerminateSessionsTxn(
-	ctx context.Context,
+	r *http.Request,
 	userId uuid.UUID,
 	curDevId uuid.UUID,
-	deviceData json.RawMessage,
 ) error {
+	ctx := r.Context()
 	queries, tx, err := t.queries.BeginTx(ctx)
+	if err != nil {
+		return err
+	}
+
+	defer func() {
+		err = HandleTransactionRollback(tx, err)
+	}()
+
+	deviceData, err := dbcore.NewDeviceData(r)
 	if err != nil {
 		return err
 	}
@@ -189,16 +207,28 @@ func (t *transaction) TerminateSessionsTxn(
 }
 
 func (t *transaction) UpdateRefreshTokenTrx( //TODO for future use
-	ctx context.Context,
+	r *http.Request,
 	userID uuid.UUID,
 	sessionID uuid.UUID,
-	newToken string,
-	deviceData json.RawMessage) error {
+	newToken string) error {
 
+	ctx := r.Context()
 	queries, tx, err := t.queries.BeginTx(ctx)
 	if err != nil {
 		return err
 	}
+
+	defer func() {
+		err = HandleTransactionRollback(tx, err)
+	}()
+
+	//deviceData, err := dbcore.NewDeviceData(r)
+	//if err != nil {
+	//	return err
+	//}
+	//if err != nil {
+	//	return err
+	//}
 
 	defer func() {
 		err = HandleTransactionRollback(tx, err)

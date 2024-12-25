@@ -6,13 +6,12 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **AccessToken** | **string** | The new access token. | 
 **RefreshToken** | **string** | The new refresh token. | 
-**ExpiresIn** | **int32** | Time in seconds until the access token expires. | 
 
 ## Methods
 
 ### NewRefreshRespDataAttributes
 
-`func NewRefreshRespDataAttributes(accessToken string, refreshToken string, expiresIn int32, ) *RefreshRespDataAttributes`
+`func NewRefreshRespDataAttributes(accessToken string, refreshToken string, ) *RefreshRespDataAttributes`
 
 NewRefreshRespDataAttributes instantiates a new RefreshRespDataAttributes object
 This constructor will assign default values to properties that have it defined,
@@ -65,26 +64,6 @@ and a boolean to check if the value has been set.
 `func (o *RefreshRespDataAttributes) SetRefreshToken(v string)`
 
 SetRefreshToken sets RefreshToken field to given value.
-
-
-### GetExpiresIn
-
-`func (o *RefreshRespDataAttributes) GetExpiresIn() int32`
-
-GetExpiresIn returns the ExpiresIn field if non-nil, zero value otherwise.
-
-### GetExpiresInOk
-
-`func (o *RefreshRespDataAttributes) GetExpiresInOk() (*int32, bool)`
-
-GetExpiresInOk returns a tuple with the ExpiresIn field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetExpiresIn
-
-`func (o *RefreshRespDataAttributes) SetExpiresIn(v int32)`
-
-SetExpiresIn sets ExpiresIn field to given value.
 
 
 

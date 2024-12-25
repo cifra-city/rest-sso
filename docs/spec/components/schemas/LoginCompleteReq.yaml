@@ -13,9 +13,7 @@ properties:
       attributes:
         type: object
         required:
-          - factory_id
           - device_name
-          - os_version
         properties:
           email:
             type: string
@@ -24,12 +22,6 @@ properties:
           username:
             type: string
             description: "User username"
-          factory_id:
-            type: string
-            description: "Unique identifier for the user's device."
           device_name:
             type: string
-            description: "Human-readable name for the user's device (e.g., 'iPhone 14')."
-          os_version:
-            type: string
-            description: "Operating system version of the user's device."
+            description: "Device name"

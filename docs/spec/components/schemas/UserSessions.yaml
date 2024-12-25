@@ -10,7 +10,7 @@ properties:
     properties:
       type:
         type: string
-        enum: [users_sessions]
+        enum: [ users_sessions ]
       attributes:
         type: object
         required:
@@ -22,25 +22,25 @@ properties:
               type: object
               required:
                 - id
-                - factory_id
                 - device_name
-                - os_version
+                - client
+                - location
                 - last_used
               properties:
                 id:
                   type: string
                   format: uuid
-                  description: Уникальный идентификатор устройства
-                factory_id:
-                  type: string
-                  description: Серийный номер устройства
+                  description: "session id"
                 device_name:
                   type: string
-                  description: Имя устройства, заданное пользователем
-                os_version:
+                  description: "device name"
+                client:
                   type: string
-                  description: Версия операционной системы устройства
+                  description: "client name and version"
+                location:
+                  type: string
+                  description: "location"
                 last_used:
                   type: string
                   format: date-time
-                  description: Дата и время последнего использования устройства
+                  description: "last used date"

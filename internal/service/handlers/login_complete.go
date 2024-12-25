@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"database/sql"
 	"errors"
 	"net/http"
 
@@ -27,9 +26,7 @@ func LoginComplete(w http.ResponseWriter, r *http.Request) {
 
 	email := req.Data.Attributes.Email
 	username := req.Data.Attributes.Username
-	factoryId := req.Data.Attributes.FactoryId
 	deviceName := req.Data.Attributes.DeviceName
-	osVersion := req.Data.Attributes.OsVersion
 
 	IP := httpkit.GetClientIP(r)
 	UserAgent := httpkit.GetUserAgent(r)
@@ -43,32 +40,27 @@ func LoginComplete(w http.ResponseWriter, r *http.Request) {
 
 	log := Server.Logger
 
-	user, err := utils.GetUserExists(r.Context(), Server, username, email)
+	acc, err := Server.Databaser.Accounts.Exists(r, username, email)
 	if err != nil {
-		if errors.Is(err, utils.ErrMultipleChoices) {
-			log.Errorf("multiple choices error: %v", err)
-			httpkit.RenderErr(w, problems.BadRequest(err)...)
-			return
-		}
-		if errors.Is(err, sql.ErrNoRows) {
-			log.Errorf("user not found: %v", err)
-			httpkit.RenderErr(w, problems.NotFound())
-			return
-		}
 		log.Errorf("error getting user: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
+	if acc == nil {
+		log.Debugf("user not found: %v", err)
+		httpkit.RenderErr(w, problems.NotFound())
+		return
+	}
 
-	err = Server.Mailman.CheckAccess(user.Email, string(LOGIN), UserAgent, IP)
+	err = Server.Mailman.CheckAccess(acc.Email, string(LOGIN), UserAgent, IP)
 	if err != nil {
 		if errors.Is(err, mailman.ErrNotFound) {
-			log.Warnf("email haven`t access: %s", user.Email)
+			log.Warnf("email haven`t access: %s", acc.Email)
 			httpkit.RenderErr(w, problems.NotFound("email haven`t access"))
 			return
 		}
 		if errors.Is(err, mailman.ErrAccessDenied) {
-			log.Warnf("failed to decrypt ConfidenceCode for email: %s", user.Email)
+			log.Warnf("failed to decrypt ConfidenceCode for email: %s", acc.Email)
 			httpkit.RenderErr(w, problems.Forbidden("failed to decrypt ConfidenceCode"))
 			return
 		}
@@ -79,7 +71,7 @@ func LoginComplete(w http.ResponseWriter, r *http.Request) {
 
 	deviceID := uuid.New()
 
-	tokenAccess, tokenRefresh, expiresAt, err := utils.GenerateTokens(*Server, user, deviceID)
+	tokenAccess, tokenRefresh, _, err := utils.GenerateTokens(*Server, *acc, deviceID)
 	if err != nil {
 		log.Errorf("error generating tokens: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())
@@ -93,23 +85,20 @@ func LoginComplete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = Server.Databaser.LoginTransaction(r.Context(), user.ID, deviceID, encryptToken, expiresAt,
-		factoryId, deviceName, osVersion, IP, httpkit.GenerateFingerprint(r))
+	_, err = Server.Databaser.LoginTxn(r, acc.ID, encryptToken, deviceName)
 	if err != nil {
 		log.Errorf("error updating last used and refresh token: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
-	log.Infof("user logged in: %s", user.Username)
+	log.Infof("user logged in: %s", acc.Username)
 
-	logrus.Infof("user created: %v", user.Username)
 	httpkit.Render(w, resources.LoginCompleteResp{
 		Data: resources.LoginCompleteRespData{
 			Type: "login",
 			Attributes: resources.LoginCompleteRespDataAttributes{
 				AccessToken:  tokenAccess,
 				RefreshToken: tokenRefresh,
-				ExpiresIn:    int32(Server.Config.JWT.AccessToken.TokenLifetime.Seconds()),
 			},
 		},
 	})

@@ -4,17 +4,17 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | **string** | Уникальный идентификатор устройства | 
-**FactoryId** | **string** | Серийный номер устройства | 
-**DeviceName** | **string** | Имя устройства, заданное пользователем | 
-**OsVersion** | **string** | Версия операционной системы устройства | 
-**LastUsed** | **time.Time** | Дата и время последнего использования устройства | 
+**Id** | **string** | session id | 
+**DeviceName** | **string** | device name | 
+**Client** | **string** | client name and version | 
+**Location** | **string** | location | 
+**LastUsed** | **time.Time** | last used date | 
 
 ## Methods
 
 ### NewUserSessionDataAttributesDevicesInner
 
-`func NewUserSessionDataAttributesDevicesInner(id string, factoryId string, deviceName string, osVersion string, lastUsed time.Time, ) *UserSessionDataAttributesDevicesInner`
+`func NewUserSessionDataAttributesDevicesInner(id string, deviceName string, client string, location string, lastUsed time.Time, ) *UserSessionDataAttributesDevicesInner`
 
 NewUserSessionDataAttributesDevicesInner instantiates a new UserSessionDataAttributesDevicesInner object
 This constructor will assign default values to properties that have it defined,
@@ -49,26 +49,6 @@ and a boolean to check if the value has been set.
 SetId sets Id field to given value.
 
 
-### GetFactoryId
-
-`func (o *UserSessionDataAttributesDevicesInner) GetFactoryId() string`
-
-GetFactoryId returns the FactoryId field if non-nil, zero value otherwise.
-
-### GetFactoryIdOk
-
-`func (o *UserSessionDataAttributesDevicesInner) GetFactoryIdOk() (*string, bool)`
-
-GetFactoryIdOk returns a tuple with the FactoryId field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetFactoryId
-
-`func (o *UserSessionDataAttributesDevicesInner) SetFactoryId(v string)`
-
-SetFactoryId sets FactoryId field to given value.
-
-
 ### GetDeviceName
 
 `func (o *UserSessionDataAttributesDevicesInner) GetDeviceName() string`
@@ -89,24 +69,44 @@ and a boolean to check if the value has been set.
 SetDeviceName sets DeviceName field to given value.
 
 
-### GetOsVersion
+### GetClient
 
-`func (o *UserSessionDataAttributesDevicesInner) GetOsVersion() string`
+`func (o *UserSessionDataAttributesDevicesInner) GetClient() string`
 
-GetOsVersion returns the OsVersion field if non-nil, zero value otherwise.
+GetClient returns the Client field if non-nil, zero value otherwise.
 
-### GetOsVersionOk
+### GetClientOk
 
-`func (o *UserSessionDataAttributesDevicesInner) GetOsVersionOk() (*string, bool)`
+`func (o *UserSessionDataAttributesDevicesInner) GetClientOk() (*string, bool)`
 
-GetOsVersionOk returns a tuple with the OsVersion field if it's non-nil, zero value otherwise
+GetClientOk returns a tuple with the Client field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetOsVersion
+### SetClient
 
-`func (o *UserSessionDataAttributesDevicesInner) SetOsVersion(v string)`
+`func (o *UserSessionDataAttributesDevicesInner) SetClient(v string)`
 
-SetOsVersion sets OsVersion field to given value.
+SetClient sets Client field to given value.
+
+
+### GetLocation
+
+`func (o *UserSessionDataAttributesDevicesInner) GetLocation() string`
+
+GetLocation returns the Location field if non-nil, zero value otherwise.
+
+### GetLocationOk
+
+`func (o *UserSessionDataAttributesDevicesInner) GetLocationOk() (*string, bool)`
+
+GetLocationOk returns a tuple with the Location field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetLocation
+
+`func (o *UserSessionDataAttributesDevicesInner) SetLocation(v string)`
+
+SetLocation sets Location field to given value.
 
 
 ### GetLastUsed

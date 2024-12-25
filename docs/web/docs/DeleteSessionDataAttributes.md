@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**DeviceId** | **string** | Device ID. | 
+**SessionId** | **string** | Device ID. | 
 
 ## Methods
 
 ### NewDeleteSessionDataAttributes
 
-`func NewDeleteSessionDataAttributes(deviceId string, ) *DeleteSessionDataAttributes`
+`func NewDeleteSessionDataAttributes(sessionId string, ) *DeleteSessionDataAttributes`
 
 NewDeleteSessionDataAttributes instantiates a new DeleteSessionDataAttributes object
 This constructor will assign default values to properties that have it defined,
@@ -25,24 +25,24 @@ NewDeleteSessionDataAttributesWithDefaults instantiates a new DeleteSessionDataA
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetDeviceId
+### GetSessionId
 
-`func (o *DeleteSessionDataAttributes) GetDeviceId() string`
+`func (o *DeleteSessionDataAttributes) GetSessionId() string`
 
-GetDeviceId returns the DeviceId field if non-nil, zero value otherwise.
+GetSessionId returns the SessionId field if non-nil, zero value otherwise.
 
-### GetDeviceIdOk
+### GetSessionIdOk
 
-`func (o *DeleteSessionDataAttributes) GetDeviceIdOk() (*string, bool)`
+`func (o *DeleteSessionDataAttributes) GetSessionIdOk() (*string, bool)`
 
-GetDeviceIdOk returns a tuple with the DeviceId field if it's non-nil, zero value otherwise
+GetSessionIdOk returns a tuple with the SessionId field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetDeviceId
+### SetSessionId
 
-`func (o *DeleteSessionDataAttributes) SetDeviceId(v string)`
+`func (o *DeleteSessionDataAttributes) SetSessionId(v string)`
 
-SetDeviceId sets DeviceId field to given value.
+SetSessionId sets SessionId field to given value.
 
 
 

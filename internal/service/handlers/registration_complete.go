@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"database/sql"
 	"errors"
 	"net/http"
 
@@ -9,11 +8,8 @@ import (
 	"github.com/cifra-city/httpkit"
 	"github.com/cifra-city/httpkit/problems"
 	"github.com/cifra-city/rest-sso/internal/config"
-	"github.com/cifra-city/rest-sso/internal/db/data"
 	"github.com/cifra-city/rest-sso/internal/sectools"
 	"github.com/cifra-city/rest-sso/internal/service/requests"
-	"github.com/cifra-city/rest-sso/internal/service/utils"
-	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -25,7 +21,7 @@ func RegistrationComplete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	password := req.Data.Attributes.FirstPassword
+	password := req.Data.Attributes.Password
 	email := req.Data.Attributes.Email
 	username := req.Data.Attributes.Username
 
@@ -34,11 +30,6 @@ func RegistrationComplete(w http.ResponseWriter, r *http.Request) {
 
 	if len(password) < 8 || !sectools.HasRequiredChars(password) {
 		httpkit.RenderErr(w, problems.BadRequest(errors.New("invalid password requirements"))...)
-		return
-	}
-
-	if req.Data.Attributes.FirstPassword != req.Data.Attributes.SecondPassword {
-		httpkit.RenderErr(w, problems.BadRequest(errors.New("passwords do not match"))...)
 		return
 	}
 
@@ -51,13 +42,13 @@ func RegistrationComplete(w http.ResponseWriter, r *http.Request) {
 
 	log := Server.Logger
 
-	user, err := utils.GetUserExists(r.Context(), Server, &username, &email)
-	if !errors.Is(err, sql.ErrNoRows) {
-		if err != nil {
-			log.Errorf("error getting user: %v", err)
-			httpkit.RenderErr(w, problems.InternalError())
-			return
-		}
+	acc, err := Server.Databaser.Accounts.Exists(r, &username, &email)
+	if err != nil {
+		log.Errorf("error getting user: %v", err)
+		httpkit.RenderErr(w, problems.InternalError())
+		return
+	}
+	if acc != nil {
 		httpkit.RenderErr(w, problems.Conflict("user already exists"))
 		return
 	}
@@ -79,8 +70,6 @@ func RegistrationComplete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	newUuid := uuid.New()
-
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
 		logrus.Errorf("error hashing password: %v", err)
@@ -88,20 +77,14 @@ func RegistrationComplete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	params := dbcore.InsertUserParams{
-		ID:       newUuid,
-		Username: username,
-		Email:    email,
-		PassHash: string(hashedPassword),
-	}
-
-	user, err = Server.Databaser.InsertUser(r.Context(), params)
+	account, err := Server.Databaser.Accounts.Create(r, username, email, string(hashedPassword))
 	if err != nil {
 		logrus.Errorf("error inserting user: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
 
-	logrus.Infof("user created: %v", user.Username)
+	logrus.Infof("user created: %v", account.Username)
+
 	httpkit.Render(w, http.StatusCreated)
 }

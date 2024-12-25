@@ -36,7 +36,7 @@ paths:
 components:
   schemas:
     ApproveOperationReq:
-      $ref: './spec/components/schemas/ApproveOperationReq.yaml'
+      $ref: './spec/components/schemas/ApproveOperation.yaml'
     RegistrationInitiate:
       $ref: './spec/components/schemas/RegistrationInitiate.yaml'
     RegistrationComplete:
@@ -61,5 +61,3 @@ components:
       $ref: './spec/components/schemas/UserSessions.yaml'
     DeleteSession:
       $ref: './spec/components/schemas/DeleteSession.yaml'
-    TerminateSessions:
-      $ref: './spec/components/schemas/TerminateSessions.yaml'
