@@ -181,7 +181,8 @@ type Session struct {
 	UserID     uuid.UUID
 	Token      string
 	DeviceName string
-	DeviceData json.RawMessage
+	Client     string
+	Ip         string
 	CreatedAt  time.Time
 	LastUsed   time.Time
 }

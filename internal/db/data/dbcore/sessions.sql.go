@@ -7,22 +7,22 @@ package dbcore
 
 import (
 	"context"
-	"encoding/json"
 
 	"github.com/google/uuid"
 )
 
 const createSession = `-- name: CreateSession :one
-INSERT INTO sessions (user_id, token, device_name, device_data)
-VALUES ($1, $2, $3, $4)
-RETURNING id, user_id, token, device_name, device_data, created_at, last_used
+INSERT INTO sessions (user_id, token, device_name, client, IP)
+VALUES ($1, $2, $3, $4, $5)
+RETURNING id, user_id, token, device_name, client, ip, created_at, last_used
 `
 
 type CreateSessionParams struct {
 	UserID     uuid.UUID
 	Token      string
 	DeviceName string
-	DeviceData json.RawMessage
+	Client     string
+	Ip         string
 }
 
 func (q *Queries) CreateSession(ctx context.Context, arg CreateSessionParams) (Session, error) {
@@ -30,7 +30,8 @@ func (q *Queries) CreateSession(ctx context.Context, arg CreateSessionParams) (S
 		arg.UserID,
 		arg.Token,
 		arg.DeviceName,
-		arg.DeviceData,
+		arg.Client,
+		arg.Ip,
 	)
 	var i Session
 	err := row.Scan(
@@ -38,7 +39,8 @@ func (q *Queries) CreateSession(ctx context.Context, arg CreateSessionParams) (S
 		&i.UserID,
 		&i.Token,
 		&i.DeviceName,
-		&i.DeviceData,
+		&i.Client,
+		&i.Ip,
 		&i.CreatedAt,
 		&i.LastUsed,
 	)
@@ -81,7 +83,7 @@ func (q *Queries) DeleteUserSessions(ctx context.Context, userID uuid.UUID) erro
 }
 
 const getSession = `-- name: GetSession :one
-SELECT id, user_id, token, device_name, device_data, created_at, last_used FROM sessions
+SELECT id, user_id, token, device_name, client, ip, created_at, last_used FROM sessions
 WHERE id = $1
 `
 
@@ -93,7 +95,8 @@ func (q *Queries) GetSession(ctx context.Context, id uuid.UUID) (Session, error)
 		&i.UserID,
 		&i.Token,
 		&i.DeviceName,
-		&i.DeviceData,
+		&i.Client,
+		&i.Ip,
 		&i.CreatedAt,
 		&i.LastUsed,
 	)
@@ -118,7 +121,7 @@ func (q *Queries) GetSessionToken(ctx context.Context, arg GetSessionTokenParams
 }
 
 const getSessionsByUserID = `-- name: GetSessionsByUserID :many
-SELECT id, user_id, token, device_name, device_data, created_at, last_used FROM sessions
+SELECT id, user_id, token, device_name, client, ip, created_at, last_used FROM sessions
 WHERE user_id = $1
 `
 
@@ -136,7 +139,8 @@ func (q *Queries) GetSessionsByUserID(ctx context.Context, userID uuid.UUID) ([]
 			&i.UserID,
 			&i.Token,
 			&i.DeviceName,
-			&i.DeviceData,
+			&i.Client,
+			&i.Ip,
 			&i.CreatedAt,
 			&i.LastUsed,
 		); err != nil {
@@ -154,7 +158,7 @@ func (q *Queries) GetSessionsByUserID(ctx context.Context, userID uuid.UUID) ([]
 }
 
 const getUserSession = `-- name: GetUserSession :one
-SELECT id, user_id, token, device_name, device_data, created_at, last_used FROM sessions
+SELECT id, user_id, token, device_name, client, ip, created_at, last_used FROM sessions
 WHERE id = $1 AND user_id = $2
 `
 
@@ -171,7 +175,8 @@ func (q *Queries) GetUserSession(ctx context.Context, arg GetUserSessionParams) 
 		&i.UserID,
 		&i.Token,
 		&i.DeviceName,
-		&i.DeviceData,
+		&i.Client,
+		&i.Ip,
 		&i.CreatedAt,
 		&i.LastUsed,
 	)

@@ -1,4 +1,4 @@
-package dbcore
+package data
 
 import (
 	"encoding/json"

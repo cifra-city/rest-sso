@@ -20,7 +20,7 @@ func NewOperations(queries *dbcore.Queries) Operations {
 }
 
 func (o *operations) Create(r *http.Request, userID uuid.UUID, operation dbcore.OperationType, success bool, failureReason *dbcore.FailureReason) error {
-	deviceData, err := dbcore.NewDeviceData(r)
+	deviceData, err := NewDeviceData(r)
 	if err != nil {
 		return err
 	}
@@ -47,7 +47,7 @@ func (o *operations) Create(r *http.Request, userID uuid.UUID, operation dbcore.
 }
 
 func (o *operations) CreateFailure(r *http.Request, userID uuid.UUID, operation dbcore.OperationType, failureReason dbcore.FailureReason) error {
-	deviceData, err := dbcore.NewDeviceData(r)
+	deviceData, err := NewDeviceData(r)
 	if err != nil {
 		return err
 	}

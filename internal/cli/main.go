@@ -19,7 +19,7 @@ func Run(args []string) bool {
 	}
 
 	logger := config.SetupLogger(cfg.Logging.Level, cfg.Logging.Format)
-	logger.Info("Starting gRPC and HTTP servers...")
+	logger.Info("Starting server...")
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()

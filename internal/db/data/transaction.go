@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/cifra-city/httpkit"
 	"github.com/cifra-city/rest-sso/internal/db/data/dbcore"
 	"github.com/google/uuid"
 )
@@ -70,7 +71,7 @@ func (t *transaction) ResetPasswordTxn(
 		err = HandleTransactionRollback(tx, err)
 	}()
 
-	deviceData, err := dbcore.NewDeviceData(r)
+	deviceData, err := NewDeviceData(r)
 	if err != nil {
 		return err
 	}
@@ -122,7 +123,10 @@ func (t *transaction) LoginTxn(
 		err = HandleTransactionRollback(tx, err)
 	}()
 
-	deviceData, err := dbcore.NewDeviceData(r)
+	client := httpkit.GetUserAgent(r)
+	IP := httpkit.GetClientIP(r)
+
+	deviceData, err := NewDeviceData(r)
 	if err != nil {
 		return nil, err
 	}
@@ -130,7 +134,8 @@ func (t *transaction) LoginTxn(
 	session, err := queries.CreateSession(ctx, dbcore.CreateSessionParams{
 		UserID:     userID,
 		Token:      Token,
-		DeviceData: deviceData,
+		Ip:         IP,
+		Client:     client,
 		DeviceName: deviceName,
 	})
 	if err != nil {
@@ -165,7 +170,7 @@ func (t *transaction) TerminateSessionsTxn(
 		err = HandleTransactionRollback(tx, err)
 	}()
 
-	deviceData, err := dbcore.NewDeviceData(r)
+	deviceData, err := NewDeviceData(r)
 	if err != nil {
 		return err
 	}

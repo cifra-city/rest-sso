@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/cifra-city/httpkit"
 	"github.com/cifra-city/rest-sso/internal/db/data/dbcore"
 	"github.com/google/uuid"
 )
@@ -31,11 +32,14 @@ func NewSession(queries *dbcore.Queries) Sessions {
 }
 
 func (s *sessions) Create(r *http.Request, userID uuid.UUID, token string, deviceName string, deviceData json.RawMessage) (dbcore.Session, error) {
+	client := httpkit.GetUserAgent(r)
+	IP := httpkit.GetClientIP(r)
 	return s.queries.CreateSession(r.Context(), dbcore.CreateSessionParams{
 		UserID:     userID,
 		Token:      token,
-		DeviceData: deviceData,
 		DeviceName: deviceName,
+		Client:     client,
+		Ip:         IP,
 	})
 }
 
