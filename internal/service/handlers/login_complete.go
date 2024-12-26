@@ -93,6 +93,8 @@ func LoginComplete(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Infof("user logged in: %s", acc.Username)
 
+	Server.Mailman.DeleteAccess(acc.Email, string(LOGIN))
+
 	httpkit.Render(w, resources.LoginCompleteResp{
 		Data: resources.LoginCompleteRespData{
 			Type: "login",

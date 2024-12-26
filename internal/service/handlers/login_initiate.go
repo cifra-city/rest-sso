@@ -37,14 +37,14 @@ func LoginInitiate(w http.ResponseWriter, r *http.Request) {
 	log := Server.Logger
 
 	acc, err := Server.Databaser.Accounts.Exists(r, username, email)
+	if acc == nil {
+		log.Debugf("user not found for email: %v", email)
+		httpkit.RenderErr(w, problems.NotFound())
+		return
+	}
 	if err != nil {
 		log.Errorf("error getting user: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())
-		return
-	}
-	if acc == nil {
-		log.Debugf("user not found for email: %v", &email)
-		httpkit.RenderErr(w, problems.NotFound())
 		return
 	}
 
@@ -61,7 +61,7 @@ func LoginInitiate(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Errorf("error sending email: %v", err)
 		} else {
-			log.Infof("Email sent successfully to: %s", email)
+			log.Infof("Email sent successfully to: %s", *email)
 		}
 	}()
 
