@@ -6,7 +6,7 @@ require (
 	github.com/cifra-city/cifractx v0.0.0-20241220023258-6841644fc9a1
 	github.com/cifra-city/httpkit v0.0.0-20241220020938-31caee808935
 	github.com/cifra-city/mailman v0.0.3
-	github.com/cifra-city/tokens v1.1.0
+	github.com/cifra-city/tokens v1.2.11
 	github.com/go-chi/chi v4.1.2+incompatible
 	github.com/go-ozzo/ozzo-validation/v4 v4.3.0
 	github.com/golang-jwt/jwt/v5 v5.2.1

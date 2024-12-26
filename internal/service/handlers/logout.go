@@ -37,7 +37,19 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	err = Server.TokenManager.Bin.Add(userID.String(), sessionID.String())
+	if err != nil {
+		log.Errorf("Failed to add token to bin: %v", err)
+		httpkit.RenderErr(w, problems.InternalError())
+		return
+	}
+
 	err = Server.Databaser.Sessions.Delete(r, sessionID, userID)
+	if err != nil {
+		log.Errorf("Failed to delete session: %v", err)
+		httpkit.RenderErr(w, problems.InternalError())
+		return
+	}
 
 	httpkit.Render(w, http.StatusOK)
 }

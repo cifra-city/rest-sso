@@ -69,6 +69,13 @@ func DeleteSession(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	err = Server.TokenManager.Bin.Add(userID.String(), sessionID.String())
+	if err != nil {
+		log.Errorf("Failed to add token to bin: %v", err)
+		httpkit.RenderErr(w, problems.InternalError())
+		return
+	}
+
 	sessions, err := Server.Databaser.Sessions.GetSessions(r, userID)
 	if err != nil {
 		log.Errorf("Failed to retrieve user sessions: %v", err)

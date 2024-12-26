@@ -14,7 +14,6 @@ import (
 	"github.com/cifra-city/rest-sso/internal/sectools"
 	"github.com/cifra-city/rest-sso/internal/service/requests"
 	"github.com/cifra-city/rest-sso/resources"
-	"github.com/cifra-city/tokens"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/sirupsen/logrus"
 )
@@ -53,12 +52,16 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 
 	log.Debugf("Token received: %s", tokenString)
 
-	userID, sessionID, tokenVersion, _, err := tokens.VerifyJWTAndExtractClaims(r.Context(), tokenString, Server.Config.JWT.AccessToken.SecretKey, log)
+	userData, err := Server.TokenManager.VerifyJWTAndExtractClaims(tokenString, Server.Config.JWT.AccessToken.SecretKey)
 	if err != nil && !errors.Is(err, jwt.ErrTokenExpired) {
 		log.Warnf("Token validation failed: %v", err)
 		httpkit.RenderErr(w, problems.Unauthorized("Token validation failed"))
 		return
 	}
+
+	userID := userData.ID
+	tokenVersion := userData.TokenVersion
+	sessionID := userData.DevID
 
 	user, err := Server.Databaser.Accounts.GetById(r, userID)
 	if err != nil {
@@ -113,14 +116,14 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tokenAccess, err := tokens.GenerateJWT(user.ID, sessionID, string(user.Role), int(user.TokenVersion), Server.Config.JWT.AccessToken.TokenLifetime, Server.Config.JWT.AccessToken.SecretKey)
+	tokenAccess, err := Server.TokenManager.GenerateJWT(user.ID, sessionID, string(user.Role), int(user.TokenVersion), Server.Config.JWT.AccessToken.TokenLifetime, Server.Config.JWT.AccessToken.SecretKey)
 	if err != nil {
 		Server.Logger.Errorf("Error generating access token: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
 
-	tokenRefresh, err := tokens.GenerateJWT(user.ID, sessionID, string(user.Role), int(user.TokenVersion), Server.Config.JWT.RefreshToken.TokenLifetime, Server.Config.JWT.RefreshToken.SecretKey)
+	tokenRefresh, err := Server.TokenManager.GenerateJWT(user.ID, sessionID, string(user.Role), int(user.TokenVersion), Server.Config.JWT.RefreshToken.TokenLifetime, Server.Config.JWT.RefreshToken.SecretKey)
 	if err != nil {
 		Server.Logger.Errorf("Error generating refresh token: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())

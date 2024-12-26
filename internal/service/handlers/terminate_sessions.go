@@ -39,6 +39,17 @@ func TerminateSessions(w http.ResponseWriter, r *http.Request) {
 
 	log.Infof("userID: %v", userID)
 
+	sessions, err := Server.Databaser.Sessions.GetSessions(r, userID)
+
+	for _, ses := range sessions {
+		err = Server.TokenManager.Bin.Add(userID.String(), ses.ID.String())
+		if err != nil {
+			log.Errorf("Failed to add token to bin: %v", err)
+			httpkit.RenderErr(w, problems.InternalError())
+			return
+		}
+	}
+
 	err = Server.Databaser.TerminateSessionsTxn(r, userID, sessionID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {

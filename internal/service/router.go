@@ -8,7 +8,6 @@ import (
 	"github.com/cifra-city/httpkit"
 	"github.com/cifra-city/rest-sso/internal/config"
 	"github.com/cifra-city/rest-sso/internal/service/handlers"
-	"github.com/cifra-city/tokens"
 	"github.com/go-chi/chi"
 	"github.com/sirupsen/logrus"
 )
@@ -22,7 +21,7 @@ func Run(ctx context.Context) {
 	}
 
 	r.Use(cifractx.MiddlewareWithContext(config.SERVICE, service))
-	authMW := tokens.JWTMiddleware(service.Config.JWT.AccessToken.SecretKey, service.Logger)
+	authMW := service.TokenManager.Middleware(service.Config.JWT.AccessToken.SecretKey, service.Logger)
 	rateLimiter := httpkit.NewRateLimiter(5, 10*time.Second, 5*time.Minute)
 	r.Route("/cifra-sso", func(r chi.Router) {
 		r.Route("/v1", func(r chi.Router) {
