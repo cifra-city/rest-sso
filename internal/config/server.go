@@ -15,12 +15,15 @@ type Service struct {
 	Databaser *data.Databaser
 	Logger    *logrus.Logger
 	Mailman   *mailman.Mailman
+	TokenBin  *TokenBin
 }
 
 func NewServer(cfg *Config) (*Service, error) {
 	logger := SetupLogger(cfg.Logging.Level, cfg.Logging.Format)
 	mail := mailman.NewMailman(cfg.Email.SmtpPort, cfg.Email.SmtpHost, cfg.Email.Address, cfg.Email.Password)
 	queries, err := data.NewDatabaser(cfg.Database.URL)
+	tokenBin := NewTokenBin(cfg.Redis.Addr, cfg.Redis.Password, cfg.Redis.DB, cfg.JWT.AccessToken.TokenLifetime)
+
 	if err != nil {
 		return nil, err
 	}
@@ -30,5 +33,6 @@ func NewServer(cfg *Config) (*Service, error) {
 		Databaser: queries,
 		Logger:    logger,
 		Mailman:   mail,
+		TokenBin:  tokenBin,
 	}, nil
 }

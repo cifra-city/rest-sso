@@ -2,10 +2,13 @@ package data
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	"net/http"
 
+	"github.com/cifra-city/cifractx"
 	"github.com/cifra-city/httpkit"
+	"github.com/cifra-city/rest-sso/internal/config"
 	"github.com/cifra-city/rest-sso/internal/db/data/dbcore"
 	"github.com/google/uuid"
 )
@@ -184,9 +187,19 @@ func (t *transaction) TerminateSessionsTxn(
 		return err
 	}
 
+	Server, err := cifractx.GetValue[*config.Service](r.Context(), config.SERVICE)
+	if err != nil {
+		return errors.New("failed to retrieve service configuration")
+	}
+
 	for _, dev := range userSessions {
 		if dev.ID == curDevId {
 			continue
+		}
+
+		err = Server.TokenBin.Add(userId.String(), dev.ID.String())
+		if err != nil {
+			return errors.New("failed to delete device")
 		}
 
 		err = queries.DeleteUserSession(ctx, dbcore.DeleteUserSessionParams{

@@ -2,9 +2,12 @@ package data
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 
+	"github.com/cifra-city/cifractx"
 	"github.com/cifra-city/httpkit"
+	"github.com/cifra-city/rest-sso/internal/config"
 	"github.com/cifra-city/rest-sso/internal/db/data/dbcore"
 	"github.com/google/uuid"
 )
@@ -77,6 +80,16 @@ func (s *sessions) DeleteAll(r *http.Request, id uuid.UUID) error {
 }
 
 func (s *sessions) Delete(r *http.Request, id uuid.UUID, userID uuid.UUID) error {
+	Server, err := cifractx.GetValue[*config.Service](r.Context(), config.SERVICE)
+	if err != nil {
+		return errors.New("failed to retrieve service configuration")
+	}
+
+	err = Server.TokenBin.Add(userID.String(), id.String())
+	if err != nil {
+		return errors.New("failed to delete device")
+	}
+
 	return s.queries.DeleteUserSession(r.Context(), dbcore.DeleteUserSessionParams{
 		ID:     id,
 		UserID: userID,

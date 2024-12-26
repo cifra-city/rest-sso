@@ -53,6 +53,12 @@ type CORSConfig struct {
 	AllowedHeaders []string `mapstructure:"allowed_headers"`
 }
 
+type RedisConfig struct {
+	Addr     string `mapstructure:"addr"`
+	Password string `mapstructure:"password"`
+	DB       int    `mapstructure:"db"`
+}
+
 type Config struct {
 	Database DatabaseConfig `mapstructure:"database"`
 	Server   ServerConfig   `mapstructure:"server"`
@@ -61,6 +67,7 @@ type Config struct {
 	Email    EmailConfig    `mapstructure:"email"`
 	Swagger  SwaggerConfig  `mapstructure:"swagger"`
 	CORS     CORSConfig     `mapstructure:"cors"`
+	Redis    RedisConfig    `mapstructure:"redis"`
 }
 
 // LoadConfig - функция для загрузки конфигурации из файла.

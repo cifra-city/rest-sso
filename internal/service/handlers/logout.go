@@ -23,12 +23,21 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 
 	log := Server.Logger
 
-	_, ok := r.Context().Value(tokens.UserIDKey).(uuid.UUID)
+	sessionID, ok := r.Context().Value(tokens.DeviceIDKey).(uuid.UUID)
+	if !ok {
+		log.Warn("SessionID not found in context")
+		httpkit.RenderErr(w, problems.Unauthorized("Session not authenticated"))
+		return
+	}
+
+	userID, ok := r.Context().Value(tokens.UserIDKey).(uuid.UUID)
 	if !ok {
 		log.Warn("UserID not found in context")
 		httpkit.RenderErr(w, problems.Unauthorized("User not authenticated"))
 		return
 	}
+
+	err = Server.Databaser.Sessions.Delete(r, sessionID, userID)
 
 	httpkit.Render(w, http.StatusOK)
 }

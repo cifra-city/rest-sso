@@ -43,7 +43,7 @@ func RegistrationInitiate(w http.ResponseWriter, r *http.Request) {
 	}
 	if acc != nil {
 		log.Debugf("Email or username already taken %v %v", &email, &username)
-		httpkit.RenderErr(w, problems.NotFound())
+		httpkit.RenderErr(w, problems.Conflict())
 		return
 	}
 

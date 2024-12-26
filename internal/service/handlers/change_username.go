@@ -70,10 +70,18 @@ func ChangeUsername(w http.ResponseWriter, r *http.Request) {
 	}
 
 	_, err = Server.Databaser.Accounts.GetByUsername(r, *newUsername)
-	if err != nil {
-		httpkit.RenderErr(w, problems.InternalError("Failed to update username"))
+	if err != nil && !errors.Is(err, sql.ErrNoRows) {
+		log.Errorf("Failed to update username: %v", err)
+		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
 
-	httpkit.Render(w, map[string]string{"message": "Username updated successfully"})
+	_, err = Server.Databaser.Accounts.UpdateUsername(r, userID, *newUsername)
+	if err != nil {
+		log.Errorf("Failed to update username: %v", err)
+		httpkit.RenderErr(w, problems.InternalError())
+		return
+	}
+
+	httpkit.Render(w, http.StatusOK)
 }

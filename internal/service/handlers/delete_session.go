@@ -24,7 +24,7 @@ func DeleteSession(w http.ResponseWriter, r *http.Request) {
 
 	sessionIdStr := req.Data.Attributes.SessionId
 
-	sessionID, err := uuid.Parse(sessionIdStr)
+	sessionForDelete, err := uuid.Parse(sessionIdStr)
 	if err != nil {
 		httpkit.RenderErr(w, problems.BadRequest(errors.New("invalid format session id"))...)
 		return
@@ -37,6 +37,18 @@ func DeleteSession(w http.ResponseWriter, r *http.Request) {
 	}
 
 	log := Server.Logger
+
+	sessionID, ok := r.Context().Value(tokens.DeviceIDKey).(uuid.UUID)
+	if !ok {
+		log.Warn("SessionID not found in context")
+		httpkit.RenderErr(w, problems.Unauthorized("Session not authenticated"))
+		return
+	}
+
+	if sessionID != sessionForDelete {
+		httpkit.RenderErr(w, problems.BadRequest(errors.New("session can't be current"))...)
+		return
+	}
 
 	userID, ok := r.Context().Value(tokens.UserIDKey).(uuid.UUID)
 	if !ok {
