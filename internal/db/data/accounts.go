@@ -1,6 +1,8 @@
 package data
 
 import (
+	"database/sql"
+	"errors"
 	"net/http"
 
 	"github.com/cifra-city/rest-sso/internal/db/data/dbcore"
@@ -39,25 +41,43 @@ func (a *accounts) Create(r *http.Request, username string, email string, passHa
 }
 
 func (a *accounts) Exists(r *http.Request, username *string, email *string) (*dbcore.Account, error) {
-	var acc1 dbcore.Account
-	var acc2 dbcore.Account
-	var err error
+	var userByUsername *dbcore.Account
+	var userByEmail *dbcore.Account
+	
+	if username != nil && *username != "" {
+		result, err := a.queries.GetAccountByUsername(r.Context(), *username)
+		if err != nil && !errors.Is(err, sql.ErrNoRows) {
+			return nil, err
+		}
+		if err == nil {
+			userByUsername = &result
+		}
+	}
 
-	if username != nil {
-		acc1, err = a.queries.GetAccountByUsername(r.Context(), *username)
-	}
-	if email != nil {
-		acc2, err = a.queries.GetAccountByEmail(r.Context(), *email)
-	}
-	if err != nil {
-		return nil, err
+	if email != nil && *email != "" {
+		result, err := a.queries.GetAccountByEmail(r.Context(), *email)
+		if err != nil && !errors.Is(err, sql.ErrNoRows) {
+			return nil, err
+		}
+		if err == nil {
+			userByEmail = &result
+		}
 	}
 
-	if acc1.ID != acc2.ID {
+	if userByUsername == nil && userByEmail == nil {
 		return nil, nil
 	}
 
-	return &acc1, nil
+	if userByUsername != nil && userByEmail != nil {
+		if userByUsername.ID != userByEmail.ID {
+			return nil, errors.New("conflicting accounts found for username and email")
+		}
+	}
+
+	if userByUsername != nil {
+		return userByUsername, nil
+	}
+	return userByEmail, nil
 }
 
 func (a *accounts) GetById(r *http.Request, id uuid.UUID) (dbcore.Account, error) {

@@ -32,10 +32,8 @@ func Run(ctx context.Context) {
 
 				r.Post("/registration-initiate", handlers.RegistrationInitiate) // check if email exists, send code to email
 				r.Post("/registration-complete", handlers.RegistrationComplete) // check for approved email address for use
-
-				r.Post("/login-initiate", handlers.LoginInitiate) // check if email exists, send code to email
-				r.Post("/login-complete", handlers.LoginComplete) // check for approved email address for use
-
+				r.Post("/login-initiate", handlers.LoginInitiate)               // check if email exists, send code to email
+				r.Post("/login-complete", handlers.LoginComplete)               // check for approved email address for use
 				r.Post("/reset-password-initiate", handlers.ResetPasswordInitiate)
 				r.Post("/reset-password-complete", handlers.ResetPasswordComplete)
 
@@ -43,11 +41,10 @@ func Run(ctx context.Context) {
 
 				r.Route("/user", func(r chi.Router) {
 					r.Use(authMW)
-
 					r.Post("/change_username", handlers.ChangeUsername)
 					r.Route("/sessions", func(r chi.Router) {
 						r.Get("/", handlers.GetUserSessions)
-						r.Delete("/delete", handlers.DeleteSession)
+						r.Delete("/", handlers.DeleteSession)
 						r.Delete("/terminate", handlers.TerminateSessions)
 					})
 					r.Post("/logout", handlers.Logout)

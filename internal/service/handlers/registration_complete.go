@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"database/sql"
 	"errors"
 	"net/http"
 
@@ -28,8 +29,13 @@ func RegistrationComplete(w http.ResponseWriter, r *http.Request) {
 	IP := httpkit.GetClientIP(r)
 	UserAgent := httpkit.GetUserAgent(r)
 
-	if len(password) < 8 || !sectools.HasRequiredChars(password) {
+	if len(password) < 8 || !sectools.HasRequiredChars(password) || len(password) > 32 {
 		httpkit.RenderErr(w, problems.BadRequest(errors.New("invalid password requirements"))...)
+		return
+	}
+
+	if len(username) < 3 || len(username) > 32 {
+		httpkit.RenderErr(w, problems.BadRequest(errors.New("invalid username length"))...)
 		return
 	}
 
@@ -43,13 +49,14 @@ func RegistrationComplete(w http.ResponseWriter, r *http.Request) {
 	log := Server.Logger
 
 	acc, err := Server.Databaser.Accounts.Exists(r, &username, &email)
-	if err != nil {
+	if err != nil && !errors.Is(err, sql.ErrNoRows) {
 		log.Errorf("error getting user: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
 	if acc != nil {
-		httpkit.RenderErr(w, problems.Conflict("user already exists"))
+		log.Debugf("Email or isername already taken: %v", err)
+		httpkit.RenderErr(w, problems.NotFound())
 		return
 	}
 
@@ -72,19 +79,19 @@ func RegistrationComplete(w http.ResponseWriter, r *http.Request) {
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
-		logrus.Errorf("error hashing password: %v", err)
+		log.Errorf("error hashing password: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
 
 	account, err := Server.Databaser.Accounts.Create(r, username, email, string(hashedPassword))
 	if err != nil {
-		logrus.Errorf("error inserting user: %v", err)
+		log.Errorf("error inserting user: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
 
-	logrus.Infof("user created: %v", account.Username)
+	log.Infof("user created: %v", account.Username)
 
 	httpkit.Render(w, http.StatusCreated)
 }

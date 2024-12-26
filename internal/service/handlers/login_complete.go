@@ -87,7 +87,7 @@ func LoginComplete(w http.ResponseWriter, r *http.Request) {
 
 	_, err = Server.Databaser.LoginTxn(r, acc.ID, encryptToken, deviceName)
 	if err != nil {
-		log.Errorf("error updating last used and refresh token: %v", err)
+		log.Errorf("Error transaction login: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}

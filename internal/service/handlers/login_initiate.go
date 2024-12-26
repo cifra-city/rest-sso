@@ -43,7 +43,7 @@ func LoginInitiate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if acc == nil {
-		log.Debugf("user not found: %v", err)
+		log.Debugf("user not found for email: %v", &email)
 		httpkit.RenderErr(w, problems.NotFound())
 		return
 	}

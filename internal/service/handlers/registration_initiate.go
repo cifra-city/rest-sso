@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"database/sql"
+	"errors"
 	"net/http"
 
 	"github.com/cifra-city/cifractx"
@@ -34,13 +36,13 @@ func RegistrationInitiate(w http.ResponseWriter, r *http.Request) {
 	log := Server.Logger
 
 	acc, err := Server.Databaser.Accounts.Exists(r, &username, &email)
-	if err != nil {
+	if err != nil && !errors.Is(err, sql.ErrNoRows) {
 		log.Errorf("error getting user: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
-	if acc == nil {
-		log.Debugf("user not found: %v", err)
+	if acc != nil {
+		log.Debugf("Email or username already taken %v %v", &email, &username)
 		httpkit.RenderErr(w, problems.NotFound())
 		return
 	}

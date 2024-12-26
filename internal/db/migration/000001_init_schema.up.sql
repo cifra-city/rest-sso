@@ -1,3 +1,5 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 CREATE TYPE role_type AS ENUM (
     'admin',
     'user',
@@ -30,10 +32,10 @@ CREATE TYPE operation_type AS ENUM (
 );
 
 CREATE TABLE accounts (
-    id UUID PRIMARY KEY NOT NULL,
+    id UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
     username VARCHAR(255) NOT NULL UNIQUE,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    pass_hash VARCHAR(255) NOT NULL,
+    email TEXT NOT NULL UNIQUE,
+    pass_hash TEXT NOT NULL,
     role role_type DEFAULT 'user' NOT NULL,
     token_version INTEGER DEFAULT 0 NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT now(),
@@ -41,19 +43,19 @@ CREATE TABLE accounts (
 );
 
 CREATE TABLE sessions (
-    id UUID PRIMARY KEY NOT NULL,
-    user_id UUID NOT NULL REFERENCES account(id) ON DELETE CASCADE,
+    id UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
     token TEXT NOT NULL,
-    device_name VARCHAR(255) NOT NULL,
-    client VARCHAR(255) NOT NULL,
-    IP VARCHAR(255) NOT NULL,
+    device_name TEXT NOT NULL,
+    client TEXT NOT NULL,
+    IP TEXT NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT now(),
     last_used TIMESTAMP NOT NULL DEFAULT now()
 );
 
 CREATE TABLE operations (
-    id UUID PRIMARY KEY NOT NULL,
-    user_id UUID NOT NULL REFERENCES account(id) ON DELETE CASCADE,
+    id UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
     operation operation_type NOT NULL,
     device_data JSONB NOT NULL,
     success BOOLEAN NOT NULL,
@@ -61,8 +63,8 @@ CREATE TABLE operations (
     created_at TIMESTAMP NOT NULL DEFAULT now()
 );
 
-CREATE INDEX idx_account_email ON account(email);
-CREATE INDEX idx_account_username ON account(username);
+CREATE INDEX idx_account_email ON accounts(email);
+CREATE INDEX idx_account_username ON accounts(username);
 CREATE INDEX idx_sessions_user_id ON sessions(user_id);
 CREATE INDEX idx_sessions_last_used ON sessions(last_used);
 CREATE INDEX idx_operations_user_id ON operations(user_id);
