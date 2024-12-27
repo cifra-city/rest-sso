@@ -22,6 +22,7 @@ type Transaction interface {
 		userID uuid.UUID,
 		deviceName string,
 		Token string,
+		deviceID uuid.UUID,
 	) (*dbcore.Session, error)
 
 	TerminateSessionsTxn(
@@ -112,6 +113,7 @@ func (t *transaction) LoginTxn(
 	userID uuid.UUID,
 	deviceName string,
 	Token string,
+	deviceID uuid.UUID,
 ) (*dbcore.Session, error) {
 	ctx := r.Context()
 	queries, tx, err := t.queries.BeginTx(ctx)
@@ -132,6 +134,7 @@ func (t *transaction) LoginTxn(
 	}
 
 	session, err := queries.CreateSession(ctx, dbcore.CreateSessionParams{
+		ID:         deviceID,
 		UserID:     userID,
 		Token:      Token,
 		Ip:         IP,
@@ -185,6 +188,9 @@ func (t *transaction) TerminateSessionsTxn(
 	}
 
 	for _, dev := range userSessions {
+		if dev.ID == curDevId {
+			continue
+		}
 		err = queries.DeleteUserSession(ctx, dbcore.DeleteUserSessionParams{
 			ID:     dev.ID,
 			UserID: userId,

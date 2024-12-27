@@ -12,14 +12,8 @@ github.com/cifra-city/httpkit v0.0.0-20241220020938-31caee808935 h1:lrTVqdhw/NG3
 github.com/cifra-city/httpkit v0.0.0-20241220020938-31caee808935/go.mod h1:YIJ3wK4+GVz1TRAmFHJglwWV7usxYGICZgaWSWZINwg=
 github.com/cifra-city/mailman v0.0.3 h1:WNFJ7UMvJkl67mfMsTVduntNLAGTeoOvNMbXJ31S71U=
 github.com/cifra-city/mailman v0.0.3/go.mod h1:3lQz400RyFVlW7RWTbCLn757ERNLCib7fxczKCkv9vk=
-github.com/cifra-city/tokens v1.1.0 h1:48OIB17P5Jh94BXjbtQUd+XAWpGC5Z/wbco7OQJPUfo=
-github.com/cifra-city/tokens v1.1.0/go.mod h1:EkFTXkIWUONhJb1Q3XOK0U2P2Z+cPaKnBU1GjNUJeDE=
-github.com/cifra-city/tokens v1.2.0 h1:OBQhiF8Jv5KaZAQZMRsIpbKeDAcwIe2gyH+l/7fMe3Q=
-github.com/cifra-city/tokens v1.2.0/go.mod h1:szvYYQy+GDRQqVSv47e/Nd96RSNLn3VCITk61epZ53g=
-github.com/cifra-city/tokens v1.2.1 h1:w42TOx1MUVx1I11Hki1+2HQ8pdIhyfJ29QerBOCYbSM=
-github.com/cifra-city/tokens v1.2.1/go.mod h1:szvYYQy+GDRQqVSv47e/Nd96RSNLn3VCITk61epZ53g=
-github.com/cifra-city/tokens v1.2.11 h1:IsaFSas2WxPB5wdSCxD+oD6cILQ76INOni7fSyE0mNA=
-github.com/cifra-city/tokens v1.2.11/go.mod h1:szvYYQy+GDRQqVSv47e/Nd96RSNLn3VCITk61epZ53g=
+github.com/cifra-city/tokens v1.2.15 h1:evHirW7FE/Kz9JomIiiwhXApyncBOtPXUnfKW1XOS6o=
+github.com/cifra-city/tokens v1.2.15/go.mod h1:szvYYQy+GDRQqVSv47e/Nd96RSNLn3VCITk61epZ53g=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc h1:U9qPSI2PIWSS1VwoXQT9A3Wy9MM3WgvqSxFWenqJduM=

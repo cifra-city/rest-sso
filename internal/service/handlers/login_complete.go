@@ -1,13 +1,11 @@
 package handlers
 
 import (
-	"errors"
 	"net/http"
 
 	"github.com/cifra-city/cifractx"
 	"github.com/cifra-city/httpkit"
 	"github.com/cifra-city/httpkit/problems"
-	"github.com/cifra-city/mailman"
 	"github.com/cifra-city/rest-sso/internal/config"
 	"github.com/cifra-city/rest-sso/internal/sectools"
 	"github.com/cifra-city/rest-sso/internal/service/requests"
@@ -28,8 +26,8 @@ func LoginComplete(w http.ResponseWriter, r *http.Request) {
 	username := req.Data.Attributes.Username
 	deviceName := req.Data.Attributes.DeviceName
 
-	IP := httpkit.GetClientIP(r)
-	UserAgent := httpkit.GetUserAgent(r)
+	//IP := httpkit.GetClientIP(r)
+	//UserAgent := httpkit.GetUserAgent(r)
 
 	Server, err := cifractx.GetValue[*config.Service](r.Context(), config.SERVICE)
 	if err != nil {
@@ -52,22 +50,22 @@ func LoginComplete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = Server.Mailman.CheckAccess(acc.Email, string(LOGIN), UserAgent, IP)
-	if err != nil {
-		if errors.Is(err, mailman.ErrNotFound) {
-			log.Warnf("email haven`t access: %s", acc.Email)
-			httpkit.RenderErr(w, problems.NotFound("email haven`t access"))
-			return
-		}
-		if errors.Is(err, mailman.ErrAccessDenied) {
-			log.Warnf("failed to decrypt ConfidenceCode for email: %s", acc.Email)
-			httpkit.RenderErr(w, problems.Forbidden("failed to decrypt ConfidenceCode"))
-			return
-		}
-		log.Warnf("Access denied %s, %s %s", err, IP, UserAgent)
-		httpkit.RenderErr(w, problems.InternalError())
-		return
-	}
+	//err = Server.Mailman.CheckAccess(acc.Email, string(LOGIN), UserAgent, IP)
+	//if err != nil {
+	//	if errors.Is(err, mailman.ErrNotFound) {
+	//		log.Warnf("email haven`t access: %s", acc.Email)
+	//		httpkit.RenderErr(w, problems.NotFound("email haven`t access"))
+	//		return
+	//	}
+	//	if errors.Is(err, mailman.ErrAccessDenied) {
+	//		log.Warnf("failed to decrypt ConfidenceCode for email: %s", acc.Email)
+	//		httpkit.RenderErr(w, problems.Forbidden("failed to decrypt ConfidenceCode"))
+	//		return
+	//	}
+	//	log.Warnf("Access denied %s, %s %s", err, IP, UserAgent)
+	//	httpkit.RenderErr(w, problems.InternalError())
+	//	return
+	//}
 
 	deviceID := uuid.New()
 
@@ -85,7 +83,7 @@ func LoginComplete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = Server.Databaser.LoginTxn(r, acc.ID, encryptToken, deviceName)
+	_, err = Server.Databaser.LoginTxn(r, acc.ID, encryptToken, deviceName, deviceID)
 	if err != nil {
 		log.Errorf("Error transaction login: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())

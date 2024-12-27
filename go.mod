@@ -6,13 +6,12 @@ require (
 	github.com/cifra-city/cifractx v0.0.0-20241220023258-6841644fc9a1
 	github.com/cifra-city/httpkit v0.0.0-20241220020938-31caee808935
 	github.com/cifra-city/mailman v0.0.3
-	github.com/cifra-city/tokens v1.2.11
+	github.com/cifra-city/tokens v1.2.15
 	github.com/go-chi/chi v4.1.2+incompatible
 	github.com/go-ozzo/ozzo-validation/v4 v4.3.0
 	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/google/uuid v1.6.0
 	github.com/lib/pq v1.10.9
-	github.com/redis/go-redis/v9 v9.7.0
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/viper v1.19.0
 	golang.org/x/crypto v0.21.0
@@ -29,6 +28,7 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.2 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
+	github.com/redis/go-redis/v9 v9.7.0 // indirect
 	github.com/sagikazarmark/locafero v0.4.0 // indirect
 	github.com/sagikazarmark/slog-shim v0.1.0 // indirect
 	github.com/sourcegraph/conc v0.3.0 // indirect

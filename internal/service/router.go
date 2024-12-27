@@ -22,7 +22,7 @@ func Run(ctx context.Context) {
 
 	r.Use(cifractx.MiddlewareWithContext(config.SERVICE, service))
 	authMW := service.TokenManager.Middleware(service.Config.JWT.AccessToken.SecretKey, service.Logger)
-	rateLimiter := httpkit.NewRateLimiter(5, 10*time.Second, 5*time.Minute)
+	rateLimiter := httpkit.NewRateLimiter(15, 10*time.Second, 5*time.Minute)
 	r.Route("/cifra-sso", func(r chi.Router) {
 		r.Route("/v1", func(r chi.Router) {
 			r.Use(rateLimiter.Middleware)

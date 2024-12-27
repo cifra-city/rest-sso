@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"database/sql"
 	"errors"
 	"net/http"
 
@@ -38,6 +37,8 @@ func DeleteSession(w http.ResponseWriter, r *http.Request) {
 
 	log := Server.Logger
 
+	log.Infof("sessionForDelete: %v", sessionForDelete)
+
 	sessionID, ok := r.Context().Value(tokens.DeviceIDKey).(uuid.UUID)
 	if !ok {
 		log.Warn("SessionID not found in context")
@@ -45,7 +46,12 @@ func DeleteSession(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if sessionID != sessionForDelete {
+	log.Infof("sessionID cur: %v", sessionID)
+
+	log.Infof("sessionForDelete: %v", sessionID == sessionForDelete)
+
+	if sessionID == sessionForDelete {
+		log.Debugf("Session can't be current")
 		httpkit.RenderErr(w, problems.BadRequest(errors.New("session can't be current"))...)
 		return
 	}
@@ -58,23 +64,25 @@ func DeleteSession(w http.ResponseWriter, r *http.Request) {
 	}
 
 	log.Infof("userID: %v", userID)
-
-	err = Server.Databaser.Sessions.Delete(r, sessionID, userID)
-	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			httpkit.RenderErr(w, problems.NotFound("Device not found"))
-			return
-		}
-		httpkit.RenderErr(w, problems.InternalError("Failed to delete device"))
-		return
-	}
-
-	err = Server.TokenManager.Bin.Add(userID.String(), sessionID.String())
-	if err != nil {
-		log.Errorf("Failed to add token to bin: %v", err)
-		httpkit.RenderErr(w, problems.InternalError())
-		return
-	}
+	//
+	//err = Server.Databaser.Sessions.Delete(r, sessionForDelete, userID)
+	//if err != nil {
+	//	if errors.Is(err, sql.ErrNoRows) {
+	//		log.Debugf("Session not found: %v", err)
+	//		httpkit.RenderErr(w, problems.NotFound("Device not found"))
+	//		return
+	//	}
+	//	log.Errorf("Failed to delete device: %v", err)
+	//	httpkit.RenderErr(w, problems.InternalError("Failed to delete device"))
+	//	return
+	//}
+	//
+	//err = Server.TokenManager.Bin.Add(userID.String(), sessionForDelete.String())
+	//if err != nil {
+	//	log.Errorf("Failed to add token to bin: %v", err)
+	//	httpkit.RenderErr(w, problems.InternalError())
+	//	return
+	//}
 
 	sessions, err := Server.Databaser.Sessions.GetSessions(r, userID)
 	if err != nil {
@@ -102,14 +110,4 @@ func DeleteSession(w http.ResponseWriter, r *http.Request) {
 			},
 		},
 	})
-
-	httpkit.Render(w, resources.UserSessions{
-		Data: resources.UserSessionData{
-			Type: "user_sessions",
-			Attributes: resources.UserSessionDataAttributes{
-				Devices: userSessions,
-			},
-		},
-	})
-
 }
