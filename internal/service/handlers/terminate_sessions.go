@@ -14,7 +14,6 @@ import (
 )
 
 func TerminateSessions(w http.ResponseWriter, r *http.Request) {
-
 	Server, err := cifractx.GetValue[*config.Service](r.Context(), config.SERVICE)
 	if err != nil {
 		httpkit.RenderErr(w, problems.InternalError("Failed to retrieve service configuration"))
@@ -37,8 +36,6 @@ func TerminateSessions(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Infof("userID: %v", userID)
-
 	sessions, err := Server.Databaser.Sessions.GetSessions(r, userID)
 
 	for _, ses := range sessions {
@@ -53,7 +50,7 @@ func TerminateSessions(w http.ResponseWriter, r *http.Request) {
 	err = Server.Databaser.TerminateSessionsTxn(r, userID, sessionID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			httpkit.RenderErr(w, problems.NotFound("Device not found"))
+			httpkit.RenderErr(w, problems.NotFound())
 			return
 		}
 		httpkit.RenderErr(w, problems.InternalError("Failed to terminate sessions"))

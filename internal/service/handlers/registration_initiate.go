@@ -29,7 +29,7 @@ func RegistrationInitiate(w http.ResponseWriter, r *http.Request) {
 	Server, err := cifractx.GetValue[*config.Service](r.Context(), config.SERVICE)
 	if err != nil {
 		logrus.Errorf("error getting db queries: %v", err)
-		httpkit.RenderErr(w, problems.InternalError("database queries not found"))
+		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
 
@@ -52,7 +52,7 @@ func RegistrationInitiate(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Errorf("error sending email: %v", err)
 		} else {
-			log.Infof("Email sent successfully to: %s", email)
+			log.Debugf("Email sent successfully to: %s", email)
 		}
 	}()
 

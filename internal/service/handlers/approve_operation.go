@@ -35,7 +35,7 @@ func (op OperationType) IsValid() bool {
 func ApproveOperation(w http.ResponseWriter, r *http.Request) {
 	req, err := requests.NewApproveOperation(r)
 	if err != nil {
-		logrus.Errorf("error decoding request: %v", err)
+		logrus.Debugf("error decoding request: %v", err)
 		httpkit.RenderErr(w, problems.BadRequest(err)...)
 		return
 	}
@@ -49,8 +49,8 @@ func ApproveOperation(w http.ResponseWriter, r *http.Request) {
 
 	Server, err := cifractx.GetValue[*config.Service](r.Context(), config.SERVICE)
 	if err != nil {
-		logrus.Errorf("error getting db queries: %v", err)
-		httpkit.RenderErr(w, problems.InternalError("database queries not found"))
+		logrus.Warn("error getting db queries: %v", err)
+		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
 
@@ -58,7 +58,7 @@ func ApproveOperation(w http.ResponseWriter, r *http.Request) {
 
 	opType := OperationType(opTypeStr)
 	if !opType.IsValid() {
-		log.Errorf("invalid operation type: %s", opTypeStr)
+		log.Debugf("invalid operation type: %s", opTypeStr)
 		httpkit.RenderErr(w, problems.BadRequest(errors.New("invalid operation type"))...)
 		return
 	}
@@ -67,16 +67,16 @@ func ApproveOperation(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		if errors.Is(err, mailman.ErrNotFound) {
 			log.Debugf("code not found for email: %s", email)
-			httpkit.RenderErr(w, problems.NotFound("code not found"))
+			httpkit.RenderErr(w, problems.NotFound())
 			return
 		}
 		if errors.Is(err, mailman.ErrAccessDenied) {
 			log.Errorf("failed to decrypt ConfidenceCode for email: %s", email)
-			httpkit.RenderErr(w, problems.InternalError("failed to decrypt ConfidenceCode"))
+			httpkit.RenderErr(w, problems.Unauthorized())
 			return
 		}
 		log.Debugf("Unhadler denied err: %s", err)
-		httpkit.RenderErr(w, problems.Forbidden("incorrect code"))
+		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
 

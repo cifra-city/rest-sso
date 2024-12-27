@@ -37,25 +37,23 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 
 	authHeader := r.Header.Get("Authorization")
 	if authHeader == "" {
-		log.Warn("Missing Authorization header")
+		log.Debugf("Missing Authorization header")
 		httpkit.RenderErr(w, problems.Unauthorized("Missing Authorization header"))
 		return
 	}
 
 	parts := strings.Split(authHeader, " ")
 	if len(parts) != 2 || strings.ToLower(parts[0]) != "bearer" {
-		log.Warn("Invalid Authorization header format")
+		log.Debugf("Invalid Authorization header format")
 		httpkit.RenderErr(w, problems.Unauthorized("Invalid Authorization header format"))
 		return
 	}
 	tokenString := parts[1]
 
-	log.Debugf("Token received: %s", tokenString)
-
 	userData, err := Server.TokenManager.VerifyJWTAndExtractClaims(tokenString, Server.Config.JWT.AccessToken.SecretKey)
 	if err != nil && !errors.Is(err, jwt.ErrTokenExpired) {
 		log.Warnf("Token validation failed: %v", err)
-		httpkit.RenderErr(w, problems.Unauthorized("Token validation failed"))
+		httpkit.RenderErr(w, problems.Unauthorized())
 		return
 	}
 
@@ -66,7 +64,7 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 	user, err := Server.Databaser.Accounts.GetById(r, userID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			httpkit.RenderErr(w, problems.Unauthorized("User not found"))
+			httpkit.RenderErr(w, problems.Unauthorized())
 			return
 		}
 		log.Errorf("Failed to get user: %v", err)
@@ -76,7 +74,7 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 
 	if int(user.TokenVersion) != tokenVersion {
 		log.Warn("Token version mismatch")
-		httpkit.RenderErr(w, problems.Unauthorized("Token version mismatch"))
+		httpkit.RenderErr(w, problems.Unauthorized())
 		return
 	}
 
@@ -99,7 +97,7 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 			httpkit.RenderErr(w, problems.InternalError())
 			return
 		}
-		httpkit.RenderErr(w, problems.Unauthorized("Device does not belong to user"))
+		httpkit.RenderErr(w, problems.Unauthorized())
 		return
 	}
 
@@ -112,7 +110,7 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 
 	if decryptedToken != refreshToken {
 		Server.Logger.Warn("Provided refresh token does not match the stored token")
-		httpkit.RenderErr(w, problems.Unauthorized("Invalid refresh token"))
+		httpkit.RenderErr(w, problems.Conflict())
 		return
 	}
 
@@ -139,15 +137,14 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 
 	err = Server.Databaser.UpdateRefreshTokenTrx(r, userID, sessionID, encryptedToken)
 	if err != nil {
-		log.Errorf("Error updating last used and refresh token: %v", err)
 		if errors.Is(err, sql.ErrNoRows) {
 			httpkit.RenderErr(w, problems.Unauthorized())
 			return
 		}
+		log.Errorf("Error updating last used and refresh token: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
-	log.Infof("User logged in: %s", user.Username)
 
 	httpkit.Render(w, resources.RefreshResp{
 		Data: resources.RefreshRespData{

@@ -27,7 +27,7 @@ func ResetPasswordInitiate(w http.ResponseWriter, r *http.Request) {
 	Server, err := cifractx.GetValue[*config.Service](r.Context(), config.SERVICE)
 	if err != nil {
 		logrus.Errorf("error getting server from context: %v", err)
-		http.Error(w, "Service configuration not found", http.StatusInternalServerError)
+		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
 	log := Server.Logger
@@ -39,7 +39,6 @@ func ResetPasswordInitiate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if acc == nil {
-		log.Debugf("user not found: %v", err)
 		httpkit.RenderErr(w, problems.NotFound())
 		return
 	}
@@ -49,7 +48,7 @@ func ResetPasswordInitiate(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Errorf("error sending email: %v", err)
 		} else {
-			log.Infof("Email sent successfully to: %s", acc.Email)
+			log.Debugf("Email sent successfully to: %s", acc.Email)
 		}
 	}()
 

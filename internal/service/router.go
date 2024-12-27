@@ -42,7 +42,7 @@ func Run(ctx context.Context) {
 					r.Use(authMW)
 					r.Post("/change_username", handlers.ChangeUsername)
 					r.Route("/sessions", func(r chi.Router) {
-						r.Get("/", handlers.GetUserSessions)
+						r.Get("/", handlers.GetSessions)
 						r.Delete("/", handlers.DeleteSession)
 						r.Delete("/terminate", handlers.TerminateSessions)
 					})

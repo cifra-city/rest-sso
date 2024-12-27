@@ -14,12 +14,6 @@ get:
       $ref: '../spec/components/responses/invalidParameter.yaml'
     '401':
       $ref: '../spec/components/responses/invalidAuth.yaml'
-    '403':
-      $ref: '../spec/components/responses/forbidden.yaml'
-    '409':
-      $ref: '../spec/components/responses/conflict.yaml'
-    '415':
-      $ref: '../spec/components/responses/unsupportedMediaType.yaml'
     '429':
       $ref: '../spec/components/responses/tooManyRequests.yaml'
     '500':

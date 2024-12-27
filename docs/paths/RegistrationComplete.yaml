@@ -22,11 +22,17 @@ post:
                 example: 201
     '400':
       $ref: '../spec/components/responses/invalidParameter.yaml'
-    '409':
-      $ref: '../spec/components/responses/conflict.yaml'
-    '415':
-      $ref: '../spec/components/responses/unsupportedMediaType.yaml'
-    '429':
-      $ref: '../spec/components/responses/tooManyRequests.yaml'
+    '403':
+      description: Metadata is not valid
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '../spec/components/responses/forbidden.yaml'
+    '404':
+      description: Email not found in request pool
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '../spec/components/responses/forbidden.yaml'
     '500':
       $ref: '../spec/components/responses/internalError.yaml'

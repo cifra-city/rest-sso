@@ -10,23 +10,15 @@ post:
         schema:
           $ref: '../spec/components/schemas/RegistrationInitiate.yaml'
   responses:
-    '201':
+    '202':
       description: Successfully initiated registration
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status:
-                type: number
-                example: 201
     '400':
       $ref: '../spec/components/responses/invalidParameter.yaml'
     '409':
-      $ref: '../spec/components/responses/conflict.yaml'
-    '415':
-      $ref: '../spec/components/responses/unsupportedMediaType.yaml'
-    '429':
-      $ref: '../spec/components/responses/tooManyRequests.yaml'
+      description: Username or email is already taken
+      content:
+        application/json:
+          schema:
+            $ref: '../spec/components/responses/conflict.yaml'
     '500':
       $ref: '../spec/components/responses/internalError.yaml'

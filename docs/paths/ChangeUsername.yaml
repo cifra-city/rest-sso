@@ -10,18 +10,22 @@ patch:
         schema:
           $ref: '../spec/components/schemas/ChangeUsername.yaml'
   responses:
-    '201':
+    '200':
       description: Updated username successfully
     '400':
       $ref: '../spec/components/responses/invalidParameter.yaml'
     '401':
-      $ref: '../spec/components/responses/invalidAuth.yaml'
-    '403':
-      $ref: '../spec/components/responses/forbidden.yaml'
+      description: Password is incorrect
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '../spec/components/responses/invalidAuth.yaml'
     '409':
-      $ref: '../spec/components/responses/conflict.yaml'
-    '415':
-      $ref: '../spec/components/responses/unsupportedMediaType.yaml'
+      description: Username already exists
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '../spec/components/responses/conflict.yaml'
     '429':
       $ref: '../spec/components/responses/tooManyRequests.yaml'
     '500':

@@ -13,6 +13,7 @@ import (
 	"github.com/cifra-city/rest-sso/internal/service/requests"
 	"github.com/cifra-city/tokens"
 	"github.com/google/uuid"
+	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -23,31 +24,32 @@ func ChangeUsername(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	oldPassword := req.Data.Attributes.Password
+	password := req.Data.Attributes.Password
 	newUsername := req.Data.Attributes.NewUsername
 
 	Server, err := cifractx.GetValue[*config.Service](r.Context(), config.SERVICE)
 	if err != nil {
-		httpkit.RenderErr(w, problems.InternalError("Failed to retrieve service configuration"))
+		logrus.Errorf("Failed to retrieve service configuration: %v", err)
+		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
-
 	log := Server.Logger
 
 	userID, ok := r.Context().Value(tokens.UserIDKey).(uuid.UUID)
 	if !ok {
 		log.Warn("UserID not found in context")
-		httpkit.RenderErr(w, problems.Unauthorized("User not authenticated"))
+		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
 
 	user, err := Server.Databaser.Accounts.GetById(r, userID)
 	if err != nil {
-		httpkit.RenderErr(w, problems.InternalError("Failed to retrieve user information"))
+		log.Errorf("Failed to retrieve user information: %v", err)
+		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
 
-	err = bcrypt.CompareHashAndPassword([]byte(user.PassHash), []byte(oldPassword))
+	err = bcrypt.CompareHashAndPassword([]byte(user.PassHash), []byte(password))
 	if err != nil {
 		err = Server.Databaser.Operations.CreateFailure(r, userID, dbcore.OperationTypeChangeUsername, dbcore.FailureReasonInvalidPassword)
 		if err != nil {
@@ -55,17 +57,18 @@ func ChangeUsername(w http.ResponseWriter, r *http.Request) {
 			httpkit.RenderErr(w, problems.InternalError())
 			return
 		}
-		httpkit.RenderErr(w, problems.Unauthorized("Invalid password"))
+		httpkit.RenderErr(w, problems.Unauthorized())
 		return
 	}
 
 	_, err = Server.Databaser.Accounts.GetByUsername(r, *newUsername)
 	if !errors.Is(err, sql.ErrNoRows) {
 		if err != nil {
-			httpkit.RenderErr(w, problems.InternalError("Failed to check username availability"))
+			log.Errorf("Failed to check username availability: %v", err)
+			httpkit.RenderErr(w, problems.InternalError())
 			return
 		}
-		httpkit.RenderErr(w, problems.Conflict("Username already exists"))
+		httpkit.RenderErr(w, problems.Conflict())
 		return
 	}
 

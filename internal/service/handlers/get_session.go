@@ -10,15 +10,16 @@ import (
 	"github.com/cifra-city/rest-sso/resources"
 	"github.com/cifra-city/tokens"
 	"github.com/google/uuid"
+	"github.com/sirupsen/logrus"
 )
 
-func GetUserSessions(w http.ResponseWriter, r *http.Request) {
+func GetSessions(w http.ResponseWriter, r *http.Request) {
 	Server, err := cifractx.GetValue[*config.Service](r.Context(), config.SERVICE)
 	if err != nil {
-		httpkit.RenderErr(w, problems.InternalError("Failed to retrieve service configuration"))
+		logrus.Errorf("Failed to retrieve service configuration %s", err)
+		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
-
 	log := Server.Logger
 
 	userID, ok := r.Context().Value(tokens.UserIDKey).(uuid.UUID)
@@ -27,8 +28,6 @@ func GetUserSessions(w http.ResponseWriter, r *http.Request) {
 		httpkit.RenderErr(w, problems.Unauthorized("User not authenticated"))
 		return
 	}
-
-	log.Infof("userID: %v", userID)
 
 	sessions, err := Server.Databaser.Sessions.GetSessions(r, userID)
 	if err != nil {

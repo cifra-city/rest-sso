@@ -12,20 +12,20 @@ post:
   responses:
     '201':
       description: User successfully initiated login
+    '400':
+      $ref: '../spec/components/responses/invalidParameter.yaml'
+    '404':
+      description: User not found
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              status:
-                type: number
-                example: 201
-    '400':
-      $ref: '../spec/components/responses/invalidParameter.yaml'
+            $ref: '../spec/components/responses/notFound.yaml'
     '409':
-      $ref: '../spec/components/responses/conflict.yaml'
-    '415':
-      $ref: '../spec/components/responses/unsupportedMediaType.yaml'
+      description: Password is incorrect
+      content:
+        application/json:
+          schema:
+            $ref: '../spec/components/responses/conflict.yaml'
     '429':
       $ref: '../spec/components/responses/tooManyRequests.yaml'
     '500':

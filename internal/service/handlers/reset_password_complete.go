@@ -7,6 +7,7 @@ import (
 	"github.com/cifra-city/cifractx"
 	"github.com/cifra-city/httpkit"
 	"github.com/cifra-city/httpkit/problems"
+	"github.com/cifra-city/mailman"
 	"github.com/cifra-city/rest-sso/internal/config"
 	"github.com/cifra-city/rest-sso/internal/db/data/dbcore"
 	"github.com/cifra-city/rest-sso/internal/service/requests"
@@ -48,21 +49,25 @@ func ResetPasswordComplete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if acc == nil {
-		log.Debugf("user not found: %v", err)
 		httpkit.RenderErr(w, problems.NotFound())
 		return
 	}
 
 	err = Server.Mailman.CheckAccess(acc.Email, string(RESET_PASSWORD), UserAgent, IP)
 	if err != nil {
-		log.Debugf("User %s has no access to reset password", acc.Email)
-		err = Server.Databaser.Operations.CreateFailure(r, acc.ID, dbcore.OperationTypeResetPassword, dbcore.FailureReasonNoAccess)
-		if err != nil {
-			log.Errorf("error creating failure: %v", err)
-			httpkit.RenderErr(w, problems.InternalError())
+		_ = Server.Databaser.Operations.CreateFailure(r, acc.ID, dbcore.OperationTypeResetPassword, dbcore.FailureReasonNoAccess)
+		if errors.Is(err, mailman.ErrNotFound) {
+			log.Debugf("email haven`t request: %s", email)
+			httpkit.RenderErr(w, problems.NotFound())
 			return
 		}
-		httpkit.RenderErr(w, problems.Forbidden())
+		if errors.Is(err, mailman.ErrAccessDenied) {
+			log.Warnf("Metadata is invalid at try to reset password account: %s", acc.Username)
+			httpkit.RenderErr(w, problems.Forbidden())
+			return
+		}
+		log.Debugf("Access denied %s, %s %s", err, IP, UserAgent)
+		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
 
@@ -79,7 +84,6 @@ func ResetPasswordComplete(w http.ResponseWriter, r *http.Request) {
 		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
-	log.Infof("user logged in: %s", acc.Username)
 
 	httpkit.Render(w, http.StatusAccepted)
 }

@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"database/sql"
 	"errors"
 	"net/http"
 
@@ -12,6 +13,7 @@ import (
 	"github.com/cifra-city/rest-sso/resources"
 	"github.com/cifra-city/tokens"
 	"github.com/google/uuid"
+	"github.com/sirupsen/logrus"
 )
 
 func DeleteSession(w http.ResponseWriter, r *http.Request) {
@@ -25,30 +27,31 @@ func DeleteSession(w http.ResponseWriter, r *http.Request) {
 
 	sessionForDelete, err := uuid.Parse(sessionIdStr)
 	if err != nil {
-		httpkit.RenderErr(w, problems.BadRequest(errors.New("invalid format session id"))...)
+		httpkit.RenderErr(w, problems.BadRequest(err)...)
 		return
 	}
 
 	Server, err := cifractx.GetValue[*config.Service](r.Context(), config.SERVICE)
 	if err != nil {
-		httpkit.RenderErr(w, problems.InternalError("Failed to retrieve service configuration"))
+		logrus.Errorf("Failed to retrieve service configuration %s", err)
+		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
-
 	log := Server.Logger
-
-	log.Infof("sessionForDelete: %v", sessionForDelete)
 
 	sessionID, ok := r.Context().Value(tokens.DeviceIDKey).(uuid.UUID)
 	if !ok {
 		log.Warn("SessionID not found in context")
-		httpkit.RenderErr(w, problems.Unauthorized("Session not authenticated"))
+		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
 
-	log.Infof("sessionID cur: %v", sessionID)
-
-	log.Infof("sessionForDelete: %v", sessionID == sessionForDelete)
+	userID, ok := r.Context().Value(tokens.UserIDKey).(uuid.UUID)
+	if !ok {
+		log.Warn("UserID not found in context")
+		httpkit.RenderErr(w, problems.InternalError())
+		return
+	}
 
 	if sessionID == sessionForDelete {
 		log.Debugf("Session can't be current")
@@ -56,33 +59,23 @@ func DeleteSession(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userID, ok := r.Context().Value(tokens.UserIDKey).(uuid.UUID)
-	if !ok {
-		log.Warn("UserID not found in context")
-		httpkit.RenderErr(w, problems.Unauthorized("User not authenticated"))
+	err = Server.Databaser.Sessions.Delete(r, sessionForDelete, userID)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			httpkit.RenderErr(w, problems.NotFound())
+			return
+		}
+		log.Errorf("Failed to delete device: %v", err)
+		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
 
-	log.Infof("userID: %v", userID)
-	//
-	//err = Server.Databaser.Sessions.Delete(r, sessionForDelete, userID)
-	//if err != nil {
-	//	if errors.Is(err, sql.ErrNoRows) {
-	//		log.Debugf("Session not found: %v", err)
-	//		httpkit.RenderErr(w, problems.NotFound("Device not found"))
-	//		return
-	//	}
-	//	log.Errorf("Failed to delete device: %v", err)
-	//	httpkit.RenderErr(w, problems.InternalError("Failed to delete device"))
-	//	return
-	//}
-	//
-	//err = Server.TokenManager.Bin.Add(userID.String(), sessionForDelete.String())
-	//if err != nil {
-	//	log.Errorf("Failed to add token to bin: %v", err)
-	//	httpkit.RenderErr(w, problems.InternalError())
-	//	return
-	//}
+	err = Server.TokenManager.Bin.Add(userID.String(), sessionForDelete.String())
+	if err != nil {
+		log.Errorf("Failed to add token to bin: %v", err)
+		httpkit.RenderErr(w, problems.InternalError())
+		return
+	}
 
 	sessions, err := Server.Databaser.Sessions.GetSessions(r, userID)
 	if err != nil {
