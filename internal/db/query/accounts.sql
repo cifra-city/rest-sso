@@ -44,11 +44,3 @@ SET
     updated_at = now()
 WHERE id = $1
     RETURNING *;
-
--- name: UpdateTokenVersion :one
-UPDATE accounts
-SET
-    token_version = token_version + 1,
-    updated_at = now()
-WHERE id = $1
-    RETURNING *;

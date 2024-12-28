@@ -37,7 +37,6 @@ CREATE TABLE accounts (
     email TEXT NOT NULL UNIQUE,
     pass_hash TEXT NOT NULL,
     role role_type DEFAULT 'user' NOT NULL,
-    token_version INTEGER DEFAULT 0 NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT now(),
     updated_at TIMESTAMP NOT NULL DEFAULT now()
 );

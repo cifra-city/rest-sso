@@ -58,7 +58,6 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 	}
 
 	userID := userData.ID
-	tokenVersion := userData.TokenVersion
 	sessionID := userData.DevID
 
 	user, err := Server.Databaser.Accounts.GetById(r, userID)
@@ -69,12 +68,6 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 		}
 		log.Errorf("Failed to get user: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())
-		return
-	}
-
-	if int(user.TokenVersion) != tokenVersion {
-		log.Warn("Token version mismatch")
-		httpkit.RenderErr(w, problems.Unauthorized())
 		return
 	}
 
@@ -114,14 +107,14 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tokenAccess, err := Server.TokenManager.GenerateJWT(user.ID, sessionID, string(user.Role), int(user.TokenVersion), Server.Config.JWT.AccessToken.TokenLifetime, Server.Config.JWT.AccessToken.SecretKey)
+	tokenAccess, err := Server.TokenManager.GenerateJWT(user.ID, sessionID, string(user.Role), Server.Config.JWT.AccessToken.TokenLifetime, Server.Config.JWT.AccessToken.SecretKey)
 	if err != nil {
 		Server.Logger.Errorf("Error generating access token: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
 
-	tokenRefresh, err := Server.TokenManager.GenerateJWT(user.ID, sessionID, string(user.Role), int(user.TokenVersion), Server.Config.JWT.RefreshToken.TokenLifetime, Server.Config.JWT.RefreshToken.SecretKey)
+	tokenRefresh, err := Server.TokenManager.GenerateJWT(user.ID, sessionID, string(user.Role), Server.Config.JWT.RefreshToken.TokenLifetime, Server.Config.JWT.RefreshToken.SecretKey)
 	if err != nil {
 		Server.Logger.Errorf("Error generating refresh token: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())

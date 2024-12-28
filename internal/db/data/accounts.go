@@ -20,7 +20,6 @@ type Accounts interface {
 	GetByUsername(r *http.Request, email string) (dbcore.Account, error)
 
 	UpdatePassword(r *http.Request, id uuid.UUID, passHash string) (dbcore.Account, error)
-	UpdateTokenVersion(r *http.Request, id uuid.UUID) (dbcore.Account, error)
 	UpdateUsername(r *http.Request, id uuid.UUID, username string) (dbcore.Account, error)
 }
 
@@ -43,7 +42,7 @@ func (a *accounts) Create(r *http.Request, username string, email string, passHa
 func (a *accounts) Exists(r *http.Request, username *string, email *string) (*dbcore.Account, error) {
 	var userByUsername *dbcore.Account
 	var userByEmail *dbcore.Account
-	
+
 	if username != nil && *username != "" {
 		result, err := a.queries.GetAccountByUsername(r.Context(), *username)
 		if err != nil && !errors.Is(err, sql.ErrNoRows) {
@@ -104,10 +103,6 @@ func (a *accounts) UpdatePassword(r *http.Request, id uuid.UUID, passHash string
 		ID:       id,
 		PassHash: passHash,
 	})
-}
-
-func (a *accounts) UpdateTokenVersion(r *http.Request, id uuid.UUID) (dbcore.Account, error) {
-	return a.queries.UpdateTokenVersion(r.Context(), id)
 }
 
 func (a *accounts) UpdateUsername(r *http.Request, id uuid.UUID, username string) (dbcore.Account, error) {

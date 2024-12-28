@@ -85,11 +85,6 @@ func (t *transaction) ResetPasswordTxn(
 		return err
 	}
 
-	_, err = queries.UpdateTokenVersion(ctx, userID)
-	if err != nil {
-		return err
-	}
-
 	err = queries.DeleteUserSessions(ctx, userID)
 	if err != nil {
 		return err
@@ -137,9 +132,9 @@ func (t *transaction) LoginTxn(
 		ID:         deviceID,
 		UserID:     userID,
 		Token:      Token,
+		DeviceName: deviceName,
 		Ip:         IP,
 		Client:     client,
-		DeviceName: deviceName,
 	})
 	if err != nil {
 		return nil, err
@@ -177,10 +172,6 @@ func (t *transaction) TerminateSessionsTxn(
 	if err != nil {
 		return err
 	}
-
-	defer func() {
-		err = HandleTransactionRollback(tx, err)
-	}()
 
 	userSessions, err := queries.GetSessionsByUserID(ctx, userId)
 	if err != nil {
@@ -224,18 +215,6 @@ func (t *transaction) UpdateRefreshTokenTrx( //TODO for future use
 	if err != nil {
 		return err
 	}
-
-	defer func() {
-		err = HandleTransactionRollback(tx, err)
-	}()
-
-	//deviceData, err := dbcore.NewDeviceData(r)
-	//if err != nil {
-	//	return err
-	//}
-	//if err != nil {
-	//	return err
-	//}
 
 	defer func() {
 		err = HandleTransactionRollback(tx, err)

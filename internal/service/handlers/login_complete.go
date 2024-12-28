@@ -71,7 +71,7 @@ func LoginComplete(w http.ResponseWriter, r *http.Request) {
 
 	deviceID := uuid.New()
 
-	tokenAccess, tokenRefresh, _, err := utils.GenerateTokens(*Server, *acc, deviceID)
+	tokenAccess, tokenRefresh, err := utils.GenerateTokens(*Server, *acc, deviceID)
 	if err != nil {
 		log.Errorf("error generating tokens: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())
@@ -85,7 +85,7 @@ func LoginComplete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = Server.Databaser.LoginTxn(r, acc.ID, encryptToken, deviceName, deviceID)
+	_, err = Server.Databaser.LoginTxn(r, acc.ID, deviceName, encryptToken, deviceID)
 	if err != nil {
 		log.Errorf("Error transaction login: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())

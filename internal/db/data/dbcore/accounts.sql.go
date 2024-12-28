@@ -37,7 +37,7 @@ INSERT INTO accounts (
     pass_hash
 ) VALUES (
     $1, $2, $3
-) RETURNING id, username, email, pass_hash, role, token_version, created_at, updated_at
+) RETURNING id, username, email, pass_hash, role, created_at, updated_at
 `
 
 type CreateAccountParams struct {
@@ -55,7 +55,6 @@ func (q *Queries) CreateAccount(ctx context.Context, arg CreateAccountParams) (A
 		&i.Email,
 		&i.PassHash,
 		&i.Role,
-		&i.TokenVersion,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -63,7 +62,7 @@ func (q *Queries) CreateAccount(ctx context.Context, arg CreateAccountParams) (A
 }
 
 const getAccountByEmail = `-- name: GetAccountByEmail :one
-SELECT id, username, email, pass_hash, role, token_version, created_at, updated_at FROM accounts
+SELECT id, username, email, pass_hash, role, created_at, updated_at FROM accounts
 WHERE email = $1 LIMIT 1
 `
 
@@ -76,7 +75,6 @@ func (q *Queries) GetAccountByEmail(ctx context.Context, email string) (Account,
 		&i.Email,
 		&i.PassHash,
 		&i.Role,
-		&i.TokenVersion,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -84,7 +82,7 @@ func (q *Queries) GetAccountByEmail(ctx context.Context, email string) (Account,
 }
 
 const getAccountByID = `-- name: GetAccountByID :one
-SELECT id, username, email, pass_hash, role, token_version, created_at, updated_at FROM accounts
+SELECT id, username, email, pass_hash, role, created_at, updated_at FROM accounts
 WHERE id = $1 LIMIT 1
 `
 
@@ -97,7 +95,6 @@ func (q *Queries) GetAccountByID(ctx context.Context, id uuid.UUID) (Account, er
 		&i.Email,
 		&i.PassHash,
 		&i.Role,
-		&i.TokenVersion,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -105,7 +102,7 @@ func (q *Queries) GetAccountByID(ctx context.Context, id uuid.UUID) (Account, er
 }
 
 const getAccountByLogin = `-- name: GetAccountByLogin :one
-SELECT id, username, email, pass_hash, role, token_version, created_at, updated_at FROM accounts
+SELECT id, username, email, pass_hash, role, created_at, updated_at FROM accounts
 WHERE username = $1 AND email = $2 LIMIT 1
 `
 
@@ -123,7 +120,6 @@ func (q *Queries) GetAccountByLogin(ctx context.Context, arg GetAccountByLoginPa
 		&i.Email,
 		&i.PassHash,
 		&i.Role,
-		&i.TokenVersion,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -131,7 +127,7 @@ func (q *Queries) GetAccountByLogin(ctx context.Context, arg GetAccountByLoginPa
 }
 
 const getAccountByUsername = `-- name: GetAccountByUsername :one
-SELECT id, username, email, pass_hash, role, token_version, created_at, updated_at FROM accounts
+SELECT id, username, email, pass_hash, role, created_at, updated_at FROM accounts
 WHERE username = $1 LIMIT 1
 `
 
@@ -144,7 +140,6 @@ func (q *Queries) GetAccountByUsername(ctx context.Context, username string) (Ac
 		&i.Email,
 		&i.PassHash,
 		&i.Role,
-		&i.TokenVersion,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -157,7 +152,7 @@ SET
     pass_hash = $2,
     updated_at = now()
 WHERE id = $1
-    RETURNING id, username, email, pass_hash, role, token_version, created_at, updated_at
+    RETURNING id, username, email, pass_hash, role, created_at, updated_at
 `
 
 type UpdatePasswordParams struct {
@@ -174,32 +169,6 @@ func (q *Queries) UpdatePassword(ctx context.Context, arg UpdatePasswordParams) 
 		&i.Email,
 		&i.PassHash,
 		&i.Role,
-		&i.TokenVersion,
-		&i.CreatedAt,
-		&i.UpdatedAt,
-	)
-	return i, err
-}
-
-const updateTokenVersion = `-- name: UpdateTokenVersion :one
-UPDATE accounts
-SET
-    token_version = token_version + 1,
-    updated_at = now()
-WHERE id = $1
-    RETURNING id, username, email, pass_hash, role, token_version, created_at, updated_at
-`
-
-func (q *Queries) UpdateTokenVersion(ctx context.Context, id uuid.UUID) (Account, error) {
-	row := q.db.QueryRowContext(ctx, updateTokenVersion, id)
-	var i Account
-	err := row.Scan(
-		&i.ID,
-		&i.Username,
-		&i.Email,
-		&i.PassHash,
-		&i.Role,
-		&i.TokenVersion,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -212,7 +181,7 @@ SET
     username = $2,
     updated_at = now()
 WHERE id = $1
-    RETURNING id, username, email, pass_hash, role, token_version, created_at, updated_at
+    RETURNING id, username, email, pass_hash, role, created_at, updated_at
 `
 
 type UpdateUsernameParams struct {
@@ -229,7 +198,6 @@ func (q *Queries) UpdateUsername(ctx context.Context, arg UpdateUsernameParams) 
 		&i.Email,
 		&i.PassHash,
 		&i.Role,
-		&i.TokenVersion,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)

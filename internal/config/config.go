@@ -3,7 +3,7 @@ package config
 import (
 	"time"
 
-	_ "github.com/lib/pq" // driver for postgres PostgreSQL.
+	_ "github.com/lib/pq" // postgres driver don`t delete
 	"github.com/spf13/viper"
 )
 
@@ -70,20 +70,17 @@ type Config struct {
 	Redis    RedisConfig    `mapstructure:"redis"`
 }
 
-// LoadConfig - функция для загрузки конфигурации из файла.
 func LoadConfig(path string) (*Config, error) {
-	viper.SetConfigName("local_config") // Имя файла конфигурации (без расширения).
-	viper.SetConfigType("yaml")         // Формат файла.
-	viper.AddConfigPath(path)           // Путь к директории, где находится файл конфигурации.
+	viper.SetConfigName("local_config")
+	viper.SetConfigType("yaml")
+	viper.AddConfigPath(path)
 
-	// Читаем конфигурационный файл.
 	if err := viper.ReadInConfig(); err != nil {
 		return nil, err
 	}
 
 	var config Config
 
-	// Декодируем конфигурацию в структуру Cfg.
 	if err := viper.Unmarshal(&config); err != nil {
 		return nil, err
 	}

@@ -156,14 +156,13 @@ func (ns NullRoleType) Value() (driver.Value, error) {
 }
 
 type Account struct {
-	ID           uuid.UUID
-	Username     string
-	Email        string
-	PassHash     string
-	Role         RoleType
-	TokenVersion int32
-	CreatedAt    time.Time
-	UpdatedAt    time.Time
+	ID        uuid.UUID
+	Username  string
+	Email     string
+	PassHash  string
+	Role      RoleType
+	CreatedAt time.Time
+	UpdatedAt time.Time
 }
 
 type Operation struct {
