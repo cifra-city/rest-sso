@@ -1,3 +1,9 @@
+github.com/alecthomas/kingpin v2.2.6+incompatible h1:5svnBTFgJjZvGKyYBtMB0+m5wvrbUHiqye8wRJMlnYI=
+github.com/alecthomas/kingpin v2.2.6+incompatible/go.mod h1:59OFYbFVLKQKq+mqrL6Rw5bR0c3ACQaawgXx0QYndlE=
+github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751 h1:JYp7IbQjafoB+tBA3gMyHYHrpOtNuDiK/uB5uXxq5wM=
+github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751/go.mod h1:LOuyumcjzFXgccqObfd/Ljyb9UuFJ6TxHnclSeseNhc=
+github.com/alecthomas/units v0.0.0-20240927000941-0f3dac36c52b h1:mimo19zliBX/vSQ6PWWSL9lK8qwHozUj03+zLoEB8O0=
+github.com/alecthomas/units v0.0.0-20240927000941-0f3dac36c52b/go.mod h1:fvzegU4vN3H1qMT+8wDmzjAcDONcgo2/SZ/TyfdUOFs=
 github.com/asaskevich/govalidator v0.0.0-20200108200545-475eaeb16496 h1:zV3ejI06GQ59hwDQAvmK1qxOQGB3WuVTRoY0okPTAv0=
 github.com/asaskevich/govalidator v0.0.0-20200108200545-475eaeb16496/go.mod h1:oGkLhpf+kjZl6xBf758TQhh5XrAeiJv/7FRz/2spLIg=
 github.com/bsm/ginkgo/v2 v2.12.0 h1:Ny8MWAHyOepLGlLKYmXG4IEkioBysk6GpaRTLC8zwWs=
@@ -12,8 +18,6 @@ github.com/cifra-city/httpkit v0.0.0-20241220020938-31caee808935 h1:lrTVqdhw/NG3
 github.com/cifra-city/httpkit v0.0.0-20241220020938-31caee808935/go.mod h1:YIJ3wK4+GVz1TRAmFHJglwWV7usxYGICZgaWSWZINwg=
 github.com/cifra-city/mailman v0.0.3 h1:WNFJ7UMvJkl67mfMsTVduntNLAGTeoOvNMbXJ31S71U=
 github.com/cifra-city/mailman v0.0.3/go.mod h1:3lQz400RyFVlW7RWTbCLn757ERNLCib7fxczKCkv9vk=
-github.com/cifra-city/tokens v1.2.16 h1:QUN/cukXmxa/dhLEQRyY63x2Sov21/xg4gFcHiGoCgU=
-github.com/cifra-city/tokens v1.2.16/go.mod h1:szvYYQy+GDRQqVSv47e/Nd96RSNLn3VCITk61epZ53g=
 github.com/cifra-city/tokens v1.2.17 h1:Bd6G5jIVzwPwybSloSnZDKLw8l21XQJJAZkKZUhk+oI=
 github.com/cifra-city/tokens v1.2.17/go.mod h1:szvYYQy+GDRQqVSv47e/Nd96RSNLn3VCITk61epZ53g=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=

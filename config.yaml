@@ -1,5 +1,5 @@
 database:
-  url: "postgresql://postgres:postgres@localhost:5555/postgres?sslmode=disable"
+  url: "postgresql://postgres:postgres@db:5432/postgres?sslmode=disable"
 
 server:
   port: ":8080"
@@ -16,7 +16,7 @@ jwt:
 
 logging:
   level: "debug"                 # Levels: "debug", "info", "warn", "error".
-  format: "text"                # Format: "json" or "text".
+  format: "text"                 # Format: "json" or "text".
 
 email:
   password: "example"

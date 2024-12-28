@@ -8,6 +8,7 @@ import (
 	"sync"
 	"syscall"
 
+	"github.com/alecthomas/kingpin"
 	"github.com/cifra-city/cifractx"
 	"github.com/cifra-city/rest-sso/internal/config"
 )
@@ -21,6 +22,15 @@ func Run(args []string) bool {
 	logger := config.SetupLogger(cfg.Logging.Level, cfg.Logging.Format)
 	logger.Info("Starting server...")
 
+	var (
+		app            = kingpin.New("geo-points-svc", "")
+		runCmd         = app.Command("run", "run command")
+		serviceCmd     = runCmd.Command("service", "run service")
+		migrateCmd     = app.Command("migrate", "migrate command")
+		migrateUpCmd   = migrateCmd.Command("up", "migrate db up")
+		migrateDownCmd = migrateCmd.Command("down", "migrate db down")
+	)
+
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
 
@@ -33,7 +43,28 @@ func Run(args []string) bool {
 	ctx = cifractx.WithValue(ctx, config.SERVICE, service)
 
 	var wg sync.WaitGroup
-	runServices(ctx, &wg)
+
+	cmd, err := app.Parse(args[1:])
+	if err != nil {
+		logger.WithError(err).Error("failed to parse arguments")
+		return false
+	}
+
+	switch cmd {
+	case serviceCmd.FullCommand():
+		runServices(ctx, &wg)
+	case migrateUpCmd.FullCommand():
+		err = MigrateUp(ctx)
+	case migrateDownCmd.FullCommand():
+		err = MigrateDown(ctx)
+	default:
+		logger.Errorf("unknown command %s", cmd)
+		return false
+	}
+	if err != nil {
+		logger.WithError(err).Error("failed to exec cmd")
+		return false
+	}
 
 	wgch := make(chan struct{})
 	go func() {

@@ -1,7 +1,7 @@
-DB_URL=postgresql://postgres:postgres@localhost:5555/postgres?sslmode=disable
 SWAGGER_CODEGEN := java -jar /home/trpdjke/go/src/github.com/cifra-city/rest-sso/swagger-codegen-cli.jar
-CONFIG_FILE = ./local_config.yaml
+DB_URL=postgresql://postgres:postgres@localhost:5555/postgres?sslmode=disable
 OPENAPI_GENERATOR := java -jar ./openapi-generator-cli.jar
+CONFIG_FILE := ./local_config.yaml
 
 generate-models:
 	rm -rf resources/*
@@ -10,24 +10,19 @@ generate-models:
 	find docs/web -name '*.go' -exec mv {} resources/ \;
 	find resources -type f -name "*_test.go" -delete
 
-create-db-image:
-	docker run --name cifra-sso -p 5555:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -d postgres:12-alpine
-
-migrate-up:
-	migrate -path internal/db/migration -database $(DB_URL) -verbose up
-
-migrate-down:
-	migrate -path internal/db/migration -database $(DB_URL) -verbose down
+start-docs:
+	 http-server .
 
 generate-sqlc:
 	sqlc generate
 
-build-server:
-	go build -o main main.go
+migrate-up:
+	KV_VIPER_FILE=$(CONFIG_FILE) go build -o main main.go
+	KV_VIPER_FILE=$(CONFIG_FILE) ./main migrate up
 
-start-docs:
-	 http-server .
+migrate-down:
+	migrate -path internal/db/migration -database $(DB_URL) -verbose down
 
 run-server:
-	KV_VIPER_FILE=$(CONFIG_FILE) go run main.go
-
+	KV_VIPER_FILE=$(CONFIG_FILE) go build -o main main.go
+	KV_VIPER_FILE=$(CONFIG_FILE) ./main run service
