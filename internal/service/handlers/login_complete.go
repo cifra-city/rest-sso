@@ -47,26 +47,27 @@ func LoginComplete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if acc == nil {
-		log.Debugf("user not found: %v", err)
 		httpkit.RenderErr(w, problems.NotFound())
 		return
 	}
 
-	err = Server.Mailman.CheckAccess(acc.Email, string(LOGIN), UserAgent, IP)
-	if err != nil {
-		if errors.Is(err, mailman.ErrNotFound) {
-			log.Infof("email haven`t access: %s", acc.Email)
-			httpkit.RenderErr(w, problems.NotFound())
+	if !Server.Config.Email.Off { // for testing
+		err = Server.Mailman.CheckAccess(acc.Email, string(LOGIN), UserAgent, IP)
+		if err != nil {
+			if errors.Is(err, mailman.ErrNotFound) {
+				log.Infof("email haven`t access: %s", acc.Email)
+				httpkit.RenderErr(w, problems.NotFound())
+				return
+			}
+			if errors.Is(err, mailman.ErrAccessDenied) {
+				log.Warnf("failed to decrypt ConfidenceCode for email: %s", acc.Email)
+				httpkit.RenderErr(w, problems.Forbidden())
+				return
+			}
+			log.Infof("Access denied %s, %s %s", err, IP, UserAgent)
+			httpkit.RenderErr(w, problems.InternalError())
 			return
 		}
-		if errors.Is(err, mailman.ErrAccessDenied) {
-			log.Warnf("failed to decrypt ConfidenceCode for email: %s", acc.Email)
-			httpkit.RenderErr(w, problems.Forbidden())
-			return
-		}
-		log.Infof("Access denied %s, %s %s", err, IP, UserAgent)
-		httpkit.RenderErr(w, problems.InternalError())
-		return
 	}
 
 	deviceID := uuid.New()

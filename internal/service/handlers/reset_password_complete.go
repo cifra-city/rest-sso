@@ -53,22 +53,24 @@ func ResetPasswordComplete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = Server.Mailman.CheckAccess(acc.Email, string(RESET_PASSWORD), UserAgent, IP)
-	if err != nil {
-		_ = Server.Databaser.Operations.CreateFailure(r, acc.ID, dbcore.OperationTypeResetPassword, dbcore.FailureReasonNoAccess)
-		if errors.Is(err, mailman.ErrNotFound) {
-			log.Debugf("email haven`t request: %s", email)
-			httpkit.RenderErr(w, problems.NotFound())
+	if !Server.Config.Email.Off { // for testing
+		err = Server.Mailman.CheckAccess(acc.Email, string(RESET_PASSWORD), UserAgent, IP)
+		if err != nil {
+			_ = Server.Databaser.Operations.CreateFailure(r, acc.ID, dbcore.OperationTypeResetPassword, dbcore.FailureReasonNoAccess)
+			if errors.Is(err, mailman.ErrNotFound) {
+				log.Debugf("email haven`t request: %s", email)
+				httpkit.RenderErr(w, problems.NotFound())
+				return
+			}
+			if errors.Is(err, mailman.ErrAccessDenied) {
+				log.Warnf("Metadata is invalid at try to reset password account: %s", acc.Username)
+				httpkit.RenderErr(w, problems.Forbidden())
+				return
+			}
+			log.Debugf("Access denied %s, %s %s", err, IP, UserAgent)
+			httpkit.RenderErr(w, problems.InternalError())
 			return
 		}
-		if errors.Is(err, mailman.ErrAccessDenied) {
-			log.Warnf("Metadata is invalid at try to reset password account: %s", acc.Username)
-			httpkit.RenderErr(w, problems.Forbidden())
-			return
-		}
-		log.Debugf("Access denied %s, %s %s", err, IP, UserAgent)
-		httpkit.RenderErr(w, problems.InternalError())
-		return
 	}
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)

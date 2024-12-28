@@ -7,16 +7,16 @@ server:
 
 jwt:
   access_token:
-    secret_key: "supersecretkey"    # Секретный ключ для подписи Access Token.
-    token_lifetime: 900            # Время жизни Access Token в секундах (например, 15 минут).
+    secret_key: "supersecretkey"    # Secret encryption key
+    token_lifetime: 900
   refresh_token:
-    secret_key: "refreshsuperkey"  # Секретный ключ для подписи Refresh Token (можно использовать другой ключ).
-    encryption_key: "f6tD7wVYNvXMm4MwqivfpB9Gf+HYz8a3" # Ключ для шифрования Refresh Token.
-    token_lifetime: 604800         # Время жизни Refresh Token в секундах (например, 7 дней).
+    secret_key: "refreshsuperkey"  # Secret encryption key
+    encryption_key: "f6tD7wVYNvXMm4MwqivfpB9Gf+HYz8a3"  # Key for decrypting Refresh Token in the database
+    token_lifetime: 604800
 
 logging:
-  level: "debug"                 # Уровни: "debug", "info", "warn", "error".
-  format: "text"                # Форматы: "json" или "text".
+  level: "debug"                 # Levels: "debug", "info", "warn", "error".
+  format: "text"                # Format: "json" or "text".
 
 email:
   password: "example"
@@ -24,6 +24,7 @@ email:
   smtp_host: "smtp.gmail.com"
   smtp_port: "587"
   key: "example"
+  off: true # disabling email access verification to the operation is necessary for testing purposes
 
 swagger:
   enabled: true

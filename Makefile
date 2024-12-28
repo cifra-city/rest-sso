@@ -1,6 +1,6 @@
 DB_URL=postgresql://postgres:postgres@localhost:5555/postgres?sslmode=disable
 SWAGGER_CODEGEN := java -jar /home/trpdjke/go/src/github.com/cifra-city/rest-sso/swagger-codegen-cli.jar
-
+CONFIG_FILE = ./local_config.yaml
 OPENAPI_GENERATOR := java -jar ./openapi-generator-cli.jar
 
 generate-models:
@@ -28,5 +28,6 @@ build-server:
 start-docs:
 	 http-server .
 
-run-server: build-server
-	go run main.go
+run-server:
+	KV_VIPER_FILE=$(CONFIG_FILE) go run main.go
+

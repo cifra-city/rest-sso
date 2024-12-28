@@ -42,23 +42,27 @@ func (a *accounts) Create(r *http.Request, username string, email string, passHa
 func (a *accounts) Exists(r *http.Request, username *string, email *string) (*dbcore.Account, error) {
 	var userByUsername *dbcore.Account
 	var userByEmail *dbcore.Account
-
-	if username != nil && *username != "" {
+	if username != nil {
 		result, err := a.queries.GetAccountByUsername(r.Context(), *username)
 		if err != nil && !errors.Is(err, sql.ErrNoRows) {
 			return nil, err
 		}
 		if err == nil {
+			if email != nil && result.Email != *email {
+				return nil, nil
+			}
 			userByUsername = &result
 		}
 	}
-
-	if email != nil && *email != "" {
+	if email != nil {
 		result, err := a.queries.GetAccountByEmail(r.Context(), *email)
 		if err != nil && !errors.Is(err, sql.ErrNoRows) {
 			return nil, err
 		}
 		if err == nil {
+			if username != nil && result.Username != *username {
+				return nil, nil
+			}
 			userByEmail = &result
 		}
 	}

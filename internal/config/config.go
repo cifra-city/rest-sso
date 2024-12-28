@@ -1,9 +1,11 @@
 package config
 
 import (
+	"os"
 	"time"
 
 	_ "github.com/lib/pq" // postgres driver don`t delete
+	"github.com/pkg/errors"
 	"github.com/spf13/viper"
 )
 
@@ -39,6 +41,7 @@ type EmailConfig struct {
 	SmtpHost string `mapstructure:"smtp_host"`
 	SmtpPort string `mapstructure:"smtp_port"`
 	Key      string `mapstructure:"key"`
+	Off      bool   `mapstructure:"off"`
 }
 
 type SwaggerConfig struct {
@@ -70,19 +73,20 @@ type Config struct {
 	Redis    RedisConfig    `mapstructure:"redis"`
 }
 
-func LoadConfig(path string) (*Config, error) {
-	viper.SetConfigName("local_config")
-	viper.SetConfigType("yaml")
-	viper.AddConfigPath(path)
+func LoadConfig() (*Config, error) {
+	configPath := os.Getenv("KV_VIPER_FILE")
+	if configPath == "" {
+		return nil, errors.New("KV_VIPER_FILE env var is not set")
+	}
+	viper.SetConfigFile(configPath)
 
 	if err := viper.ReadInConfig(); err != nil {
-		return nil, err
+		return nil, errors.Errorf("error reading config file: %s", err)
 	}
 
 	var config Config
-
 	if err := viper.Unmarshal(&config); err != nil {
-		return nil, err
+		return nil, errors.Errorf("error unmarshalling config: %s", err)
 	}
 
 	return &config, nil
