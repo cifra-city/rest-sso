@@ -33,7 +33,6 @@ CREATE TYPE operation_type AS ENUM (
 
 CREATE TABLE accounts (
     id UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
-    username VARCHAR(255) NOT NULL UNIQUE,
     email TEXT NOT NULL UNIQUE,
     pass_hash TEXT NOT NULL,
     role role_type DEFAULT 'user' NOT NULL,
@@ -63,7 +62,6 @@ CREATE TABLE operations (
 );
 
 CREATE INDEX idx_account_email ON accounts(email);
-CREATE INDEX idx_account_username ON accounts(username);
 CREATE INDEX idx_sessions_user_id ON sessions(user_id);
 CREATE INDEX idx_sessions_last_used ON sessions(last_used);
 CREATE INDEX idx_operations_user_id ON operations(user_id);

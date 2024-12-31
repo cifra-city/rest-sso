@@ -33,7 +33,7 @@ func (r ApiUserChangeDeleteSessionDeleteRequest) DeleteSession(deleteSession Del
 	return r
 }
 
-func (r ApiUserChangeDeleteSessionDeleteRequest) Execute() (*AproveOperationPatch200Response, *http.Response, error) {
+func (r ApiUserChangeDeleteSessionDeleteRequest) Execute() (*UserSessions, *http.Response, error) {
 	return r.ApiService.UserChangeDeleteSessionDeleteExecute(r)
 }
 
@@ -53,13 +53,13 @@ func (a *SessionsAPIService) UserChangeDeleteSessionDelete(ctx context.Context) 
 }
 
 // Execute executes the request
-//  @return AproveOperationPatch200Response
-func (a *SessionsAPIService) UserChangeDeleteSessionDeleteExecute(r ApiUserChangeDeleteSessionDeleteRequest) (*AproveOperationPatch200Response, *http.Response, error) {
+//  @return UserSessions
+func (a *SessionsAPIService) UserChangeDeleteSessionDeleteExecute(r ApiUserChangeDeleteSessionDeleteRequest) (*UserSessions, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *AproveOperationPatch200Response
+		localVarReturnValue  *UserSessions
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SessionsAPIService.UserChangeDeleteSessionDelete")
@@ -86,7 +86,7 @@ func (a *SessionsAPIService) UserChangeDeleteSessionDeleteExecute(r ApiUserChang
 	}
 
 	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json", "application/vnd.api+json"}
+	localVarHTTPHeaderAccepts := []string{"application/vnd.api+json"}
 
 	// set Accept header
 	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
@@ -139,8 +139,8 @@ func (a *SessionsAPIService) UserChangeDeleteSessionDeleteExecute(r ApiUserChang
 					newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
-		if localVarHTTPResponse.StatusCode == 415 {
-			var v Errors
+		if localVarHTTPResponse.StatusCode == 404 {
+			var v map[string]interface{}
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -292,39 +292,6 @@ func (a *SessionsAPIService) UserChangeSessionsGetExecute(r ApiUserChangeSession
 					newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
-		if localVarHTTPResponse.StatusCode == 403 {
-			var v Errors
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
-			return localVarReturnValue, localVarHTTPResponse, newErr
-		}
-		if localVarHTTPResponse.StatusCode == 409 {
-			var v Errors
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
-			return localVarReturnValue, localVarHTTPResponse, newErr
-		}
-		if localVarHTTPResponse.StatusCode == 415 {
-			var v Errors
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
-			return localVarReturnValue, localVarHTTPResponse, newErr
-		}
 		if localVarHTTPResponse.StatusCode == 429 {
 			var v Errors
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
@@ -366,7 +333,7 @@ type ApiUserChangeTerminateSessionsDeleteRequest struct {
 	ApiService *SessionsAPIService
 }
 
-func (r ApiUserChangeTerminateSessionsDeleteRequest) Execute() (*AproveOperationPatch200Response, *http.Response, error) {
+func (r ApiUserChangeTerminateSessionsDeleteRequest) Execute() (*UserChangeTerminateSessionsDelete200Response, *http.Response, error) {
 	return r.ApiService.UserChangeTerminateSessionsDeleteExecute(r)
 }
 
@@ -386,13 +353,13 @@ func (a *SessionsAPIService) UserChangeTerminateSessionsDelete(ctx context.Conte
 }
 
 // Execute executes the request
-//  @return AproveOperationPatch200Response
-func (a *SessionsAPIService) UserChangeTerminateSessionsDeleteExecute(r ApiUserChangeTerminateSessionsDeleteRequest) (*AproveOperationPatch200Response, *http.Response, error) {
+//  @return UserChangeTerminateSessionsDelete200Response
+func (a *SessionsAPIService) UserChangeTerminateSessionsDeleteExecute(r ApiUserChangeTerminateSessionsDeleteRequest) (*UserChangeTerminateSessionsDelete200Response, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *AproveOperationPatch200Response
+		localVarReturnValue  *UserChangeTerminateSessionsDelete200Response
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SessionsAPIService.UserChangeTerminateSessionsDelete")
@@ -467,19 +434,8 @@ func (a *SessionsAPIService) UserChangeTerminateSessionsDeleteExecute(r ApiUserC
 					newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
-		if localVarHTTPResponse.StatusCode == 415 {
-			var v Errors
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
-			return localVarReturnValue, localVarHTTPResponse, newErr
-		}
-		if localVarHTTPResponse.StatusCode == 429 {
-			var v Errors
+		if localVarHTTPResponse.StatusCode == 404 {
+			var v map[string]interface{}
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()

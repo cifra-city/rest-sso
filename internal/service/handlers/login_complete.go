@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"database/sql"
 	"errors"
 	"net/http"
 
@@ -25,7 +26,6 @@ func LoginComplete(w http.ResponseWriter, r *http.Request) {
 	}
 
 	email := req.Data.Attributes.Email
-	username := req.Data.Attributes.Username
 	deviceName := req.Data.Attributes.DeviceName
 
 	IP := httpkit.GetClientIP(r)
@@ -40,14 +40,15 @@ func LoginComplete(w http.ResponseWriter, r *http.Request) {
 
 	log := Server.Logger
 
-	acc, err := Server.Databaser.Accounts.Exists(r, username, email)
+	acc, err := Server.Databaser.Accounts.GetByEmail(r, email)
 	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			log.Debugf("user not found for email: %v", email)
+			httpkit.RenderErr(w, problems.NotFound())
+			return
+		}
 		log.Errorf("error getting user: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())
-		return
-	}
-	if acc == nil {
-		httpkit.RenderErr(w, problems.NotFound())
 		return
 	}
 
@@ -72,7 +73,7 @@ func LoginComplete(w http.ResponseWriter, r *http.Request) {
 
 	deviceID := uuid.New()
 
-	tokenAccess, tokenRefresh, err := utils.GenerateTokens(*Server, *acc, deviceID)
+	tokenAccess, tokenRefresh, err := utils.GenerateTokens(*Server, acc, deviceID)
 	if err != nil {
 		log.Errorf("error generating tokens: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())

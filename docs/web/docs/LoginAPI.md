@@ -32,7 +32,7 @@ import (
 )
 
 func main() {
-	loginCompleteReq := *openapiclient.NewLoginCompleteReq(*openapiclient.NewLoginCompleteReqData("Type_example", *openapiclient.NewLoginCompleteReqDataAttributes("DeviceName_example"))) // LoginCompleteReq | 
+	loginCompleteReq := *openapiclient.NewLoginCompleteReq(*openapiclient.NewLoginCompleteReqData("Type_example", *openapiclient.NewLoginCompleteReqDataAttributes("Email_example", "DeviceName_example"))) // LoginCompleteReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -79,7 +79,7 @@ No authorization required
 
 ## LoginInitiatePost
 
-> RegistertionInitiatePost201Response LoginInitiatePost(ctx).LoginInitiate(loginInitiate).Execute()
+> LoginInitiatePost(ctx).LoginInitiate(loginInitiate).Execute()
 
 Send a request to login
 
@@ -98,17 +98,15 @@ import (
 )
 
 func main() {
-	loginInitiate := *openapiclient.NewLoginInitiate(*openapiclient.NewLoginInitiateData("Type_example", *openapiclient.NewLoginInitiateDataAttributes("Password_example"))) // LoginInitiate | 
+	loginInitiate := *openapiclient.NewLoginInitiate(*openapiclient.NewLoginInitiateData("Type_example", *openapiclient.NewLoginInitiateDataAttributes("Email_example", "Password_example"))) // LoginInitiate | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.LoginAPI.LoginInitiatePost(context.Background()).LoginInitiate(loginInitiate).Execute()
+	r, err := apiClient.LoginAPI.LoginInitiatePost(context.Background()).LoginInitiate(loginInitiate).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `LoginAPI.LoginInitiatePost``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `LoginInitiatePost`: RegistertionInitiatePost201Response
-	fmt.Fprintf(os.Stdout, "Response from `LoginAPI.LoginInitiatePost`: %v\n", resp)
 }
 ```
 
@@ -127,7 +125,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**RegistertionInitiatePost201Response**](RegistertionInitiatePost201Response.md)
+ (empty response body)
 
 ### Authorization
 
@@ -136,7 +134,7 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: application/vnd.api+json
-- **Accept**: application/json, application/vnd.api+json
+- **Accept**: application/vnd.api+json, application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
@@ -202,7 +200,7 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: application/vnd.api+json
-- **Accept**: application/vnd.api+json, application/json
+- **Accept**: application/vnd.api+json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)

@@ -1,4 +1,4 @@
-package data
+package db
 
 import (
 	"database/sql"
@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/cifra-city/httpkit"
-	"github.com/cifra-city/rest-sso/internal/db/data/dbcore"
+	"github.com/cifra-city/rest-sso/internal/data/db/dbcore"
 	"github.com/google/uuid"
 )
 

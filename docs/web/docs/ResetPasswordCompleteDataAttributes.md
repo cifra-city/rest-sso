@@ -4,15 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**Email** | **string** | User email (required if username is not provided) | 
 **Password** | **string** | New user password | 
-**Email** | Pointer to **string** | User email (required if username is not provided) | [optional] 
-**Username** | Pointer to **string** | User username (required if email is not provided) | [optional] 
 
 ## Methods
 
 ### NewResetPasswordCompleteDataAttributes
 
-`func NewResetPasswordCompleteDataAttributes(password string, ) *ResetPasswordCompleteDataAttributes`
+`func NewResetPasswordCompleteDataAttributes(email string, password string, ) *ResetPasswordCompleteDataAttributes`
 
 NewResetPasswordCompleteDataAttributes instantiates a new ResetPasswordCompleteDataAttributes object
 This constructor will assign default values to properties that have it defined,
@@ -26,26 +25,6 @@ will change when the set of required properties is changed
 NewResetPasswordCompleteDataAttributesWithDefaults instantiates a new ResetPasswordCompleteDataAttributes object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
-
-### GetPassword
-
-`func (o *ResetPasswordCompleteDataAttributes) GetPassword() string`
-
-GetPassword returns the Password field if non-nil, zero value otherwise.
-
-### GetPasswordOk
-
-`func (o *ResetPasswordCompleteDataAttributes) GetPasswordOk() (*string, bool)`
-
-GetPasswordOk returns a tuple with the Password field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetPassword
-
-`func (o *ResetPasswordCompleteDataAttributes) SetPassword(v string)`
-
-SetPassword sets Password field to given value.
-
 
 ### GetEmail
 
@@ -66,36 +45,26 @@ and a boolean to check if the value has been set.
 
 SetEmail sets Email field to given value.
 
-### HasEmail
 
-`func (o *ResetPasswordCompleteDataAttributes) HasEmail() bool`
+### GetPassword
 
-HasEmail returns a boolean if a field has been set.
+`func (o *ResetPasswordCompleteDataAttributes) GetPassword() string`
 
-### GetUsername
+GetPassword returns the Password field if non-nil, zero value otherwise.
 
-`func (o *ResetPasswordCompleteDataAttributes) GetUsername() string`
+### GetPasswordOk
 
-GetUsername returns the Username field if non-nil, zero value otherwise.
+`func (o *ResetPasswordCompleteDataAttributes) GetPasswordOk() (*string, bool)`
 
-### GetUsernameOk
-
-`func (o *ResetPasswordCompleteDataAttributes) GetUsernameOk() (*string, bool)`
-
-GetUsernameOk returns a tuple with the Username field if it's non-nil, zero value otherwise
+GetPasswordOk returns a tuple with the Password field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetUsername
+### SetPassword
 
-`func (o *ResetPasswordCompleteDataAttributes) SetUsername(v string)`
+`func (o *ResetPasswordCompleteDataAttributes) SetPassword(v string)`
 
-SetUsername sets Username field to given value.
+SetPassword sets Password field to given value.
 
-### HasUsername
-
-`func (o *ResetPasswordCompleteDataAttributes) HasUsername() bool`
-
-HasUsername returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

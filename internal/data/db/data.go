@@ -1,9 +1,9 @@
-package data
+package db
 
 import (
 	"database/sql"
 
-	"github.com/cifra-city/rest-sso/internal/db/data/dbcore"
+	"github.com/cifra-city/rest-sso/internal/data/db/dbcore"
 )
 
 type Databaser struct {

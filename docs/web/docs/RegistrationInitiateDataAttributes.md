@@ -5,13 +5,12 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Email** | **string** | User email | 
-**Username** | **string** | User username | 
 
 ## Methods
 
 ### NewRegistrationInitiateDataAttributes
 
-`func NewRegistrationInitiateDataAttributes(email string, username string, ) *RegistrationInitiateDataAttributes`
+`func NewRegistrationInitiateDataAttributes(email string, ) *RegistrationInitiateDataAttributes`
 
 NewRegistrationInitiateDataAttributes instantiates a new RegistrationInitiateDataAttributes object
 This constructor will assign default values to properties that have it defined,
@@ -44,26 +43,6 @@ and a boolean to check if the value has been set.
 `func (o *RegistrationInitiateDataAttributes) SetEmail(v string)`
 
 SetEmail sets Email field to given value.
-
-
-### GetUsername
-
-`func (o *RegistrationInitiateDataAttributes) GetUsername() string`
-
-GetUsername returns the Username field if non-nil, zero value otherwise.
-
-### GetUsernameOk
-
-`func (o *RegistrationInitiateDataAttributes) GetUsernameOk() (*string, bool)`
-
-GetUsernameOk returns a tuple with the Username field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetUsername
-
-`func (o *RegistrationInitiateDataAttributes) SetUsername(v string)`
-
-SetUsername sets Username field to given value.
 
 
 

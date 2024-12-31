@@ -25,8 +25,6 @@ type RegistrationCompleteDataAttributes struct {
 	Password string `json:"password"`
 	// User email
 	Email string `json:"email"`
-	// User username
-	Username string `json:"username"`
 }
 
 type _RegistrationCompleteDataAttributes RegistrationCompleteDataAttributes
@@ -35,11 +33,10 @@ type _RegistrationCompleteDataAttributes RegistrationCompleteDataAttributes
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewRegistrationCompleteDataAttributes(password string, email string, username string) *RegistrationCompleteDataAttributes {
+func NewRegistrationCompleteDataAttributes(password string, email string) *RegistrationCompleteDataAttributes {
 	this := RegistrationCompleteDataAttributes{}
 	this.Password = password
 	this.Email = email
-	this.Username = username
 	return &this
 }
 
@@ -99,30 +96,6 @@ func (o *RegistrationCompleteDataAttributes) SetEmail(v string) {
 	o.Email = v
 }
 
-// GetUsername returns the Username field value
-func (o *RegistrationCompleteDataAttributes) GetUsername() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.Username
-}
-
-// GetUsernameOk returns a tuple with the Username field value
-// and a boolean to check if the value has been set.
-func (o *RegistrationCompleteDataAttributes) GetUsernameOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.Username, true
-}
-
-// SetUsername sets field value
-func (o *RegistrationCompleteDataAttributes) SetUsername(v string) {
-	o.Username = v
-}
-
 func (o RegistrationCompleteDataAttributes) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -135,7 +108,6 @@ func (o RegistrationCompleteDataAttributes) ToMap() (map[string]interface{}, err
 	toSerialize := map[string]interface{}{}
 	toSerialize["password"] = o.Password
 	toSerialize["email"] = o.Email
-	toSerialize["username"] = o.Username
 	return toSerialize, nil
 }
 
@@ -146,7 +118,6 @@ func (o *RegistrationCompleteDataAttributes) UnmarshalJSON(data []byte) (err err
 	requiredProperties := []string{
 		"password",
 		"email",
-		"username",
 	}
 
 	allProperties := make(map[string]interface{})

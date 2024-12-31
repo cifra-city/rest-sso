@@ -17,10 +17,6 @@ paths:
         required: true
       responses:
         "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_aprove_operation_patch_200_response'
           description: User successfully activated email
         "400":
           content:
@@ -33,26 +29,14 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                $ref: '#/components/schemas/Errors'
-          description: You must provide a valid authorization params.
-        "403":
+                $ref: '#/components/schemas/invalidAuth'
+          description: "Incorrect metadata for this user, like IP or User-Agent"
+        "404":
           content:
             application/vnd.api+json:
               schema:
-                $ref: '#/components/schemas/Errors'
-          description: Forbidden
-        "409":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Conflict
-        "415":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Unsupported Media Type
+                $ref: '#/components/schemas/notFound'
+          description: Code not found fro this user
         "429":
           content:
             application/vnd.api+json:
@@ -78,11 +62,7 @@ paths:
               $ref: '#/components/schemas/RegistrationInitiate'
         required: true
       responses:
-        "201":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_registertion_initiate_post_201_response'
+        "202":
           description: Successfully initiated registration
         "400":
           content:
@@ -93,22 +73,10 @@ paths:
             for details.
         "409":
           content:
-            application/vnd.api+json:
+            application/json:
               schema:
-                $ref: '#/components/schemas/Errors'
-          description: Conflict
-        "415":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Unsupported Media Type
-        "429":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Too many requests
+                $ref: '#/components/schemas/conflict'
+          description: Username or email is already taken
         "500":
           content:
             application/vnd.api+json:
@@ -132,7 +100,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_registertion_initiate_post_201_response'
+                $ref: '#/components/schemas/_registration_complete_post_201_response'
           description: User successfully registered
         "400":
           content:
@@ -141,24 +109,18 @@ paths:
                 $ref: '#/components/schemas/Errors'
           description: One of the parameters is invalid. Refer to the response body
             for details.
-        "409":
+        "403":
           content:
             application/vnd.api+json:
               schema:
-                $ref: '#/components/schemas/Errors'
-          description: Conflict
-        "415":
+                $ref: '#/components/schemas/forbidden'
+          description: Metadata is not valid
+        "404":
           content:
             application/vnd.api+json:
               schema:
-                $ref: '#/components/schemas/Errors'
-          description: Unsupported Media Type
-        "429":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Too many requests
+                $ref: '#/components/schemas/forbidden'
+          description: Email not found in request pool
         "500":
           content:
             application/vnd.api+json:
@@ -179,10 +141,6 @@ paths:
         required: true
       responses:
         "201":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_registertion_initiate_post_201_response'
           description: User successfully initiated login
         "400":
           content:
@@ -191,18 +149,18 @@ paths:
                 $ref: '#/components/schemas/Errors'
           description: One of the parameters is invalid. Refer to the response body
             for details.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/notFound'
+          description: User not found
         "409":
           content:
-            application/vnd.api+json:
+            application/json:
               schema:
-                $ref: '#/components/schemas/Errors'
-          description: Conflict
-        "415":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Unsupported Media Type
+                $ref: '#/components/schemas/conflict'
+          description: Password is incorrect
         "429":
           content:
             application/vnd.api+json:
@@ -241,18 +199,18 @@ paths:
                 $ref: '#/components/schemas/Errors'
           description: One of the parameters is invalid. Refer to the response body
             for details.
-        "409":
+        "403":
           content:
             application/vnd.api+json:
               schema:
-                $ref: '#/components/schemas/Errors'
-          description: Conflict
-        "415":
+                $ref: '#/components/schemas/forbidden'
+          description: Metadata is not valid
+        "404":
           content:
             application/vnd.api+json:
               schema:
-                $ref: '#/components/schemas/Errors'
-          description: Unsupported Media Type
+                $ref: '#/components/schemas/forbidden'
+          description: Email not found in request pool
         "429":
           content:
             application/vnd.api+json:
@@ -294,10 +252,22 @@ paths:
             for details.
         "401":
           content:
-            application/json:
+            application/vnd.api+json:
               schema:
-                $ref: '#/components/schemas/_refresh_post_401_response'
-          description: Unauthorized. Refresh token is invalid or expired.
+                $ref: '#/components/schemas/Errors'
+          description: You must provide a valid authorization params.
+        "409":
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/conflict'
+          description: Refresh token is invalid or expired.
+        "429":
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+          description: Too many requests
         "500":
           content:
             application/vnd.api+json:
@@ -318,10 +288,6 @@ paths:
         required: true
       responses:
         "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_aprove_operation_patch_200_response'
           description: User successfully reset password
         "400":
           content:
@@ -330,24 +296,12 @@ paths:
                 $ref: '#/components/schemas/Errors'
           description: One of the parameters is invalid. Refer to the response body
             for details.
-        "401":
+        "404":
           content:
             application/vnd.api+json:
               schema:
                 $ref: '#/components/schemas/Errors'
-          description: You must provide a valid authorization params.
-        "415":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Unsupported Media Type
-        "429":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Too many requests
+          description: Requested resource does not exist.
         "500":
           content:
             application/vnd.api+json:
@@ -368,10 +322,6 @@ paths:
         required: true
       responses:
         "201":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_registertion_initiate_post_201_response'
           description: User successfully reset password
         "400":
           content:
@@ -380,89 +330,19 @@ paths:
                 $ref: '#/components/schemas/Errors'
           description: One of the parameters is invalid. Refer to the response body
             for details.
-        "401":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: You must provide a valid authorization params.
-        "415":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Unsupported Media Type
-        "429":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Too many requests
-        "500":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Internal server error
-      summary: Reset password
-      tags:
-      - User
-  /user/change/username:
-    patch:
-      description: Endpoint to change username
-      requestBody:
-        content:
-          application/vnd.api+json:
-            schema:
-              $ref: '#/components/schemas/ChangeUsername'
-        required: true
-      responses:
-        "201":
-          description: Updated username successfully
-        "400":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: One of the parameters is invalid. Refer to the response body
-            for details.
-        "401":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: You must provide a valid authorization params.
         "403":
           content:
             application/vnd.api+json:
               schema:
-                $ref: '#/components/schemas/Errors'
-          description: Forbidden
-        "409":
+                $ref: '#/components/schemas/forbidden'
+          description: Metadata is not valid
+        "404":
           content:
             application/vnd.api+json:
               schema:
-                $ref: '#/components/schemas/Errors'
-          description: Conflict
-        "415":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Unsupported Media Type
-        "429":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Too many requests
-        "500":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Internal server error
-      summary: Change username
+                $ref: '#/components/schemas/forbidden'
+          description: Email not found in request pool
+      summary: Reset password
       tags:
       - User
   /user/change/sessions:
@@ -488,24 +368,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/Errors'
           description: You must provide a valid authorization params.
-        "403":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Forbidden
-        "409":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Conflict
-        "415":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Unsupported Media Type
         "429":
           content:
             application/vnd.api+json:
@@ -527,37 +389,12 @@ paths:
       responses:
         "201":
           description: User successfully logout
-        "400":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: One of the parameters is invalid. Refer to the response body
-            for details.
         "401":
           content:
             application/vnd.api+json:
               schema:
                 $ref: '#/components/schemas/Errors'
           description: You must provide a valid authorization params.
-        "403":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Forbidden
-        "409":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Conflict
-        "415":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Unsupported Media Type
         "429":
           content:
             application/vnd.api+json:
@@ -585,10 +422,10 @@ paths:
       responses:
         "200":
           content:
-            application/json:
+            application/vnd.api+json:
               schema:
-                $ref: '#/components/schemas/_aprove_operation_patch_200_response'
-          description: User successfully delete the session
+                $ref: '#/components/schemas/UserSessions'
+          description: Updated username successfully
         "400":
           content:
             application/vnd.api+json:
@@ -602,12 +439,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/Errors'
           description: You must provide a valid authorization params.
-        "415":
+        "404":
           content:
             application/vnd.api+json:
               schema:
-                $ref: '#/components/schemas/Errors'
-          description: Unsupported Media Type
+                $ref: '#/components/schemas/notFound'
+          description: Session not found
         "429":
           content:
             application/vnd.api+json:
@@ -631,7 +468,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_aprove_operation_patch_200_response'
+                $ref: '#/components/schemas/_user_change_terminate_sessions_delete_200_response'
           description: User successfully terminated all sessions
         "400":
           content:
@@ -646,18 +483,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/Errors'
           description: You must provide a valid authorization params.
-        "415":
+        "404":
           content:
             application/vnd.api+json:
               schema:
-                $ref: '#/components/schemas/Errors'
-          description: Unsupported Media Type
-        "429":
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Errors'
-          description: Too many requests
+                $ref: '#/components/schemas/notFound'
+          description: Requested resource does not exist.
         "500":
           content:
             application/vnd.api+json:
@@ -676,30 +507,6 @@ components:
             $ref: '#/components/schemas/Errors'
       description: One of the parameters is invalid. Refer to the response body for
         details.
-    invalidAuth:
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-      description: You must provide a valid authorization params.
-    forbidden:
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-      description: Forbidden
-    conflict:
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-      description: Conflict
-    unsupportedMediaType:
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-      description: Unsupported Media Type
     tooManyRequests:
       content:
         application/vnd.api+json:
@@ -712,6 +519,18 @@ components:
           schema:
             $ref: '#/components/schemas/Errors'
       description: Internal server error
+    invalidAuth:
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+      description: You must provide a valid authorization params.
+    notFound:
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+      description: Requested resource does not exist.
   schemas:
     ApproveOperationReq:
       properties:
@@ -783,13 +602,6 @@ components:
       required:
       - data
       type: object
-    ChangeUsername:
-      properties:
-        data:
-          $ref: '#/components/schemas/ChangeUsername_data'
-      required:
-      - data
-      type: object
     UserSession:
       properties:
         data:
@@ -822,6 +634,18 @@ components:
       required:
       - errors
       type: object
+    invalidAuth:
+      description: You must provide a valid authorization params.
+      type: object
+    notFound:
+      description: Requested resource does not exist.
+      type: object
+    conflict:
+      description: Conflict
+      type: object
+    forbidden:
+      description: Forbidden
+      type: object
     UserSessions:
       properties:
         data:
@@ -829,15 +653,7 @@ components:
       required:
       - data
       type: object
-    _aprove_operation_patch_200_response:
-      example:
-        status: 200
-      properties:
-        status:
-          example: 200
-          type: number
-      type: object
-    _registertion_initiate_post_201_response:
+    _registration_complete_post_201_response:
       example:
         status: 201
       properties:
@@ -845,13 +661,13 @@ components:
           example: 201
           type: number
       type: object
-    _refresh_post_401_response:
+    _user_change_terminate_sessions_delete_200_response:
       example:
-        error: Invalid or expired refresh token
+        status: 200
       properties:
-        error:
-          example: Invalid or expired refresh token
-          type: string
+        status:
+          example: 200
+          type: number
       type: object
     ApproveOperationReq_data_attributes:
       properties:
@@ -888,12 +704,8 @@ components:
           description: User email
           format: email
           type: string
-        username:
-          description: User username
-          type: string
       required:
       - email
-      - username
       type: object
     RegistrationInitiate_data:
       properties:
@@ -916,13 +728,9 @@ components:
           description: User email
           format: email
           type: string
-        username:
-          description: User username
-          type: string
       required:
       - email
       - password
-      - username
       type: object
     RegistrationComplete_data:
       properties:
@@ -942,13 +750,11 @@ components:
           description: User email
           format: email
           type: string
-        username:
-          description: User username
-          type: string
         password:
           description: First password
           type: string
       required:
+      - email
       - password
       type: object
     LoginInitiate_data:
@@ -969,14 +775,12 @@ components:
           description: User email
           format: email
           type: string
-        username:
-          description: User username
-          type: string
         device_name:
           description: Device name
           type: string
       required:
       - device_name
+      - email
       type: object
     LoginCompleteReq_data:
       properties:
@@ -1020,9 +824,8 @@ components:
           description: User email (required if username is not provided).
           format: email
           type: string
-        username:
-          description: User username (required if email is not provided).
-          type: string
+      required:
+      - email
       type: object
     ResetPasswordInitiate_data:
       properties:
@@ -1038,17 +841,15 @@ components:
       type: object
     ResetPasswordComplete_data_attributes:
       properties:
-        password:
-          description: New user password
-          type: string
         email:
           description: User email (required if username is not provided)
           format: email
           type: string
-        username:
-          description: User username (required if email is not provided)
+        password:
+          description: New user password
           type: string
       required:
+      - email
       - password
       type: object
     ResetPasswordComplete_data:
@@ -1106,31 +907,6 @@ components:
           type: string
         attributes:
           $ref: '#/components/schemas/RefreshResp_data_attributes'
-      required:
-      - attributes
-      - type
-      type: object
-    ChangeUsername_data_attributes:
-      properties:
-        new_username:
-          description: New username
-          format: username
-          type: string
-        password:
-          description: User password
-          type: string
-      required:
-      - email
-      - password
-      type: object
-    ChangeUsername_data:
-      properties:
-        type:
-          enum:
-          - change_username
-          type: string
-        attributes:
-          $ref: '#/components/schemas/ChangeUsername_data_attributes'
       required:
       - attributes
       - type

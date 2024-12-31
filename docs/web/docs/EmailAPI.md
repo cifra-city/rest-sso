@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 ## AproveOperationPatch
 
-> AproveOperationPatch200Response AproveOperationPatch(ctx).ApproveOperation(approveOperation).Execute()
+> AproveOperationPatch(ctx).ApproveOperation(approveOperation).Execute()
 
 Approve operation
 
@@ -33,13 +33,11 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.EmailAPI.AproveOperationPatch(context.Background()).ApproveOperation(approveOperation).Execute()
+	r, err := apiClient.EmailAPI.AproveOperationPatch(context.Background()).ApproveOperation(approveOperation).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `EmailAPI.AproveOperationPatch``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `AproveOperationPatch`: AproveOperationPatch200Response
-	fmt.Fprintf(os.Stdout, "Response from `EmailAPI.AproveOperationPatch`: %v\n", resp)
 }
 ```
 
@@ -58,7 +56,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**AproveOperationPatch200Response**](AproveOperationPatch200Response.md)
+ (empty response body)
 
 ### Authorization
 
@@ -67,7 +65,7 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: application/vnd.api+json
-- **Accept**: application/json, application/vnd.api+json
+- **Accept**: application/vnd.api+json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)

@@ -29,10 +29,12 @@ func Run(ctx context.Context) {
 			r.Route("/public", func(r chi.Router) {
 				r.Post("/approve-operation", handlers.ApproveOperation) // approval operation with use email for 15 minutes
 
-				r.Post("/registration-initiate", handlers.RegistrationInitiate) // check if email exists, send code to email
-				r.Post("/registration-complete", handlers.RegistrationComplete) // check for approved email address for use
-				r.Post("/login-initiate", handlers.LoginInitiate)               // check if email exists, send code to email
-				r.Post("/login-complete", handlers.LoginComplete)               // check for approved email address for use
+				r.Post("/registration-initiate", handlers.RegistrationInitiate)
+				r.Post("/registration-complete", handlers.RegistrationComplete)
+
+				r.Post("/login-initiate", handlers.LoginInitiate)
+				r.Post("/login-complete", handlers.LoginComplete)
+
 				r.Post("/reset-password-initiate", handlers.ResetPasswordInitiate)
 				r.Post("/reset-password-complete", handlers.ResetPasswordComplete)
 
@@ -40,7 +42,6 @@ func Run(ctx context.Context) {
 
 				r.Route("/user", func(r chi.Router) {
 					r.Use(authMW)
-					r.Post("/change_username", handlers.ChangeUsername)
 					r.Route("/sessions", func(r chi.Router) {
 						r.Get("/", handlers.GetSessions)
 						r.Delete("/", handlers.DeleteSession)
@@ -48,7 +49,6 @@ func Run(ctx context.Context) {
 					})
 					r.Post("/logout", handlers.Logout)
 				})
-				r.Post("/refresh", handlers.Refresh)
 			})
 		})
 	})

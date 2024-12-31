@@ -12,7 +12,7 @@ Method | HTTP request | Description
 
 ## UserChangeDeleteSessionDelete
 
-> AproveOperationPatch200Response UserChangeDeleteSessionDelete(ctx).DeleteSession(deleteSession).Execute()
+> UserSessions UserChangeDeleteSessionDelete(ctx).DeleteSession(deleteSession).Execute()
 
 Delete the sessions
 
@@ -40,7 +40,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error when calling `SessionsAPI.UserChangeDeleteSessionDelete``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `UserChangeDeleteSessionDelete`: AproveOperationPatch200Response
+	// response from `UserChangeDeleteSessionDelete`: UserSessions
 	fmt.Fprintf(os.Stdout, "Response from `SessionsAPI.UserChangeDeleteSessionDelete`: %v\n", resp)
 }
 ```
@@ -60,7 +60,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**AproveOperationPatch200Response**](AproveOperationPatch200Response.md)
+[**UserSessions**](UserSessions.md)
 
 ### Authorization
 
@@ -69,7 +69,7 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: application/vnd.api+json
-- **Accept**: application/json, application/vnd.api+json
+- **Accept**: application/vnd.api+json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
@@ -139,7 +139,7 @@ No authorization required
 
 ## UserChangeTerminateSessionsDelete
 
-> AproveOperationPatch200Response UserChangeTerminateSessionsDelete(ctx).Execute()
+> UserChangeTerminateSessionsDelete200Response UserChangeTerminateSessionsDelete(ctx).Execute()
 
 Terminate all sessions
 
@@ -166,7 +166,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error when calling `SessionsAPI.UserChangeTerminateSessionsDelete``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `UserChangeTerminateSessionsDelete`: AproveOperationPatch200Response
+	// response from `UserChangeTerminateSessionsDelete`: UserChangeTerminateSessionsDelete200Response
 	fmt.Fprintf(os.Stdout, "Response from `SessionsAPI.UserChangeTerminateSessionsDelete`: %v\n", resp)
 }
 ```
@@ -182,7 +182,7 @@ Other parameters are passed through a pointer to a apiUserChangeTerminateSession
 
 ### Return type
 
-[**AproveOperationPatch200Response**](AproveOperationPatch200Response.md)
+[**UserChangeTerminateSessionsDelete200Response**](UserChangeTerminateSessionsDelete200Response.md)
 
 ### Authorization
 

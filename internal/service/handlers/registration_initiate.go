@@ -21,7 +21,6 @@ func RegistrationInitiate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	email := req.Data.Attributes.Email
-	username := req.Data.Attributes.Username
 
 	IP := httpkit.GetClientIP(r)
 	UserAgent := httpkit.GetUserAgent(r)
@@ -35,14 +34,14 @@ func RegistrationInitiate(w http.ResponseWriter, r *http.Request) {
 
 	log := Server.Logger
 
-	acc, err := Server.Databaser.Accounts.Exists(r, &username, &email)
+	_, err = Server.Databaser.Accounts.GetByEmail(r, email)
 	if err != nil && !errors.Is(err, sql.ErrNoRows) {
 		log.Errorf("error getting user: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
-	if acc != nil {
-		log.Debugf("Email or username already taken %v %v", &email, &username)
+	if err == nil {
+		log.Debugf("user already exists for email: %v", email)
 		httpkit.RenderErr(w, problems.Conflict())
 		return
 	}

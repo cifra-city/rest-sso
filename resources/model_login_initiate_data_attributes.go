@@ -22,9 +22,7 @@ var _ MappedNullable = &LoginInitiateDataAttributes{}
 // LoginInitiateDataAttributes struct for LoginInitiateDataAttributes
 type LoginInitiateDataAttributes struct {
 	// User email
-	Email *string `json:"email,omitempty"`
-	// User username
-	Username *string `json:"username,omitempty"`
+	Email string `json:"email"`
 	// First password
 	Password string `json:"password"`
 }
@@ -35,8 +33,9 @@ type _LoginInitiateDataAttributes LoginInitiateDataAttributes
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewLoginInitiateDataAttributes(password string) *LoginInitiateDataAttributes {
+func NewLoginInitiateDataAttributes(email string, password string) *LoginInitiateDataAttributes {
 	this := LoginInitiateDataAttributes{}
+	this.Email = email
 	this.Password = password
 	return &this
 }
@@ -49,68 +48,28 @@ func NewLoginInitiateDataAttributesWithDefaults() *LoginInitiateDataAttributes {
 	return &this
 }
 
-// GetEmail returns the Email field value if set, zero value otherwise.
+// GetEmail returns the Email field value
 func (o *LoginInitiateDataAttributes) GetEmail() string {
-	if o == nil || IsNil(o.Email) {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.Email
+
+	return o.Email
 }
 
-// GetEmailOk returns a tuple with the Email field value if set, nil otherwise
+// GetEmailOk returns a tuple with the Email field value
 // and a boolean to check if the value has been set.
 func (o *LoginInitiateDataAttributes) GetEmailOk() (*string, bool) {
-	if o == nil || IsNil(o.Email) {
+	if o == nil {
 		return nil, false
 	}
-	return o.Email, true
+	return &o.Email, true
 }
 
-// HasEmail returns a boolean if a field has been set.
-func (o *LoginInitiateDataAttributes) HasEmail() bool {
-	if o != nil && !IsNil(o.Email) {
-		return true
-	}
-
-	return false
-}
-
-// SetEmail gets a reference to the given string and assigns it to the Email field.
+// SetEmail sets field value
 func (o *LoginInitiateDataAttributes) SetEmail(v string) {
-	o.Email = &v
-}
-
-// GetUsername returns the Username field value if set, zero value otherwise.
-func (o *LoginInitiateDataAttributes) GetUsername() string {
-	if o == nil || IsNil(o.Username) {
-		var ret string
-		return ret
-	}
-	return *o.Username
-}
-
-// GetUsernameOk returns a tuple with the Username field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *LoginInitiateDataAttributes) GetUsernameOk() (*string, bool) {
-	if o == nil || IsNil(o.Username) {
-		return nil, false
-	}
-	return o.Username, true
-}
-
-// HasUsername returns a boolean if a field has been set.
-func (o *LoginInitiateDataAttributes) HasUsername() bool {
-	if o != nil && !IsNil(o.Username) {
-		return true
-	}
-
-	return false
-}
-
-// SetUsername gets a reference to the given string and assigns it to the Username field.
-func (o *LoginInitiateDataAttributes) SetUsername(v string) {
-	o.Username = &v
+	o.Email = v
 }
 
 // GetPassword returns the Password field value
@@ -147,12 +106,7 @@ func (o LoginInitiateDataAttributes) MarshalJSON() ([]byte, error) {
 
 func (o LoginInitiateDataAttributes) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if !IsNil(o.Email) {
-		toSerialize["email"] = o.Email
-	}
-	if !IsNil(o.Username) {
-		toSerialize["username"] = o.Username
-	}
+	toSerialize["email"] = o.Email
 	toSerialize["password"] = o.Password
 	return toSerialize, nil
 }
@@ -162,6 +116,7 @@ func (o *LoginInitiateDataAttributes) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
+		"email",
 		"password",
 	}
 

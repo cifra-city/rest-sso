@@ -12,6 +12,8 @@ package resources
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the ResetPasswordInitiateDataAttributes type satisfies the MappedNullable interface at compile time
@@ -20,17 +22,18 @@ var _ MappedNullable = &ResetPasswordInitiateDataAttributes{}
 // ResetPasswordInitiateDataAttributes struct for ResetPasswordInitiateDataAttributes
 type ResetPasswordInitiateDataAttributes struct {
 	// User email (required if username is not provided).
-	Email *string `json:"email,omitempty"`
-	// User username (required if email is not provided).
-	Username *string `json:"username,omitempty"`
+	Email string `json:"email"`
 }
+
+type _ResetPasswordInitiateDataAttributes ResetPasswordInitiateDataAttributes
 
 // NewResetPasswordInitiateDataAttributes instantiates a new ResetPasswordInitiateDataAttributes object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewResetPasswordInitiateDataAttributes() *ResetPasswordInitiateDataAttributes {
+func NewResetPasswordInitiateDataAttributes(email string) *ResetPasswordInitiateDataAttributes {
 	this := ResetPasswordInitiateDataAttributes{}
+	this.Email = email
 	return &this
 }
 
@@ -42,68 +45,28 @@ func NewResetPasswordInitiateDataAttributesWithDefaults() *ResetPasswordInitiate
 	return &this
 }
 
-// GetEmail returns the Email field value if set, zero value otherwise.
+// GetEmail returns the Email field value
 func (o *ResetPasswordInitiateDataAttributes) GetEmail() string {
-	if o == nil || IsNil(o.Email) {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.Email
+
+	return o.Email
 }
 
-// GetEmailOk returns a tuple with the Email field value if set, nil otherwise
+// GetEmailOk returns a tuple with the Email field value
 // and a boolean to check if the value has been set.
 func (o *ResetPasswordInitiateDataAttributes) GetEmailOk() (*string, bool) {
-	if o == nil || IsNil(o.Email) {
+	if o == nil {
 		return nil, false
 	}
-	return o.Email, true
+	return &o.Email, true
 }
 
-// HasEmail returns a boolean if a field has been set.
-func (o *ResetPasswordInitiateDataAttributes) HasEmail() bool {
-	if o != nil && !IsNil(o.Email) {
-		return true
-	}
-
-	return false
-}
-
-// SetEmail gets a reference to the given string and assigns it to the Email field.
+// SetEmail sets field value
 func (o *ResetPasswordInitiateDataAttributes) SetEmail(v string) {
-	o.Email = &v
-}
-
-// GetUsername returns the Username field value if set, zero value otherwise.
-func (o *ResetPasswordInitiateDataAttributes) GetUsername() string {
-	if o == nil || IsNil(o.Username) {
-		var ret string
-		return ret
-	}
-	return *o.Username
-}
-
-// GetUsernameOk returns a tuple with the Username field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *ResetPasswordInitiateDataAttributes) GetUsernameOk() (*string, bool) {
-	if o == nil || IsNil(o.Username) {
-		return nil, false
-	}
-	return o.Username, true
-}
-
-// HasUsername returns a boolean if a field has been set.
-func (o *ResetPasswordInitiateDataAttributes) HasUsername() bool {
-	if o != nil && !IsNil(o.Username) {
-		return true
-	}
-
-	return false
-}
-
-// SetUsername gets a reference to the given string and assigns it to the Username field.
-func (o *ResetPasswordInitiateDataAttributes) SetUsername(v string) {
-	o.Username = &v
+	o.Email = v
 }
 
 func (o ResetPasswordInitiateDataAttributes) MarshalJSON() ([]byte, error) {
@@ -116,13 +79,45 @@ func (o ResetPasswordInitiateDataAttributes) MarshalJSON() ([]byte, error) {
 
 func (o ResetPasswordInitiateDataAttributes) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if !IsNil(o.Email) {
-		toSerialize["email"] = o.Email
-	}
-	if !IsNil(o.Username) {
-		toSerialize["username"] = o.Username
-	}
+	toSerialize["email"] = o.Email
 	return toSerialize, nil
+}
+
+func (o *ResetPasswordInitiateDataAttributes) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"email",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varResetPasswordInitiateDataAttributes := _ResetPasswordInitiateDataAttributes{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varResetPasswordInitiateDataAttributes)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ResetPasswordInitiateDataAttributes(varResetPasswordInitiateDataAttributes)
+
+	return err
 }
 
 type NullableResetPasswordInitiateDataAttributes struct {

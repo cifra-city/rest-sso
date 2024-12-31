@@ -33,7 +33,7 @@ func (r ApiRegistertionInitiatePostRequest) RegistrationInitiate(registrationIni
 	return r
 }
 
-func (r ApiRegistertionInitiatePostRequest) Execute() (*RegistertionInitiatePost201Response, *http.Response, error) {
+func (r ApiRegistertionInitiatePostRequest) Execute() (*http.Response, error) {
 	return r.ApiService.RegistertionInitiatePostExecute(r)
 }
 
@@ -53,18 +53,16 @@ func (a *RegistrationAPIService) RegistertionInitiatePost(ctx context.Context) A
 }
 
 // Execute executes the request
-//  @return RegistertionInitiatePost201Response
-func (a *RegistrationAPIService) RegistertionInitiatePostExecute(r ApiRegistertionInitiatePostRequest) (*RegistertionInitiatePost201Response, *http.Response, error) {
+func (a *RegistrationAPIService) RegistertionInitiatePostExecute(r ApiRegistertionInitiatePostRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *RegistertionInitiatePost201Response
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RegistrationAPIService.RegistertionInitiatePost")
 	if err != nil {
-		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/registertion-initiate"
@@ -73,7 +71,7 @@ func (a *RegistrationAPIService) RegistertionInitiatePostExecute(r ApiRegisterti
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 	if r.registrationInitiate == nil {
-		return localVarReturnValue, nil, reportError("registrationInitiate is required and must be specified")
+		return nil, reportError("registrationInitiate is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -86,7 +84,7 @@ func (a *RegistrationAPIService) RegistertionInitiatePostExecute(r ApiRegisterti
 	}
 
 	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json", "application/vnd.api+json"}
+	localVarHTTPHeaderAccepts := []string{"application/vnd.api+json", "application/json"}
 
 	// set Accept header
 	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
@@ -97,19 +95,19 @@ func (a *RegistrationAPIService) RegistertionInitiatePostExecute(r ApiRegisterti
 	localVarPostBody = r.registrationInitiate
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
-		return localVarReturnValue, nil, err
+		return nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		return localVarReturnValue, localVarHTTPResponse, err
+		return localVarHTTPResponse, err
 	}
 
 	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		return localVarReturnValue, localVarHTTPResponse, err
+		return localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -122,68 +120,37 @@ func (a *RegistrationAPIService) RegistertionInitiatePostExecute(r ApiRegisterti
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
+				return localVarHTTPResponse, newErr
 			}
 					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
 					newErr.model = v
-			return localVarReturnValue, localVarHTTPResponse, newErr
+			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 409 {
-			var v Errors
+			var v map[string]interface{}
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
+				return localVarHTTPResponse, newErr
 			}
 					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
 					newErr.model = v
-			return localVarReturnValue, localVarHTTPResponse, newErr
-		}
-		if localVarHTTPResponse.StatusCode == 415 {
-			var v Errors
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
-			return localVarReturnValue, localVarHTTPResponse, newErr
-		}
-		if localVarHTTPResponse.StatusCode == 429 {
-			var v Errors
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
-			return localVarReturnValue, localVarHTTPResponse, newErr
+			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
 			var v Errors
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
+				return localVarHTTPResponse, newErr
 			}
 					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
 					newErr.model = v
 		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
+		return localVarHTTPResponse, newErr
 	}
 
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-	if err != nil {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	return localVarReturnValue, localVarHTTPResponse, nil
+	return localVarHTTPResponse, nil
 }
 
 type ApiRegistrationCompletePostRequest struct {
@@ -197,7 +164,7 @@ func (r ApiRegistrationCompletePostRequest) RegistrationComplete(registrationCom
 	return r
 }
 
-func (r ApiRegistrationCompletePostRequest) Execute() (*RegistertionInitiatePost201Response, *http.Response, error) {
+func (r ApiRegistrationCompletePostRequest) Execute() (*RegistrationCompletePost201Response, *http.Response, error) {
 	return r.ApiService.RegistrationCompletePostExecute(r)
 }
 
@@ -217,13 +184,13 @@ func (a *RegistrationAPIService) RegistrationCompletePost(ctx context.Context) A
 }
 
 // Execute executes the request
-//  @return RegistertionInitiatePost201Response
-func (a *RegistrationAPIService) RegistrationCompletePostExecute(r ApiRegistrationCompletePostRequest) (*RegistertionInitiatePost201Response, *http.Response, error) {
+//  @return RegistrationCompletePost201Response
+func (a *RegistrationAPIService) RegistrationCompletePostExecute(r ApiRegistrationCompletePostRequest) (*RegistrationCompletePost201Response, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *RegistertionInitiatePost201Response
+		localVarReturnValue  *RegistrationCompletePost201Response
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RegistrationAPIService.RegistrationCompletePost")
@@ -292,8 +259,8 @@ func (a *RegistrationAPIService) RegistrationCompletePostExecute(r ApiRegistrati
 					newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
-		if localVarHTTPResponse.StatusCode == 409 {
-			var v Errors
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v map[string]interface{}
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -303,19 +270,8 @@ func (a *RegistrationAPIService) RegistrationCompletePostExecute(r ApiRegistrati
 					newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
-		if localVarHTTPResponse.StatusCode == 415 {
-			var v Errors
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
-			return localVarReturnValue, localVarHTTPResponse, newErr
-		}
-		if localVarHTTPResponse.StatusCode == 429 {
-			var v Errors
+		if localVarHTTPResponse.StatusCode == 404 {
+			var v map[string]interface{}
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()

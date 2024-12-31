@@ -157,7 +157,6 @@ func (ns NullRoleType) Value() (driver.Value, error) {
 
 type Account struct {
 	ID        uuid.UUID
-	Username  string
 	Email     string
 	PassHash  string
 	Role      RoleType

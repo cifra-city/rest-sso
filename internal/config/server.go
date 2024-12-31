@@ -2,7 +2,7 @@ package config
 
 import (
 	"github.com/cifra-city/mailman"
-	"github.com/cifra-city/rest-sso/internal/db/data"
+	"github.com/cifra-city/rest-sso/internal/data/db"
 	"github.com/cifra-city/tokens"
 	"github.com/sirupsen/logrus"
 )
@@ -13,7 +13,7 @@ const (
 
 type Service struct {
 	Config       *Config
-	Databaser    *data.Databaser
+	Databaser    *db.Databaser
 	Logger       *logrus.Logger
 	Mailman      *mailman.Mailman
 	TokenManager *tokens.TokenManager
@@ -22,7 +22,7 @@ type Service struct {
 func NewServer(cfg *Config) (*Service, error) {
 	logger := SetupLogger(cfg.Logging.Level, cfg.Logging.Format)
 	mail := mailman.NewMailman(cfg.Email.SmtpPort, cfg.Email.SmtpHost, cfg.Email.Address, cfg.Email.Password)
-	queries, err := data.NewDatabaser(cfg.Database.URL)
+	queries, err := db.NewDatabaser(cfg.Database.URL)
 	TokenManager := tokens.NewTokenManager(cfg.Redis.Addr, cfg.Redis.Password, cfg.Redis.DB, logger, cfg.JWT.AccessToken.TokenLifetime)
 
 	if err != nil {

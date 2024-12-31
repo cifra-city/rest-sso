@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"database/sql"
 	"errors"
 	"net/http"
 
@@ -9,7 +10,7 @@ import (
 	"github.com/cifra-city/httpkit/problems"
 	"github.com/cifra-city/mailman"
 	"github.com/cifra-city/rest-sso/internal/config"
-	"github.com/cifra-city/rest-sso/internal/db/data/dbcore"
+	"github.com/cifra-city/rest-sso/internal/data/db/dbcore"
 	"github.com/cifra-city/rest-sso/internal/service/requests"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
@@ -23,16 +24,10 @@ func ResetPasswordComplete(w http.ResponseWriter, r *http.Request) {
 	}
 
 	email := req.Data.Attributes.Email
-	username := req.Data.Attributes.Username
 	password := req.Data.Attributes.Password
 
 	IP := httpkit.GetClientIP(r)
 	UserAgent := httpkit.GetUserAgent(r)
-
-	if email == nil && username == nil {
-		httpkit.RenderErr(w, problems.BadRequest(errors.New("email or username is required"))...)
-		return
-	}
 
 	Server, err := cifractx.GetValue[*config.Service](r.Context(), config.SERVICE)
 	if err != nil {
@@ -42,14 +37,15 @@ func ResetPasswordComplete(w http.ResponseWriter, r *http.Request) {
 	}
 	log := Server.Logger
 
-	acc, err := Server.Databaser.Accounts.Exists(r, username, email)
+	acc, err := Server.Databaser.Accounts.GetByEmail(r, email)
 	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			log.Debugf("user not found for email: %v", email)
+			httpkit.RenderErr(w, problems.NotFound())
+			return
+		}
 		log.Errorf("error getting user: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())
-		return
-	}
-	if acc == nil {
-		httpkit.RenderErr(w, problems.NotFound())
 		return
 	}
 
@@ -63,7 +59,7 @@ func ResetPasswordComplete(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			if errors.Is(err, mailman.ErrAccessDenied) {
-				log.Warnf("Metadata is invalid at try to reset password account: %s", acc.Username)
+				log.Warnf("Metadata is invalid at try to reset password account: %s", acc.Email)
 				httpkit.RenderErr(w, problems.Forbidden())
 				return
 			}

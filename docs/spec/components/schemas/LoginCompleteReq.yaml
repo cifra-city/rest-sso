@@ -13,15 +13,13 @@ properties:
       attributes:
         type: object
         required:
+          - email
           - device_name
         properties:
           email:
             type: string
             format: email
             description: "User email"
-          username:
-            type: string
-            description: "User username"
           device_name:
             type: string
             description: "Device name"

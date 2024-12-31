@@ -90,7 +90,6 @@ Class | Method | HTTP request | Description
 *SessionsAPI* | [**UserChangeTerminateSessionsDelete**](docs/SessionsAPI.md#userchangeterminatesessionsdelete) | **Delete** /user/change/terminate-sessions | Terminate all sessions
 *UserAPI* | [**ResetPasswordCompletePost**](docs/UserAPI.md#resetpasswordcompletepost) | **Post** /reset-password-complete | Reset password
 *UserAPI* | [**ResetPasswordInitiatePost**](docs/UserAPI.md#resetpasswordinitiatepost) | **Post** /reset-password-initiate | Send a request to change user password
-*UserAPI* | [**UserChangeUsernamePatch**](docs/UserAPI.md#userchangeusernamepatch) | **Patch** /user/change/username | Change username
 
 
 ## Documentation For Models
@@ -99,10 +98,6 @@ Class | Method | HTTP request | Description
  - [ApproveOperationReq](docs/ApproveOperationReq.md)
  - [ApproveOperationReqData](docs/ApproveOperationReqData.md)
  - [ApproveOperationReqDataAttributes](docs/ApproveOperationReqDataAttributes.md)
- - [AproveOperationPatch200Response](docs/AproveOperationPatch200Response.md)
- - [ChangeUsername](docs/ChangeUsername.md)
- - [ChangeUsernameData](docs/ChangeUsernameData.md)
- - [ChangeUsernameDataAttributes](docs/ChangeUsernameDataAttributes.md)
  - [DeleteSession](docs/DeleteSession.md)
  - [DeleteSessionData](docs/DeleteSessionData.md)
  - [DeleteSessionDataAttributes](docs/DeleteSessionDataAttributes.md)
@@ -117,17 +112,16 @@ Class | Method | HTTP request | Description
  - [LoginInitiate](docs/LoginInitiate.md)
  - [LoginInitiateData](docs/LoginInitiateData.md)
  - [LoginInitiateDataAttributes](docs/LoginInitiateDataAttributes.md)
- - [RefreshPost401Response](docs/RefreshPost401Response.md)
  - [RefreshReq](docs/RefreshReq.md)
  - [RefreshReqData](docs/RefreshReqData.md)
  - [RefreshReqDataAttributes](docs/RefreshReqDataAttributes.md)
  - [RefreshResp](docs/RefreshResp.md)
  - [RefreshRespData](docs/RefreshRespData.md)
  - [RefreshRespDataAttributes](docs/RefreshRespDataAttributes.md)
- - [RegistertionInitiatePost201Response](docs/RegistertionInitiatePost201Response.md)
  - [RegistrationComplete](docs/RegistrationComplete.md)
  - [RegistrationCompleteData](docs/RegistrationCompleteData.md)
  - [RegistrationCompleteDataAttributes](docs/RegistrationCompleteDataAttributes.md)
+ - [RegistrationCompletePost201Response](docs/RegistrationCompletePost201Response.md)
  - [RegistrationInitiate](docs/RegistrationInitiate.md)
  - [RegistrationInitiateData](docs/RegistrationInitiateData.md)
  - [RegistrationInitiateDataAttributes](docs/RegistrationInitiateDataAttributes.md)
@@ -137,6 +131,7 @@ Class | Method | HTTP request | Description
  - [ResetPasswordInitiate](docs/ResetPasswordInitiate.md)
  - [ResetPasswordInitiateData](docs/ResetPasswordInitiateData.md)
  - [ResetPasswordInitiateDataAttributes](docs/ResetPasswordInitiateDataAttributes.md)
+ - [UserChangeTerminateSessionsDelete200Response](docs/UserChangeTerminateSessionsDelete200Response.md)
  - [UserSession](docs/UserSession.md)
  - [UserSessionData](docs/UserSessionData.md)
  - [UserSessionDataAttributes](docs/UserSessionDataAttributes.md)

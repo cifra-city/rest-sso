@@ -6,13 +6,12 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Password** | **string** | User password | 
 **Email** | **string** | User email | 
-**Username** | **string** | User username | 
 
 ## Methods
 
 ### NewRegistrationCompleteDataAttributes
 
-`func NewRegistrationCompleteDataAttributes(password string, email string, username string, ) *RegistrationCompleteDataAttributes`
+`func NewRegistrationCompleteDataAttributes(password string, email string, ) *RegistrationCompleteDataAttributes`
 
 NewRegistrationCompleteDataAttributes instantiates a new RegistrationCompleteDataAttributes object
 This constructor will assign default values to properties that have it defined,
@@ -65,26 +64,6 @@ and a boolean to check if the value has been set.
 `func (o *RegistrationCompleteDataAttributes) SetEmail(v string)`
 
 SetEmail sets Email field to given value.
-
-
-### GetUsername
-
-`func (o *RegistrationCompleteDataAttributes) GetUsername() string`
-
-GetUsername returns the Username field if non-nil, zero value otherwise.
-
-### GetUsernameOk
-
-`func (o *RegistrationCompleteDataAttributes) GetUsernameOk() (*string, bool)`
-
-GetUsernameOk returns a tuple with the Username field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetUsername
-
-`func (o *RegistrationCompleteDataAttributes) SetUsername(v string)`
-
-SetUsername sets Username field to given value.
 
 
 

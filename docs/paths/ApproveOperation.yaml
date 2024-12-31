@@ -13,7 +13,7 @@ patch:
     '200':
       description: User successfully activated email
     '400':
-      $ref: '../spec/components/responses/invalidParameter.yaml'\
+      $ref: '../spec/components/responses/invalidParameter.yaml'
     '401':
       description: Incorrect metadata for this user, like IP or User-Agent
       content:

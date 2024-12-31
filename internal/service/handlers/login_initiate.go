@@ -1,13 +1,15 @@
 package handlers
 
 import (
+	"database/sql"
+	"errors"
 	"net/http"
 
 	"github.com/cifra-city/cifractx"
 	"github.com/cifra-city/httpkit"
 	"github.com/cifra-city/httpkit/problems"
 	"github.com/cifra-city/rest-sso/internal/config"
-	"github.com/cifra-city/rest-sso/internal/db/data/dbcore"
+	"github.com/cifra-city/rest-sso/internal/data/db/dbcore"
 	"github.com/cifra-city/rest-sso/internal/service/requests"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
@@ -21,7 +23,6 @@ func LoginInitiate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	email := req.Data.Attributes.Email
-	username := req.Data.Attributes.Username
 	password := req.Data.Attributes.Password
 
 	IP := httpkit.GetClientIP(r)
@@ -36,13 +37,13 @@ func LoginInitiate(w http.ResponseWriter, r *http.Request) {
 
 	log := Server.Logger
 
-	acc, err := Server.Databaser.Accounts.Exists(r, username, email)
-	if acc == nil {
-		log.Debugf("user not found for email: %v", email)
-		httpkit.RenderErr(w, problems.NotFound())
-		return
-	}
+	acc, err := Server.Databaser.Accounts.GetByEmail(r, email)
 	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			log.Debugf("user not found for email: %v", email)
+			httpkit.RenderErr(w, problems.NotFound())
+			return
+		}
 		log.Errorf("error getting user: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())
 		return
@@ -51,7 +52,7 @@ func LoginInitiate(w http.ResponseWriter, r *http.Request) {
 	err = bcrypt.CompareHashAndPassword([]byte(acc.PassHash), []byte(password))
 	if err != nil {
 		err = Server.Databaser.Operations.CreateFailure(r, acc.ID, dbcore.OperationTypeLogin, dbcore.FailureReasonInvalidPassword)
-		log.Debugf("Incorrect password for user: %s, error: %s", acc.Username, err)
+		log.Debugf("Incorrect password for account: %s, error: %s", acc.Email, err)
 		httpkit.RenderErr(w, problems.Conflict())
 		return
 	}
@@ -61,7 +62,7 @@ func LoginInitiate(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Errorf("error sending email: %v", err)
 		} else {
-			log.Debugf("Email sent successfully to: %s", *email)
+			log.Debugf("Email sent successfully to: %s", email)
 		}
 	}()
 

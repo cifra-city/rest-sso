@@ -13,9 +13,8 @@ properties:
       attributes:
         type: object
         required:
-          - password
           - email
-          - username
+          - password
         properties:
           password:
             type: string
@@ -24,6 +23,3 @@ properties:
             type: string
             format: email
             description: "User email"
-          username:
-            type: string
-            description: "User username"

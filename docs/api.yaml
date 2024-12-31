@@ -21,8 +21,6 @@ paths:
     $ref: './paths/ResetPasswordInitiate.yaml'
   /reset-password-complete:
     $ref: './paths/ResetPasswordComplete.yaml'
-  /user/change/username:
-    $ref: './paths/ChangeUsername.yaml'
   /user/change/sessions:
     $ref: './paths/GetSession.yaml'
   /user/change/logout:
@@ -55,8 +53,6 @@ components:
       $ref: './spec/components/schemas/RefreshReq.yaml'
     RefreshResp:
       $ref: './spec/components/schemas/RefreshResp.yaml'
-    ChangeUsername:
-      $ref: './spec/components/schemas/ChangeUsername.yaml'
     UserSession:
       $ref: './spec/components/schemas/UserSessions.yaml'
     DeleteSession:

@@ -21,12 +21,10 @@ var _ MappedNullable = &ResetPasswordCompleteDataAttributes{}
 
 // ResetPasswordCompleteDataAttributes struct for ResetPasswordCompleteDataAttributes
 type ResetPasswordCompleteDataAttributes struct {
+	// User email (required if username is not provided)
+	Email string `json:"email"`
 	// New user password
 	Password string `json:"password"`
-	// User email (required if username is not provided)
-	Email *string `json:"email,omitempty"`
-	// User username (required if email is not provided)
-	Username *string `json:"username,omitempty"`
 }
 
 type _ResetPasswordCompleteDataAttributes ResetPasswordCompleteDataAttributes
@@ -35,8 +33,9 @@ type _ResetPasswordCompleteDataAttributes ResetPasswordCompleteDataAttributes
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewResetPasswordCompleteDataAttributes(password string) *ResetPasswordCompleteDataAttributes {
+func NewResetPasswordCompleteDataAttributes(email string, password string) *ResetPasswordCompleteDataAttributes {
 	this := ResetPasswordCompleteDataAttributes{}
+	this.Email = email
 	this.Password = password
 	return &this
 }
@@ -47,6 +46,30 @@ func NewResetPasswordCompleteDataAttributes(password string) *ResetPasswordCompl
 func NewResetPasswordCompleteDataAttributesWithDefaults() *ResetPasswordCompleteDataAttributes {
 	this := ResetPasswordCompleteDataAttributes{}
 	return &this
+}
+
+// GetEmail returns the Email field value
+func (o *ResetPasswordCompleteDataAttributes) GetEmail() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.Email
+}
+
+// GetEmailOk returns a tuple with the Email field value
+// and a boolean to check if the value has been set.
+func (o *ResetPasswordCompleteDataAttributes) GetEmailOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.Email, true
+}
+
+// SetEmail sets field value
+func (o *ResetPasswordCompleteDataAttributes) SetEmail(v string) {
+	o.Email = v
 }
 
 // GetPassword returns the Password field value
@@ -73,70 +96,6 @@ func (o *ResetPasswordCompleteDataAttributes) SetPassword(v string) {
 	o.Password = v
 }
 
-// GetEmail returns the Email field value if set, zero value otherwise.
-func (o *ResetPasswordCompleteDataAttributes) GetEmail() string {
-	if o == nil || IsNil(o.Email) {
-		var ret string
-		return ret
-	}
-	return *o.Email
-}
-
-// GetEmailOk returns a tuple with the Email field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *ResetPasswordCompleteDataAttributes) GetEmailOk() (*string, bool) {
-	if o == nil || IsNil(o.Email) {
-		return nil, false
-	}
-	return o.Email, true
-}
-
-// HasEmail returns a boolean if a field has been set.
-func (o *ResetPasswordCompleteDataAttributes) HasEmail() bool {
-	if o != nil && !IsNil(o.Email) {
-		return true
-	}
-
-	return false
-}
-
-// SetEmail gets a reference to the given string and assigns it to the Email field.
-func (o *ResetPasswordCompleteDataAttributes) SetEmail(v string) {
-	o.Email = &v
-}
-
-// GetUsername returns the Username field value if set, zero value otherwise.
-func (o *ResetPasswordCompleteDataAttributes) GetUsername() string {
-	if o == nil || IsNil(o.Username) {
-		var ret string
-		return ret
-	}
-	return *o.Username
-}
-
-// GetUsernameOk returns a tuple with the Username field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *ResetPasswordCompleteDataAttributes) GetUsernameOk() (*string, bool) {
-	if o == nil || IsNil(o.Username) {
-		return nil, false
-	}
-	return o.Username, true
-}
-
-// HasUsername returns a boolean if a field has been set.
-func (o *ResetPasswordCompleteDataAttributes) HasUsername() bool {
-	if o != nil && !IsNil(o.Username) {
-		return true
-	}
-
-	return false
-}
-
-// SetUsername gets a reference to the given string and assigns it to the Username field.
-func (o *ResetPasswordCompleteDataAttributes) SetUsername(v string) {
-	o.Username = &v
-}
-
 func (o ResetPasswordCompleteDataAttributes) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -147,13 +106,8 @@ func (o ResetPasswordCompleteDataAttributes) MarshalJSON() ([]byte, error) {
 
 func (o ResetPasswordCompleteDataAttributes) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
+	toSerialize["email"] = o.Email
 	toSerialize["password"] = o.Password
-	if !IsNil(o.Email) {
-		toSerialize["email"] = o.Email
-	}
-	if !IsNil(o.Username) {
-		toSerialize["username"] = o.Username
-	}
 	return toSerialize, nil
 }
 
@@ -162,6 +116,7 @@ func (o *ResetPasswordCompleteDataAttributes) UnmarshalJSON(data []byte) (err er
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
+		"email",
 		"password",
 	}
 

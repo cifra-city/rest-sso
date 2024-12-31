@@ -22,9 +22,7 @@ var _ MappedNullable = &LoginCompleteReqDataAttributes{}
 // LoginCompleteReqDataAttributes struct for LoginCompleteReqDataAttributes
 type LoginCompleteReqDataAttributes struct {
 	// User email
-	Email *string `json:"email,omitempty"`
-	// User username
-	Username *string `json:"username,omitempty"`
+	Email string `json:"email"`
 	// Device name
 	DeviceName string `json:"device_name"`
 }
@@ -35,8 +33,9 @@ type _LoginCompleteReqDataAttributes LoginCompleteReqDataAttributes
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewLoginCompleteReqDataAttributes(deviceName string) *LoginCompleteReqDataAttributes {
+func NewLoginCompleteReqDataAttributes(email string, deviceName string) *LoginCompleteReqDataAttributes {
 	this := LoginCompleteReqDataAttributes{}
+	this.Email = email
 	this.DeviceName = deviceName
 	return &this
 }
@@ -49,68 +48,28 @@ func NewLoginCompleteReqDataAttributesWithDefaults() *LoginCompleteReqDataAttrib
 	return &this
 }
 
-// GetEmail returns the Email field value if set, zero value otherwise.
+// GetEmail returns the Email field value
 func (o *LoginCompleteReqDataAttributes) GetEmail() string {
-	if o == nil || IsNil(o.Email) {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.Email
+
+	return o.Email
 }
 
-// GetEmailOk returns a tuple with the Email field value if set, nil otherwise
+// GetEmailOk returns a tuple with the Email field value
 // and a boolean to check if the value has been set.
 func (o *LoginCompleteReqDataAttributes) GetEmailOk() (*string, bool) {
-	if o == nil || IsNil(o.Email) {
+	if o == nil {
 		return nil, false
 	}
-	return o.Email, true
+	return &o.Email, true
 }
 
-// HasEmail returns a boolean if a field has been set.
-func (o *LoginCompleteReqDataAttributes) HasEmail() bool {
-	if o != nil && !IsNil(o.Email) {
-		return true
-	}
-
-	return false
-}
-
-// SetEmail gets a reference to the given string and assigns it to the Email field.
+// SetEmail sets field value
 func (o *LoginCompleteReqDataAttributes) SetEmail(v string) {
-	o.Email = &v
-}
-
-// GetUsername returns the Username field value if set, zero value otherwise.
-func (o *LoginCompleteReqDataAttributes) GetUsername() string {
-	if o == nil || IsNil(o.Username) {
-		var ret string
-		return ret
-	}
-	return *o.Username
-}
-
-// GetUsernameOk returns a tuple with the Username field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *LoginCompleteReqDataAttributes) GetUsernameOk() (*string, bool) {
-	if o == nil || IsNil(o.Username) {
-		return nil, false
-	}
-	return o.Username, true
-}
-
-// HasUsername returns a boolean if a field has been set.
-func (o *LoginCompleteReqDataAttributes) HasUsername() bool {
-	if o != nil && !IsNil(o.Username) {
-		return true
-	}
-
-	return false
-}
-
-// SetUsername gets a reference to the given string and assigns it to the Username field.
-func (o *LoginCompleteReqDataAttributes) SetUsername(v string) {
-	o.Username = &v
+	o.Email = v
 }
 
 // GetDeviceName returns the DeviceName field value
@@ -147,12 +106,7 @@ func (o LoginCompleteReqDataAttributes) MarshalJSON() ([]byte, error) {
 
 func (o LoginCompleteReqDataAttributes) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if !IsNil(o.Email) {
-		toSerialize["email"] = o.Email
-	}
-	if !IsNil(o.Username) {
-		toSerialize["username"] = o.Username
-	}
+	toSerialize["email"] = o.Email
 	toSerialize["device_name"] = o.DeviceName
 	return toSerialize, nil
 }
@@ -162,6 +116,7 @@ func (o *LoginCompleteReqDataAttributes) UnmarshalJSON(data []byte) (err error) 
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
+		"email",
 		"device_name",
 	}
 

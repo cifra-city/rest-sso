@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"database/sql"
 	"errors"
 	"net/http"
 
@@ -25,18 +24,12 @@ func RegistrationComplete(w http.ResponseWriter, r *http.Request) {
 
 	password := req.Data.Attributes.Password
 	email := req.Data.Attributes.Email
-	username := req.Data.Attributes.Username
 
 	IP := httpkit.GetClientIP(r)
 	UserAgent := httpkit.GetUserAgent(r)
 
 	if len(password) < 8 || !sectools.HasRequiredChars(password) || len(password) > 32 {
 		httpkit.RenderErr(w, problems.BadRequest(errors.New("invalid password requirements"))...)
-		return
-	}
-
-	if len(username) < 3 || len(username) > 32 {
-		httpkit.RenderErr(w, problems.BadRequest(errors.New("invalid username length"))...)
 		return
 	}
 
@@ -48,18 +41,6 @@ func RegistrationComplete(w http.ResponseWriter, r *http.Request) {
 	}
 
 	log := Server.Logger
-
-	acc, err := Server.Databaser.Accounts.Exists(r, &username, &email)
-	if err != nil && !errors.Is(err, sql.ErrNoRows) {
-		log.Errorf("error getting user: %v", err)
-		httpkit.RenderErr(w, problems.InternalError())
-		return
-	}
-	if acc != nil {
-		log.Debugf("Email or username already taken: %v", err)
-		httpkit.RenderErr(w, problems.NotFound())
-		return
-	}
 
 	if !Server.Config.Email.Off { // for testing
 		err = Server.Mailman.CheckAccess(email, string(REGISTRATION), UserAgent, IP)
@@ -87,14 +68,14 @@ func RegistrationComplete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	account, err := Server.Databaser.Accounts.Create(r, username, email, string(hashedPassword))
+	account, err := Server.Databaser.Accounts.Create(r, email, string(hashedPassword))
 	if err != nil {
-		log.Errorf("error inserting user: %v", err)
+		log.Errorf("error inserting account: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())
 		return
 	}
 
-	log.Infof("user created: %v", account.Username)
+	log.Infof("account created: %v", account.Email)
 
 	httpkit.Render(w, http.StatusCreated)
 }

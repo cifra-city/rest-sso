@@ -23,8 +23,6 @@ var _ MappedNullable = &RegistrationInitiateDataAttributes{}
 type RegistrationInitiateDataAttributes struct {
 	// User email
 	Email string `json:"email"`
-	// User username
-	Username string `json:"username"`
 }
 
 type _RegistrationInitiateDataAttributes RegistrationInitiateDataAttributes
@@ -33,10 +31,9 @@ type _RegistrationInitiateDataAttributes RegistrationInitiateDataAttributes
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewRegistrationInitiateDataAttributes(email string, username string) *RegistrationInitiateDataAttributes {
+func NewRegistrationInitiateDataAttributes(email string) *RegistrationInitiateDataAttributes {
 	this := RegistrationInitiateDataAttributes{}
 	this.Email = email
-	this.Username = username
 	return &this
 }
 
@@ -72,30 +69,6 @@ func (o *RegistrationInitiateDataAttributes) SetEmail(v string) {
 	o.Email = v
 }
 
-// GetUsername returns the Username field value
-func (o *RegistrationInitiateDataAttributes) GetUsername() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.Username
-}
-
-// GetUsernameOk returns a tuple with the Username field value
-// and a boolean to check if the value has been set.
-func (o *RegistrationInitiateDataAttributes) GetUsernameOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.Username, true
-}
-
-// SetUsername sets field value
-func (o *RegistrationInitiateDataAttributes) SetUsername(v string) {
-	o.Username = v
-}
-
 func (o RegistrationInitiateDataAttributes) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -107,7 +80,6 @@ func (o RegistrationInitiateDataAttributes) MarshalJSON() ([]byte, error) {
 func (o RegistrationInitiateDataAttributes) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["email"] = o.Email
-	toSerialize["username"] = o.Username
 	return toSerialize, nil
 }
 
@@ -117,7 +89,6 @@ func (o *RegistrationInitiateDataAttributes) UnmarshalJSON(data []byte) (err err
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
 		"email",
-		"username",
 	}
 
 	allProperties := make(map[string]interface{})
