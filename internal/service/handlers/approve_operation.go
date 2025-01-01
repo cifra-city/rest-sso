@@ -47,7 +47,7 @@ func ApproveOperation(w http.ResponseWriter, r *http.Request) {
 	IP := httpkit.GetClientIP(r)
 	UserAgent := httpkit.GetUserAgent(r)
 
-	Server, err := cifractx.GetValue[*config.Service](r.Context(), config.SERVICE)
+	Server, err := cifractx.GetValue[*config.Server](r.Context(), config.SERVER)
 	if err != nil {
 		logrus.Warn("error getting db queries: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())

@@ -25,10 +25,10 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	Server, err := cifractx.GetValue[*config.Service](r.Context(), config.SERVICE)
+	Server, err := cifractx.GetValue[*config.Server](r.Context(), config.SERVER)
 	if err != nil {
 		logrus.Errorf("Failed to get service from context: %v", err)
-		http.Error(w, "Service configuration not found", http.StatusInternalServerError)
+		http.Error(w, "Server configuration not found", http.StatusInternalServerError)
 		return
 	}
 	log := Server.Logger

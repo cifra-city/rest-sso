@@ -30,6 +30,13 @@ type JWTConfig struct {
 	} `mapstructure:"refresh_token"`
 }
 
+type RabbitMQConfig struct {
+	URL      string `mapstructure:"url"`
+	User     string `mapstructure:"user"`
+	Password string `mapstructure:"password"`
+	Exchange string `mapstructure:"exchange"`
+}
+
 type LoggingConfig struct {
 	Level  string `mapstructure:"level"`
 	Format string `mapstructure:"format"`
@@ -65,6 +72,7 @@ type RedisConfig struct {
 type Config struct {
 	Database DatabaseConfig `mapstructure:"database"`
 	Server   ServerConfig   `mapstructure:"server"`
+	Rabbit   RabbitMQConfig `mapstructure:"rabbit"`
 	JWT      JWTConfig      `mapstructure:"jwt"`
 	Logging  LoggingConfig  `mapstructure:"logging"`
 	Email    EmailConfig    `mapstructure:"email"`

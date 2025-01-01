@@ -1,8 +1,10 @@
 package handlers
 
 import (
+	"encoding/json"
 	"errors"
 	"net/http"
+	"time"
 
 	"github.com/cifra-city/cifractx"
 	"github.com/cifra-city/httpkit"
@@ -10,6 +12,7 @@ import (
 	"github.com/cifra-city/mailman"
 	"github.com/cifra-city/rest-sso/internal/config"
 	"github.com/cifra-city/rest-sso/internal/sectools"
+	"github.com/cifra-city/rest-sso/internal/service/events"
 	"github.com/cifra-city/rest-sso/internal/service/requests"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
@@ -33,7 +36,7 @@ func RegistrationComplete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	Server, err := cifractx.GetValue[*config.Service](r.Context(), config.SERVICE)
+	Server, err := cifractx.GetValue[*config.Server](r.Context(), config.SERVER)
 	if err != nil {
 		logrus.Errorf("error getting db queries: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())
@@ -72,6 +75,25 @@ func RegistrationComplete(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Errorf("error inserting account: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())
+		return
+	}
+
+	event := events.AccountCreated{
+		Event:     "AccountCreate",
+		UserID:    account.ID.String(),
+		Email:     email,
+		Timestamp: time.Now().UTC(),
+	}
+
+	body, err := json.Marshal(event)
+	if err != nil {
+		http.Error(w, "Failed to serialize event", http.StatusInternalServerError)
+		return
+	}
+
+	err = Server.Broker.Publish("sso.events", "account.create", "account.create", body)
+	if err != nil {
+		http.Error(w, "Failed to publish event", http.StatusInternalServerError)
 		return
 	}
 

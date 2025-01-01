@@ -15,12 +15,12 @@ import (
 func Run(ctx context.Context) {
 	r := chi.NewRouter()
 
-	service, err := cifractx.GetValue[*config.Service](ctx, config.SERVICE)
+	service, err := cifractx.GetValue[*config.Server](ctx, config.SERVER)
 	if err != nil {
 		logrus.Fatalf("failed to get server from context: %v", err)
 	}
 
-	r.Use(cifractx.MiddlewareWithContext(config.SERVICE, service))
+	r.Use(cifractx.MiddlewareWithContext(config.SERVER, service))
 	authMW := service.TokenManager.Middleware(service.Config.JWT.AccessToken.SecretKey)
 	rateLimiter := httpkit.NewRateLimiter(15, 10*time.Second, 5*time.Minute)
 	r.Route("/cifra-sso", func(r chi.Router) {

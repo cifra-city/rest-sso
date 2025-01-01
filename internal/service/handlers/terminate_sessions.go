@@ -14,7 +14,7 @@ import (
 )
 
 func TerminateSessions(w http.ResponseWriter, r *http.Request) {
-	Server, err := cifractx.GetValue[*config.Service](r.Context(), config.SERVICE)
+	Server, err := cifractx.GetValue[*config.Server](r.Context(), config.SERVER)
 	if err != nil {
 		httpkit.RenderErr(w, problems.InternalError("Failed to retrieve service configuration"))
 		return

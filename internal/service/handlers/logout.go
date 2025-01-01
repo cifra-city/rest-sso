@@ -15,7 +15,7 @@ import (
 func Logout(w http.ResponseWriter, r *http.Request) {
 	logrus.Debugf("user logged out")
 
-	Server, err := cifractx.GetValue[*config.Service](r.Context(), config.SERVICE)
+	Server, err := cifractx.GetValue[*config.Server](r.Context(), config.SERVER)
 	if err != nil {
 		httpkit.RenderErr(w, problems.InternalError("Failed to retrieve service configuration"))
 		return

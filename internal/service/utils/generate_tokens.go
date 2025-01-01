@@ -6,7 +6,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func GenerateTokens(service config.Service, account dbcore.Account, deviceID uuid.UUID) (tokenAccess string, tokenRefresh string, err error) {
+func GenerateTokens(service config.Server, account dbcore.Account, deviceID uuid.UUID) (tokenAccess string, tokenRefresh string, err error) {
 	tokenAccess, err = service.TokenManager.GenerateJWT(account.ID, deviceID, string(account.Role), service.Config.JWT.AccessToken.TokenLifetime, service.Config.JWT.AccessToken.SecretKey)
 	if err != nil {
 		return "", "", err

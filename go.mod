@@ -16,6 +16,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/viper v1.19.0
+	github.com/streadway/amqp v1.1.0
 	golang.org/x/crypto v0.21.0
 )
 

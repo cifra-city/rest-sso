@@ -14,7 +14,7 @@ import (
 )
 
 func GetSessions(w http.ResponseWriter, r *http.Request) {
-	Server, err := cifractx.GetValue[*config.Service](r.Context(), config.SERVICE)
+	Server, err := cifractx.GetValue[*config.Server](r.Context(), config.SERVER)
 	if err != nil {
 		logrus.Errorf("Failed to retrieve service configuration %s", err)
 		httpkit.RenderErr(w, problems.InternalError())
