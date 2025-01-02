@@ -15,7 +15,7 @@ func NewRegistrationComplete(r *http.Request) (req resources.RegistrationComplet
 	}
 
 	errs := validation.Errors{
-		"data/type":       validation.Validate(req.Data.Type, validation.Required, validation.In("registration_complete")),
+		"data/type":       validation.Validate(req.Data.Type, validation.Required, validation.In(resources.RegistrationCompleteType)),
 		"data/attributes": validation.Validate(req.Data.Attributes, validation.Required),
 	}
 	return req, errs.Filter()

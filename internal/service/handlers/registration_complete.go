@@ -73,6 +73,10 @@ func RegistrationComplete(w http.ResponseWriter, r *http.Request) {
 
 	account, err := Server.Databaser.Accounts.Create(r, email, string(hashedPassword))
 	if err != nil {
+		if err.Error() == "pq: duplicate key value violates unique constraint \"accounts_email_key\"" {
+			httpkit.RenderErr(w, problems.Conflict())
+			return
+		}
 		log.Errorf("error inserting account: %v", err)
 		httpkit.RenderErr(w, problems.InternalError())
 		return

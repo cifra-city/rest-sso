@@ -15,7 +15,7 @@ func NewResetPasswordComplete(r *http.Request) (req *resources.ResetPasswordComp
 	}
 
 	errs := validation.Errors{
-		"data/type":       validation.Validate(req.Data.Type, validation.Required, validation.In("reset_password")),
+		"data/type":       validation.Validate(req.Data.Type, validation.Required, validation.In(resources.ResetPasswordCompleteType)),
 		"data/attributes": validation.Validate(req.Data.Attributes, validation.Required),
 	}
 	return req, errs.Filter()

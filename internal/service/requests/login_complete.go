@@ -15,7 +15,7 @@ func NewLoginComplete(r *http.Request) (req resources.LoginCompleteReq, err erro
 	}
 
 	errs := validation.Errors{
-		"data/type":       validation.Validate(req.Data.Type, validation.Required, validation.In("login_complete")),
+		"data/type":       validation.Validate(req.Data.Type, validation.Required, validation.In(resources.LoginCompleteType)),
 		"data/attributes": validation.Validate(req.Data.Attributes, validation.Required),
 	}
 	return req, errs.Filter()

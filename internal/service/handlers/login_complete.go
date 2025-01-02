@@ -98,7 +98,7 @@ func LoginComplete(w http.ResponseWriter, r *http.Request) {
 
 	httpkit.Render(w, resources.LoginCompleteResp{
 		Data: resources.LoginCompleteRespData{
-			Type: "login",
+			Type: resources.LoginCompleteType,
 			Attributes: resources.LoginCompleteRespDataAttributes{
 				AccessToken:  tokenAccess,
 				RefreshToken: tokenRefresh,

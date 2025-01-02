@@ -97,7 +97,7 @@ func DeleteSession(w http.ResponseWriter, r *http.Request) {
 
 	httpkit.Render(w, resources.UserSessions{
 		Data: resources.UserSessionData{
-			Type: "user_sessions",
+			Type: resources.UserSessionsType,
 			Attributes: resources.UserSessionDataAttributes{
 				Devices: userSessions,
 			},

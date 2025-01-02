@@ -15,7 +15,7 @@ func NewLoginInitiate(r *http.Request) (req resources.LoginInitiate, err error) 
 	}
 
 	errs := validation.Errors{
-		"data/type":       validation.Validate(req.Data.Type, validation.Required, validation.In("login_initiate")),
+		"data/type":       validation.Validate(req.Data.Type, validation.Required, validation.In(resources.LoginInitiateType)),
 		"data/attributes": validation.Validate(req.Data.Attributes, validation.Required),
 	}
 	return req, errs.Filter()

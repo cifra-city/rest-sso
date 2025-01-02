@@ -141,7 +141,7 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 
 	httpkit.Render(w, resources.RefreshResp{
 		Data: resources.RefreshRespData{
-			Type: string(dbcore.OperationTypeRefreshToken),
+			Type: resources.RefreshType,
 			Attributes: resources.RefreshRespDataAttributes{
 				AccessToken:  tokenAccess,
 				RefreshToken: tokenRefresh,
