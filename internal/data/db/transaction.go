@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/cifra-city/comtools/httpkit"
-	"github.com/cifra-city/rest-sso/internal/data/db/dbcore"
+	"github.com/cifra-city/rest-sso/internal/data/db/sqlcore"
 	"github.com/google/uuid"
 )
 
@@ -23,7 +23,7 @@ type Transaction interface {
 		deviceName string,
 		Token string,
 		deviceID uuid.UUID,
-	) (*dbcore.Session, error)
+	) (*sqlcore.Session, error)
 
 	TerminateSessionsTxn(
 		r *http.Request,
@@ -40,10 +40,10 @@ type Transaction interface {
 }
 
 type transaction struct {
-	queries *dbcore.Queries
+	queries *sqlcore.Queries
 }
 
-func NewTransaction(queries *dbcore.Queries) Transaction {
+func NewTransaction(queries *sqlcore.Queries) Transaction {
 	return &transaction{queries: queries}
 }
 
@@ -77,7 +77,7 @@ func (t *transaction) ResetPasswordTxn(
 		return err
 	}
 
-	_, err = queries.UpdatePassword(ctx, dbcore.UpdatePasswordParams{
+	_, err = queries.UpdatePassword(ctx, sqlcore.UpdatePasswordParams{
 		ID:       userID,
 		PassHash: hashedPassword,
 	})
@@ -90,9 +90,9 @@ func (t *transaction) ResetPasswordTxn(
 		return err
 	}
 
-	err = queries.CreateOperation(ctx, dbcore.CreateOperationParams{
+	err = queries.CreateOperation(ctx, sqlcore.CreateOperationParams{
 		UserID:     userID,
-		Operation:  dbcore.OperationTypeResetPassword,
+		Operation:  sqlcore.OperationTypeResetPassword,
 		DeviceData: deviceData,
 		Success:    true,
 	})
@@ -109,7 +109,7 @@ func (t *transaction) LoginTxn(
 	deviceName string,
 	Token string,
 	deviceID uuid.UUID,
-) (*dbcore.Session, error) {
+) (*sqlcore.Session, error) {
 	ctx := r.Context()
 	queries, tx, err := t.queries.BeginTx(ctx)
 	if err != nil {
@@ -128,7 +128,7 @@ func (t *transaction) LoginTxn(
 		return nil, err
 	}
 
-	session, err := queries.CreateSession(ctx, dbcore.CreateSessionParams{
+	session, err := queries.CreateSession(ctx, sqlcore.CreateSessionParams{
 		ID:         deviceID,
 		UserID:     userID,
 		Token:      Token,
@@ -140,9 +140,9 @@ func (t *transaction) LoginTxn(
 		return nil, err
 	}
 
-	err = queries.CreateOperation(ctx, dbcore.CreateOperationParams{
+	err = queries.CreateOperation(ctx, sqlcore.CreateOperationParams{
 		UserID:     userID,
-		Operation:  dbcore.OperationTypeLogin,
+		Operation:  sqlcore.OperationTypeLogin,
 		DeviceData: deviceData,
 		Success:    true,
 	})
@@ -182,7 +182,7 @@ func (t *transaction) TerminateSessionsTxn(
 		if dev.ID == curDevId {
 			continue
 		}
-		err = queries.DeleteUserSession(ctx, dbcore.DeleteUserSessionParams{
+		err = queries.DeleteUserSession(ctx, sqlcore.DeleteUserSessionParams{
 			ID:     dev.ID,
 			UserID: userId,
 		})
@@ -191,9 +191,9 @@ func (t *transaction) TerminateSessionsTxn(
 		}
 	}
 
-	err = queries.CreateOperation(ctx, dbcore.CreateOperationParams{
+	err = queries.CreateOperation(ctx, sqlcore.CreateOperationParams{
 		UserID:     userId,
-		Operation:  dbcore.OperationTypeTerminateSession,
+		Operation:  sqlcore.OperationTypeTerminateSession,
 		DeviceData: deviceData,
 		Success:    true,
 	})
@@ -220,7 +220,7 @@ func (t *transaction) UpdateRefreshTokenTrx( //TODO for future use
 		err = HandleTransactionRollback(tx, err)
 	}()
 
-	err = queries.UpdateSessionToken(ctx, dbcore.UpdateSessionTokenParams{
+	err = queries.UpdateSessionToken(ctx, sqlcore.UpdateSessionTokenParams{
 		ID:     sessionID,
 		UserID: userID,
 		Token:  newToken,

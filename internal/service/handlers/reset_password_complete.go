@@ -10,7 +10,7 @@ import (
 	"github.com/cifra-city/comtools/httpkit/problems"
 	"github.com/cifra-city/mailman"
 	"github.com/cifra-city/rest-sso/internal/config"
-	"github.com/cifra-city/rest-sso/internal/data/db/dbcore"
+	"github.com/cifra-city/rest-sso/internal/data/db/sqlcore"
 	"github.com/cifra-city/rest-sso/internal/service/requests"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
@@ -52,7 +52,7 @@ func ResetPasswordComplete(w http.ResponseWriter, r *http.Request) {
 	if !Server.Config.Email.Off { // for testing
 		err = Server.Mailman.CheckAccess(acc.Email, string(RESET_PASSWORD), UserAgent, IP)
 		if err != nil {
-			_ = Server.Databaser.Operations.CreateFailure(r, acc.ID, dbcore.OperationTypeResetPassword, dbcore.FailureReasonNoAccess)
+			_ = Server.Databaser.Operations.CreateFailure(r, acc.ID, sqlcore.OperationTypeResetPassword, sqlcore.FailureReasonNoAccess)
 			if errors.Is(err, mailman.ErrNotFound) {
 				log.Debugf("email haven`t request: %s", email)
 				httpkit.RenderErr(w, problems.NotFound())

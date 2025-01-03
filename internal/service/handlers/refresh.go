@@ -10,7 +10,7 @@ import (
 	"github.com/cifra-city/comtools/httpkit"
 	"github.com/cifra-city/comtools/httpkit/problems"
 	"github.com/cifra-city/rest-sso/internal/config"
-	"github.com/cifra-city/rest-sso/internal/data/db/dbcore"
+	"github.com/cifra-city/rest-sso/internal/data/db/sqlcore"
 	"github.com/cifra-city/rest-sso/internal/sectools"
 	"github.com/cifra-city/rest-sso/internal/service/requests"
 	"github.com/cifra-city/rest-sso/resources"
@@ -84,7 +84,7 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 
 	if session.UserID != userID {
 		log.Warn("Device does not belong to user")
-		err = Server.Databaser.Operations.CreateFailure(r, userID, dbcore.OperationTypeRefreshToken, dbcore.FailureReasonInvalidDeviceID)
+		err = Server.Databaser.Operations.CreateFailure(r, userID, sqlcore.OperationTypeRefreshToken, sqlcore.FailureReasonInvalidDeviceID)
 		if err != nil {
 			log.Errorf("Failed to create operation history: %v", err)
 			httpkit.RenderErr(w, problems.InternalError())

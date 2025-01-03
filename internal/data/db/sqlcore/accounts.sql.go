@@ -3,7 +3,7 @@
 //   sqlc v1.27.0
 // source: accounts.sql
 
-package dbcore
+package sqlcore
 
 import (
 	"context"

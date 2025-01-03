@@ -6,7 +6,7 @@ require (
 	github.com/alecthomas/kingpin v2.2.6+incompatible
 	github.com/cifra-city/comtools v0.0.2
 	github.com/cifra-city/mailman v0.0.3
-	github.com/cifra-city/tokens v1.3.0
+	github.com/cifra-city/tokens v0.0.1
 	github.com/go-chi/chi v4.1.2+incompatible
 	github.com/go-ozzo/ozzo-validation/v4 v4.3.0
 	github.com/golang-jwt/jwt/v5 v5.2.1

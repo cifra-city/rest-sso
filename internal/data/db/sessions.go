@@ -5,16 +5,16 @@ import (
 	"net/http"
 
 	"github.com/cifra-city/comtools/httpkit"
-	"github.com/cifra-city/rest-sso/internal/data/db/dbcore"
+	"github.com/cifra-city/rest-sso/internal/data/db/sqlcore"
 	"github.com/google/uuid"
 )
 
 type Sessions interface {
-	Create(r *http.Request, userID uuid.UUID, token string, deviceName string, deviceData json.RawMessage) (dbcore.Session, error)
+	Create(r *http.Request, userID uuid.UUID, token string, deviceName string, deviceData json.RawMessage) (sqlcore.Session, error)
 
-	GetByID(r *http.Request, id uuid.UUID) (dbcore.Session, error)
-	GetSession(r *http.Request, id uuid.UUID, userID uuid.UUID) (dbcore.Session, error)
-	GetSessions(r *http.Request, userID uuid.UUID) ([]dbcore.Session, error)
+	GetByID(r *http.Request, id uuid.UUID) (sqlcore.Session, error)
+	GetSession(r *http.Request, id uuid.UUID, userID uuid.UUID) (sqlcore.Session, error)
+	GetSessions(r *http.Request, userID uuid.UUID) ([]sqlcore.Session, error)
 
 	GetToken(r *http.Request, id uuid.UUID, userID uuid.UUID) (string, error)
 	UpdateToken(r *http.Request, id uuid.UUID, token string) error
@@ -24,17 +24,17 @@ type Sessions interface {
 }
 
 type sessions struct {
-	queries *dbcore.Queries
+	queries *sqlcore.Queries
 }
 
-func NewSession(queries *dbcore.Queries) Sessions {
+func NewSession(queries *sqlcore.Queries) Sessions {
 	return &sessions{queries: queries}
 }
 
-func (s *sessions) Create(r *http.Request, userID uuid.UUID, token string, deviceName string, deviceData json.RawMessage) (dbcore.Session, error) {
+func (s *sessions) Create(r *http.Request, userID uuid.UUID, token string, deviceName string, deviceData json.RawMessage) (sqlcore.Session, error) {
 	client := httpkit.GetUserAgent(r)
 	IP := httpkit.GetClientIP(r)
-	return s.queries.CreateSession(r.Context(), dbcore.CreateSessionParams{
+	return s.queries.CreateSession(r.Context(), sqlcore.CreateSessionParams{
 		UserID:     userID,
 		Token:      token,
 		DeviceName: deviceName,
@@ -43,30 +43,30 @@ func (s *sessions) Create(r *http.Request, userID uuid.UUID, token string, devic
 	})
 }
 
-func (s *sessions) GetByID(r *http.Request, id uuid.UUID) (dbcore.Session, error) {
+func (s *sessions) GetByID(r *http.Request, id uuid.UUID) (sqlcore.Session, error) {
 	return s.queries.GetSession(r.Context(), id)
 }
 
-func (s *sessions) GetSession(r *http.Request, id uuid.UUID, userID uuid.UUID) (dbcore.Session, error) {
-	return s.queries.GetUserSession(r.Context(), dbcore.GetUserSessionParams{
+func (s *sessions) GetSession(r *http.Request, id uuid.UUID, userID uuid.UUID) (sqlcore.Session, error) {
+	return s.queries.GetUserSession(r.Context(), sqlcore.GetUserSessionParams{
 		ID:     id,
 		UserID: userID,
 	})
 }
 
-func (s *sessions) GetSessions(r *http.Request, userID uuid.UUID) ([]dbcore.Session, error) {
+func (s *sessions) GetSessions(r *http.Request, userID uuid.UUID) ([]sqlcore.Session, error) {
 	return s.queries.GetSessionsByUserID(r.Context(), userID)
 }
 
 func (s *sessions) GetToken(r *http.Request, id uuid.UUID, userID uuid.UUID) (string, error) {
-	return s.queries.GetSessionToken(r.Context(), dbcore.GetSessionTokenParams{
+	return s.queries.GetSessionToken(r.Context(), sqlcore.GetSessionTokenParams{
 		ID:     id,
 		UserID: userID,
 	})
 }
 
 func (s *sessions) UpdateToken(r *http.Request, id uuid.UUID, token string) error {
-	return s.queries.UpdateSessionToken(r.Context(), dbcore.UpdateSessionTokenParams{
+	return s.queries.UpdateSessionToken(r.Context(), sqlcore.UpdateSessionTokenParams{
 		ID:    id,
 		Token: token,
 	})
@@ -77,7 +77,7 @@ func (s *sessions) DeleteAll(r *http.Request, id uuid.UUID) error {
 }
 
 func (s *sessions) Delete(r *http.Request, id uuid.UUID, userID uuid.UUID) error {
-	return s.queries.DeleteUserSession(r.Context(), dbcore.DeleteUserSessionParams{
+	return s.queries.DeleteUserSession(r.Context(), sqlcore.DeleteUserSessionParams{
 		ID:     id,
 		UserID: userID,
 	})

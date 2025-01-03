@@ -5,5 +5,5 @@ sql:
     engine: postgresql
     gen:
       go:
-        package: dbcore
-        out: internal/data/db/dbcore
+        package: sqlcore
+        out: internal/data/db/sqlcore

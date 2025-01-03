@@ -3,41 +3,41 @@ package db
 import (
 	"net/http"
 
-	"github.com/cifra-city/rest-sso/internal/data/db/dbcore"
+	"github.com/cifra-city/rest-sso/internal/data/db/sqlcore"
 	"github.com/google/uuid"
 )
 
 type Operations interface {
-	Create(r *http.Request, userID uuid.UUID, operation dbcore.OperationType, success bool, failureReason *dbcore.FailureReason) error
-	CreateFailure(r *http.Request, userID uuid.UUID, operation dbcore.OperationType, failureReason dbcore.FailureReason) error
+	Create(r *http.Request, userID uuid.UUID, operation sqlcore.OperationType, success bool, failureReason *sqlcore.FailureReason) error
+	CreateFailure(r *http.Request, userID uuid.UUID, operation sqlcore.OperationType, failureReason sqlcore.FailureReason) error
 }
 type operations struct {
-	queries *dbcore.Queries
+	queries *sqlcore.Queries
 }
 
-func NewOperations(queries *dbcore.Queries) Operations {
+func NewOperations(queries *sqlcore.Queries) Operations {
 	return &operations{queries: queries}
 }
 
-func (o *operations) Create(r *http.Request, userID uuid.UUID, operation dbcore.OperationType, success bool, failureReason *dbcore.FailureReason) error {
+func (o *operations) Create(r *http.Request, userID uuid.UUID, operation sqlcore.OperationType, success bool, failureReason *sqlcore.FailureReason) error {
 	deviceData, err := NewDeviceData(r)
 	if err != nil {
 		return err
 	}
 
-	fr := dbcore.NullFailureReason{
+	fr := sqlcore.NullFailureReason{
 		FailureReason: "",
 		Valid:         false,
 	}
 
 	if failureReason != nil && !success {
-		fr = dbcore.NullFailureReason{
+		fr = sqlcore.NullFailureReason{
 			FailureReason: *failureReason,
 			Valid:         true,
 		}
 	}
 
-	return o.queries.CreateOperation(r.Context(), dbcore.CreateOperationParams{
+	return o.queries.CreateOperation(r.Context(), sqlcore.CreateOperationParams{
 		UserID:        userID,
 		Operation:     operation,
 		DeviceData:    deviceData,
@@ -46,18 +46,18 @@ func (o *operations) Create(r *http.Request, userID uuid.UUID, operation dbcore.
 	})
 }
 
-func (o *operations) CreateFailure(r *http.Request, userID uuid.UUID, operation dbcore.OperationType, failureReason dbcore.FailureReason) error {
+func (o *operations) CreateFailure(r *http.Request, userID uuid.UUID, operation sqlcore.OperationType, failureReason sqlcore.FailureReason) error {
 	deviceData, err := NewDeviceData(r)
 	if err != nil {
 		return err
 	}
 
-	return o.queries.CreateOperation(r.Context(), dbcore.CreateOperationParams{
+	return o.queries.CreateOperation(r.Context(), sqlcore.CreateOperationParams{
 		UserID:     userID,
 		Operation:  operation,
 		DeviceData: deviceData,
 		Success:    false,
-		FailureReason: dbcore.NullFailureReason{
+		FailureReason: sqlcore.NullFailureReason{
 			FailureReason: failureReason,
 			Valid:         true,
 		},

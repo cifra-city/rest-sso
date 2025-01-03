@@ -9,7 +9,7 @@ import (
 	"github.com/cifra-city/comtools/httpkit"
 	"github.com/cifra-city/comtools/httpkit/problems"
 	"github.com/cifra-city/rest-sso/internal/config"
-	"github.com/cifra-city/rest-sso/internal/data/db/dbcore"
+	"github.com/cifra-city/rest-sso/internal/data/db/sqlcore"
 	"github.com/cifra-city/rest-sso/internal/service/requests"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
@@ -50,7 +50,7 @@ func LoginInitiate(w http.ResponseWriter, r *http.Request) {
 
 	err = bcrypt.CompareHashAndPassword([]byte(acc.PassHash), []byte(password))
 	if err != nil {
-		err = Server.Databaser.Operations.CreateFailure(r, acc.ID, dbcore.OperationTypeLogin, dbcore.FailureReasonInvalidPassword)
+		err = Server.Databaser.Operations.CreateFailure(r, acc.ID, sqlcore.OperationTypeLogin, sqlcore.FailureReasonInvalidPassword)
 		log.Debugf("Incorrect password for account: %s, error: %s", acc.Email, err)
 		httpkit.RenderErr(w, problems.Conflict())
 		return
