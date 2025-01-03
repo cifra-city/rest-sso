@@ -8,7 +8,7 @@ post:
     content:
       application/vnd.api+json:
         schema:
-          $ref: '../spec/components/schemas/LoginInitiate.yaml'
+          $ref: '../spec/components/schemas/Login.yaml'
   responses:
     '201':
       description: User successfully initiated login

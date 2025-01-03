@@ -4,15 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Email** | Pointer to **string** | User email | [optional] 
-**Username** | Pointer to **string** | User username | [optional] 
-**Password** | **string** | User password | 
+**Email** | **string** | User email | 
+**DeviceName** | **string** | Device name | 
 
 ## Methods
 
 ### NewLoginDataAttributes
 
-`func NewLoginDataAttributes(password string, ) *LoginDataAttributes`
+`func NewLoginDataAttributes(email string, deviceName string, ) *LoginDataAttributes`
 
 NewLoginDataAttributes instantiates a new LoginDataAttributes object
 This constructor will assign default values to properties that have it defined,
@@ -46,55 +45,25 @@ and a boolean to check if the value has been set.
 
 SetEmail sets Email field to given value.
 
-### HasEmail
 
-`func (o *LoginDataAttributes) HasEmail() bool`
+### GetDeviceName
 
-HasEmail returns a boolean if a field has been set.
+`func (o *LoginDataAttributes) GetDeviceName() string`
 
-### GetUsername
+GetDeviceName returns the DeviceName field if non-nil, zero value otherwise.
 
-`func (o *LoginDataAttributes) GetUsername() string`
+### GetDeviceNameOk
 
-GetUsername returns the Username field if non-nil, zero value otherwise.
+`func (o *LoginDataAttributes) GetDeviceNameOk() (*string, bool)`
 
-### GetUsernameOk
-
-`func (o *LoginDataAttributes) GetUsernameOk() (*string, bool)`
-
-GetUsernameOk returns a tuple with the Username field if it's non-nil, zero value otherwise
+GetDeviceNameOk returns a tuple with the DeviceName field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetUsername
+### SetDeviceName
 
-`func (o *LoginDataAttributes) SetUsername(v string)`
+`func (o *LoginDataAttributes) SetDeviceName(v string)`
 
-SetUsername sets Username field to given value.
-
-### HasUsername
-
-`func (o *LoginDataAttributes) HasUsername() bool`
-
-HasUsername returns a boolean if a field has been set.
-
-### GetPassword
-
-`func (o *LoginDataAttributes) GetPassword() string`
-
-GetPassword returns the Password field if non-nil, zero value otherwise.
-
-### GetPasswordOk
-
-`func (o *LoginDataAttributes) GetPasswordOk() (*string, bool)`
-
-GetPasswordOk returns a tuple with the Password field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetPassword
-
-`func (o *LoginDataAttributes) SetPassword(v string)`
-
-SetPassword sets Password field to given value.
+SetDeviceName sets DeviceName field to given value.
 
 
 

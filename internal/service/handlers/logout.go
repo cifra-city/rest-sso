@@ -9,12 +9,9 @@ import (
 	"github.com/cifra-city/rest-sso/internal/config"
 	"github.com/cifra-city/tokens"
 	"github.com/google/uuid"
-	"github.com/sirupsen/logrus"
 )
 
 func Logout(w http.ResponseWriter, r *http.Request) {
-	logrus.Debugf("user logged out")
-
 	Server, err := cifractx.GetValue[*config.Server](r.Context(), config.SERVER)
 	if err != nil {
 		httpkit.RenderErr(w, problems.InternalError("Failed to retrieve service configuration"))

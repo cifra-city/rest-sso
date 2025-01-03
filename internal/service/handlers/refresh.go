@@ -19,19 +19,19 @@ import (
 )
 
 func Refresh(w http.ResponseWriter, r *http.Request) {
+	Server, err := cifractx.GetValue[*config.Server](r.Context(), config.SERVER)
+	if err != nil {
+		logrus.Errorf("Failed to retrieve service configuration %s", err)
+		httpkit.RenderErr(w, problems.InternalError())
+		return
+	}
+	log := Server.Logger
+
 	req, err := requests.NewRefresh(r)
 	if err != nil {
 		httpkit.RenderErr(w, problems.BadRequest(err)...)
 		return
 	}
-
-	Server, err := cifractx.GetValue[*config.Server](r.Context(), config.SERVER)
-	if err != nil {
-		logrus.Errorf("Failed to get service from context: %v", err)
-		http.Error(w, "Server configuration not found", http.StatusInternalServerError)
-		return
-	}
-	log := Server.Logger
 
 	refreshToken := req.Data.Attributes.RefreshToken
 
@@ -139,10 +139,10 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	httpkit.Render(w, resources.RefreshResp{
-		Data: resources.RefreshRespData{
-			Type: resources.RefreshType,
-			Attributes: resources.RefreshRespDataAttributes{
+	httpkit.Render(w, resources.TokensPair{
+		Data: resources.TokensPairData{
+			Type: resources.TokensPairType,
+			Attributes: resources.TokensPairDataAttributes{
 				AccessToken:  tokenAccess,
 				RefreshToken: tokenRefresh,
 			},

@@ -36,9 +36,9 @@ func GetSessions(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var userSessions []resources.UserSessionDataAttributesDevicesInner
+	var userSessions []resources.UserSessionsDataAttributesDevicesInner
 	for _, device := range sessions {
-		userSessions = append(userSessions, resources.UserSessionDataAttributesDevicesInner{
+		userSessions = append(userSessions, resources.UserSessionsDataAttributesDevicesInner{
 			Id:         device.ID.String(),
 			Location:   "TODO",
 			DeviceName: "TODO",
@@ -48,9 +48,9 @@ func GetSessions(w http.ResponseWriter, r *http.Request) {
 	}
 
 	httpkit.Render(w, resources.UserSessions{
-		Data: resources.UserSessionData{
+		Data: resources.UserSessionsData{
 			Type: resources.UserSessionType,
-			Attributes: resources.UserSessionDataAttributes{
+			Attributes: resources.UserSessionsDataAttributes{
 				Devices: userSessions,
 			},
 		},

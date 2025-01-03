@@ -33,9 +33,17 @@ func (op OperationType) IsValid() bool {
 }
 
 func ApproveOperation(w http.ResponseWriter, r *http.Request) {
+	Server, err := cifractx.GetValue[*config.Server](r.Context(), config.SERVER)
+	if err != nil {
+		logrus.Warn("error getting db queries: %v", err)
+		httpkit.RenderErr(w, problems.InternalError())
+		return
+	}
+
+	log := Server.Logger
+
 	req, err := requests.NewApproveOperation(r)
 	if err != nil {
-		logrus.Debugf("error decoding request: %v", err)
 		httpkit.RenderErr(w, problems.BadRequest(err)...)
 		return
 	}
@@ -46,15 +54,6 @@ func ApproveOperation(w http.ResponseWriter, r *http.Request) {
 
 	IP := httpkit.GetClientIP(r)
 	UserAgent := httpkit.GetUserAgent(r)
-
-	Server, err := cifractx.GetValue[*config.Server](r.Context(), config.SERVER)
-	if err != nil {
-		logrus.Warn("error getting db queries: %v", err)
-		httpkit.RenderErr(w, problems.InternalError())
-		return
-	}
-
-	log := Server.Logger
 
 	opType := OperationType(opTypeStr)
 	if !opType.IsValid() {

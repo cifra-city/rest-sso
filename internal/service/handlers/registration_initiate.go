@@ -14,7 +14,15 @@ import (
 )
 
 func RegistrationInitiate(w http.ResponseWriter, r *http.Request) {
-	req, err := requests.NewRegistrationInitiate(r)
+	Server, err := cifractx.GetValue[*config.Server](r.Context(), config.SERVER)
+	if err != nil {
+		logrus.Errorf("Failed to retrieve service configuration %s", err)
+		httpkit.RenderErr(w, problems.InternalError())
+		return
+	}
+	log := Server.Logger
+
+	req, err := requests.NewEmail(r)
 	if err != nil {
 		httpkit.RenderErr(w, problems.BadRequest(err)...)
 		return
@@ -24,15 +32,6 @@ func RegistrationInitiate(w http.ResponseWriter, r *http.Request) {
 
 	IP := httpkit.GetClientIP(r)
 	UserAgent := httpkit.GetUserAgent(r)
-
-	Server, err := cifractx.GetValue[*config.Server](r.Context(), config.SERVER)
-	if err != nil {
-		logrus.Errorf("error getting db queries: %v", err)
-		httpkit.RenderErr(w, problems.InternalError())
-		return
-	}
-
-	log := Server.Logger
 
 	_, err = Server.Databaser.Accounts.GetByEmail(r, email)
 	if err != nil && !errors.Is(err, sql.ErrNoRows) {

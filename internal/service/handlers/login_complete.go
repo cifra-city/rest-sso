@@ -19,7 +19,15 @@ import (
 )
 
 func LoginComplete(w http.ResponseWriter, r *http.Request) {
-	req, err := requests.NewLoginComplete(r)
+	Server, err := cifractx.GetValue[*config.Server](r.Context(), config.SERVER)
+	if err != nil {
+		logrus.Errorf("Failed to retrieve service configuration %s", err)
+		httpkit.RenderErr(w, problems.InternalError())
+		return
+	}
+	log := Server.Logger
+
+	req, err := requests.NewLogin(r)
 	if err != nil {
 		httpkit.RenderErr(w, problems.BadRequest(err)...)
 		return
@@ -30,15 +38,6 @@ func LoginComplete(w http.ResponseWriter, r *http.Request) {
 
 	IP := httpkit.GetClientIP(r)
 	UserAgent := httpkit.GetUserAgent(r)
-
-	Server, err := cifractx.GetValue[*config.Server](r.Context(), config.SERVER)
-	if err != nil {
-		logrus.Errorf("error getting db queries: %v", err)
-		httpkit.RenderErr(w, problems.InternalError("database queries not found"))
-		return
-	}
-
-	log := Server.Logger
 
 	acc, err := Server.Databaser.Accounts.GetByEmail(r, email)
 	if err != nil {
@@ -96,10 +95,10 @@ func LoginComplete(w http.ResponseWriter, r *http.Request) {
 
 	Server.Mailman.DeleteAccess(acc.Email, string(LOGIN))
 
-	httpkit.Render(w, resources.LoginCompleteResp{
-		Data: resources.LoginCompleteRespData{
-			Type: resources.LoginCompleteType,
-			Attributes: resources.LoginCompleteRespDataAttributes{
+	httpkit.Render(w, resources.TokensPair{
+		Data: resources.TokensPairData{
+			Type: resources.TokensPairType,
+			Attributes: resources.TokensPairDataAttributes{
 				AccessToken:  tokenAccess,
 				RefreshToken: tokenRefresh,
 			},

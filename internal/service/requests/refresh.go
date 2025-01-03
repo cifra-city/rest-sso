@@ -8,7 +8,7 @@ import (
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 )
 
-func NewRefresh(r *http.Request) (req resources.RefreshReq, err error) {
+func NewRefresh(r *http.Request) (req resources.RefreshToken, err error) {
 	if err = json.NewDecoder(r.Body).Decode(&req); err != nil {
 		err = newDecodeError("body", err)
 		return

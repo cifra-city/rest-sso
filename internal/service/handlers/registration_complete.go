@@ -19,7 +19,15 @@ import (
 )
 
 func RegistrationComplete(w http.ResponseWriter, r *http.Request) {
-	req, err := requests.NewRegistrationComplete(r)
+	Server, err := cifractx.GetValue[*config.Server](r.Context(), config.SERVER)
+	if err != nil {
+		logrus.Errorf("Failed to retrieve service configuration %s", err)
+		httpkit.RenderErr(w, problems.InternalError())
+		return
+	}
+	log := Server.Logger
+
+	req, err := requests.NewCredentials(r)
 	if err != nil {
 		httpkit.RenderErr(w, problems.BadRequest(err)...)
 		return
@@ -35,15 +43,6 @@ func RegistrationComplete(w http.ResponseWriter, r *http.Request) {
 		httpkit.RenderErr(w, problems.BadRequest(errors.New("invalid password requirements"))...)
 		return
 	}
-
-	Server, err := cifractx.GetValue[*config.Server](r.Context(), config.SERVER)
-	if err != nil {
-		logrus.Errorf("error getting db queries: %v", err)
-		httpkit.RenderErr(w, problems.InternalError())
-		return
-	}
-
-	log := Server.Logger
 
 	if !Server.Config.Email.Off { // for testing
 		err = Server.Mailman.CheckAccess(email, string(REGISTRATION), UserAgent, IP)

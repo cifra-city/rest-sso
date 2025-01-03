@@ -21,7 +21,7 @@ var _ MappedNullable = &ApproveOperation{}
 
 // ApproveOperation struct for ApproveOperation
 type ApproveOperation struct {
-	Data ApproveOperationReqData `json:"data"`
+	Data ApproveOperationData `json:"data"`
 }
 
 type _ApproveOperation ApproveOperation
@@ -30,7 +30,7 @@ type _ApproveOperation ApproveOperation
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewApproveOperation(data ApproveOperationReqData) *ApproveOperation {
+func NewApproveOperation(data ApproveOperationData) *ApproveOperation {
 	this := ApproveOperation{}
 	this.Data = data
 	return &this
@@ -45,9 +45,9 @@ func NewApproveOperationWithDefaults() *ApproveOperation {
 }
 
 // GetData returns the Data field value
-func (o *ApproveOperation) GetData() ApproveOperationReqData {
+func (o *ApproveOperation) GetData() ApproveOperationData {
 	if o == nil {
-		var ret ApproveOperationReqData
+		var ret ApproveOperationData
 		return ret
 	}
 
@@ -56,7 +56,7 @@ func (o *ApproveOperation) GetData() ApproveOperationReqData {
 
 // GetDataOk returns a tuple with the Data field value
 // and a boolean to check if the value has been set.
-func (o *ApproveOperation) GetDataOk() (*ApproveOperationReqData, bool) {
+func (o *ApproveOperation) GetDataOk() (*ApproveOperationData, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -64,7 +64,7 @@ func (o *ApproveOperation) GetDataOk() (*ApproveOperationReqData, bool) {
 }
 
 // SetData sets field value
-func (o *ApproveOperation) SetData(v ApproveOperationReqData) {
+func (o *ApproveOperation) SetData(v ApproveOperationData) {
 	o.Data = v
 }
 

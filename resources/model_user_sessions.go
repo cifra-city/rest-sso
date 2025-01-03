@@ -21,7 +21,7 @@ var _ MappedNullable = &UserSessions{}
 
 // UserSessions struct for UserSessions
 type UserSessions struct {
-	Data UserSessionData `json:"data"`
+	Data UserSessionsData `json:"data"`
 }
 
 type _UserSessions UserSessions
@@ -30,7 +30,7 @@ type _UserSessions UserSessions
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewUserSessions(data UserSessionData) *UserSessions {
+func NewUserSessions(data UserSessionsData) *UserSessions {
 	this := UserSessions{}
 	this.Data = data
 	return &this
@@ -45,9 +45,9 @@ func NewUserSessionsWithDefaults() *UserSessions {
 }
 
 // GetData returns the Data field value
-func (o *UserSessions) GetData() UserSessionData {
+func (o *UserSessions) GetData() UserSessionsData {
 	if o == nil {
-		var ret UserSessionData
+		var ret UserSessionsData
 		return ret
 	}
 
@@ -56,7 +56,7 @@ func (o *UserSessions) GetData() UserSessionData {
 
 // GetDataOk returns a tuple with the Data field value
 // and a boolean to check if the value has been set.
-func (o *UserSessions) GetDataOk() (*UserSessionData, bool) {
+func (o *UserSessions) GetDataOk() (*UserSessionsData, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -64,7 +64,7 @@ func (o *UserSessions) GetDataOk() (*UserSessionData, bool) {
 }
 
 // SetData sets field value
-func (o *UserSessions) SetData(v UserSessionData) {
+func (o *UserSessions) SetData(v UserSessionsData) {
 	o.Data = v
 }
 

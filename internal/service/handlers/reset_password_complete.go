@@ -17,7 +17,15 @@ import (
 )
 
 func ResetPasswordComplete(w http.ResponseWriter, r *http.Request) {
-	req, err := requests.NewResetPasswordComplete(r)
+	Server, err := cifractx.GetValue[*config.Server](r.Context(), config.SERVER)
+	if err != nil {
+		logrus.Errorf("Failed to retrieve service configuration %s", err)
+		httpkit.RenderErr(w, problems.InternalError())
+		return
+	}
+	log := Server.Logger
+
+	req, err := requests.NewCredentials(r)
 	if err != nil {
 		httpkit.RenderErr(w, problems.BadRequest(err)...)
 		return
@@ -28,14 +36,6 @@ func ResetPasswordComplete(w http.ResponseWriter, r *http.Request) {
 
 	IP := httpkit.GetClientIP(r)
 	UserAgent := httpkit.GetUserAgent(r)
-
-	Server, err := cifractx.GetValue[*config.Server](r.Context(), config.SERVER)
-	if err != nil {
-		logrus.Errorf("error getting server from context: %v", err)
-		http.Error(w, "Server configuration not found", http.StatusInternalServerError)
-		return
-	}
-	log := Server.Logger
 
 	acc, err := Server.Databaser.Accounts.GetByEmail(r, email)
 	if err != nil {

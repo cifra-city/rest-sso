@@ -8,14 +8,14 @@ post:
     content:
       application/vnd.api+json:
         schema:
-          $ref: '../spec/components/schemas/LoginCompleteReq.yaml'
+          $ref: '../spec/components/schemas/LoginComplete.yaml'
   responses:
     '201':
       description: User successfully login
       content:
         application/vnd.api+json:
           schema:
-            $ref: '../spec/components/schemas/LoginCompleteResp.yaml'
+            $ref: '../spec/components/schemas/TokensPair.yaml'
     '400':
       $ref: '../spec/components/responses/invalidParameter.yaml'
     '403':

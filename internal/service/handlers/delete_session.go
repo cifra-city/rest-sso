@@ -17,6 +17,14 @@ import (
 )
 
 func DeleteSession(w http.ResponseWriter, r *http.Request) {
+	Server, err := cifractx.GetValue[*config.Server](r.Context(), config.SERVER)
+	if err != nil {
+		logrus.Errorf("Failed to retrieve service configuration %s", err)
+		httpkit.RenderErr(w, problems.InternalError())
+		return
+	}
+	log := Server.Logger
+
 	req, err := requests.NewDeleteSession(r)
 	if err != nil {
 		httpkit.RenderErr(w, problems.BadRequest(err)...)
@@ -30,14 +38,6 @@ func DeleteSession(w http.ResponseWriter, r *http.Request) {
 		httpkit.RenderErr(w, problems.BadRequest(err)...)
 		return
 	}
-
-	Server, err := cifractx.GetValue[*config.Server](r.Context(), config.SERVER)
-	if err != nil {
-		logrus.Errorf("Failed to retrieve service configuration %s", err)
-		httpkit.RenderErr(w, problems.InternalError())
-		return
-	}
-	log := Server.Logger
 
 	sessionID, ok := r.Context().Value(tokens.DeviceIDKey).(uuid.UUID)
 	if !ok {
@@ -84,9 +84,9 @@ func DeleteSession(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var userSessions []resources.UserSessionDataAttributesDevicesInner
+	var userSessions []resources.UserSessionsDataAttributesDevicesInner
 	for _, device := range sessions {
-		userSessions = append(userSessions, resources.UserSessionDataAttributesDevicesInner{
+		userSessions = append(userSessions, resources.UserSessionsDataAttributesDevicesInner{
 			Id:         device.ID.String(),
 			DeviceName: "TODO",
 			Client:     "TODO",
@@ -96,9 +96,9 @@ func DeleteSession(w http.ResponseWriter, r *http.Request) {
 	}
 
 	httpkit.Render(w, resources.UserSessions{
-		Data: resources.UserSessionData{
+		Data: resources.UserSessionsData{
 			Type: resources.UserSessionsType,
-			Attributes: resources.UserSessionDataAttributes{
+			Attributes: resources.UserSessionsDataAttributes{
 				Devices: userSessions,
 			},
 		},
