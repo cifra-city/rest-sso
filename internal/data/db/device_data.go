@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/cifra-city/httpkit"
+	"github.com/cifra-city/comtools/httpkit"
 )
 
 type DeviceData struct {

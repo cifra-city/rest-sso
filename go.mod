@@ -4,8 +4,7 @@ go 1.23.1
 
 require (
 	github.com/alecthomas/kingpin v2.2.6+incompatible
-	github.com/cifra-city/cifractx v0.0.0-20241220023258-6841644fc9a1
-	github.com/cifra-city/httpkit v0.0.0-20241220020938-31caee808935
+	github.com/cifra-city/comtools v0.0.2
 	github.com/cifra-city/mailman v0.0.3
 	github.com/cifra-city/tokens v1.3.0
 	github.com/go-chi/chi v4.1.2+incompatible
@@ -24,6 +23,7 @@ require (
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751 // indirect
 	github.com/alecthomas/units v0.0.0-20240927000941-0f3dac36c52b // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
+	github.com/cifra-city/httpkit v0.0.0-20241220020938-31caee808935 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
 	github.com/google/go-cmp v0.6.0 // indirect

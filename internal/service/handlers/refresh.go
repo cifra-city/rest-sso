@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/cifra-city/cifractx"
-	"github.com/cifra-city/httpkit"
-	"github.com/cifra-city/httpkit/problems"
+	"github.com/cifra-city/comtools/cifractx"
+	"github.com/cifra-city/comtools/httpkit"
+	"github.com/cifra-city/comtools/httpkit/problems"
 	"github.com/cifra-city/rest-sso/internal/config"
 	"github.com/cifra-city/rest-sso/internal/data/db/dbcore"
 	"github.com/cifra-city/rest-sso/internal/sectools"

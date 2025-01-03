@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/cifra-city/cifractx"
-	"github.com/cifra-city/httpkit"
+	"github.com/cifra-city/comtools/cifractx"
+	"github.com/cifra-city/comtools/httpkit"
 	"github.com/cifra-city/rest-sso/internal/config"
 	"github.com/cifra-city/rest-sso/internal/service/handlers"
 	"github.com/go-chi/chi"
